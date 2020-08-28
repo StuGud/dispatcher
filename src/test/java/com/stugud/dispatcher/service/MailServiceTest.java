@@ -16,6 +16,5 @@ class MailServiceTest {
     @Test
     void sendTxtMail() {
         MailService.sendTxtMail("741498908@qq.com","test simple mail"," hello this is simple mail");
-
     }
 }

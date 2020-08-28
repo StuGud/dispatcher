@@ -1,11 +1,15 @@
 spring:
+  #数据库
+  datasource:
+    url: jdbc:mysql://175.24.14.176:3306/pooling?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
+    username: liu
+    password: 31415926rR!
+    #邮箱
   mail:
     host: smtp.163.com
     username: dispatchertest@163.com
     password: YAXMHJEHDHWSGULA
     default-encoding: UTF-8
-
-
 
 mail:
   fromMail:
