@@ -1,0 +1,12 @@
+spring:
+  mail:
+    host: smtp.163.com
+    username: dispatchertest@163.com
+    password: YAXMHJEHDHWSGULA
+    default-encoding: UTF-8
+
+
+
+mail:
+  fromMail:
+    addr: dispatchertest@163.com
