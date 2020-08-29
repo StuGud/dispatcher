@@ -11,7 +11,6 @@ import javax.persistence.Id;
 
 @Data
 @RequiredArgsConstructor
-@NoArgsConstructor
 @Entity
 public class Record {
     @Id

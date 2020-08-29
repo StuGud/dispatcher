@@ -4,6 +4,7 @@ spring:
     url: jdbc:mysql://175.24.14.176:3306/pooling?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
     username: liu
     password: 31415926rR!
+    driver-class-name: com.mysql.cj.jdbc.driver
     #邮箱
   mail:
     host: smtp.163.com

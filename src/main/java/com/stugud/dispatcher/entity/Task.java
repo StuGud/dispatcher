@@ -13,7 +13,6 @@ import java.util.List;
 
 @Data
 @RequiredArgsConstructor
-@NoArgsConstructor
 @Entity
 public class Task {
 

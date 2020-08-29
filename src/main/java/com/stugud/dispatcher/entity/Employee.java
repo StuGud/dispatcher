@@ -10,7 +10,6 @@ import javax.validation.constraints.*;
 
 @Data
 @RequiredArgsConstructor
-@NoArgsConstructor
 @Entity
 public class Employee {
 
