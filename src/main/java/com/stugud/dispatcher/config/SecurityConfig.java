@@ -24,18 +24,28 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .withUser("employee").password("123456")
                 .authorities("ROLE_EMPLOYEE");
-        auth.jdbcAuthentication().dataSource(dataSource)
-                .usersByUsernameQuery("select username,password from t_employee where username=?")
-                .authoritiesByUsernameQuery("select username,authority from t_authorities where username=?");
+
+
+
+
+//        auth.jdbcAuthentication().dataSource(dataSource)
+//                .usersByUsernameQuery("select username,password from t_employee where username=?")
+//                .authoritiesByUsernameQuery("select username,authority from t_authorities where username=?");
 
     }
 
     @Override
     public void configure(HttpSecurity http) throws Exception {
         http.csrf().disable();
-        http.authorizeRequests()
-                .antMatchers("/admin").hasRole("ROLE_ADMIN")
-                .antMatchers("/employee").hasRole("ROLE_EMPLOYEE")
-                .antMatchers("/","/**").permitAll();
+//        http
+//                .authorizeRequests()
+//                .antMatchers("/admin","/admin/*").hasRole("ADMIN")
+//                .antMatchers("/employee","/employee/*").hasRole("EMPLOYEE")
+//                .antMatchers("/","/**").permitAll()
+//                .and()
+//                .formLogin()
+//                .successForwardUrl("/admin");
+
+
     }
 }

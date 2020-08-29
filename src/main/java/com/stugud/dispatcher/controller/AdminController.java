@@ -9,7 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-@RequestMapping("admin")
+@RequestMapping("/admin")
 @Controller
 public class AdminController {
 
@@ -20,12 +20,16 @@ public class AdminController {
         this.taskRepository = taskRepository;
         this.employeeRepository=employeeRepository;
     }
+    @RequestMapping("/test")
+    public String test(){
+        return "task";
+    }
 
     @GetMapping("/task")
     public String showTasks(Model model){
         Iterable<Task> tasks = taskRepository.findAll();
         model.addAttribute("tasks",tasks);
-        return "tasks";
+        return "task";
     }
 
     @PostMapping("/task")
