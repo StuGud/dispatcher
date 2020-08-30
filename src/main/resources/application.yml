@@ -1,15 +1,10 @@
 spring:
-  thymeleaf:
-    cache: false
   #数据库
   datasource:
-#    url: jdbc:mysql://175.24.14.176:3306/pooling?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
-#    username: liu
-#    password: 31415926rR!
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/test?useUnicode=true&characterEncoding=utf8&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=GMT%2B8
+    url: jdbc:mysql://127.0.0.1:3306/dispatcher?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
     username: root
-    password: 123456
+    password: Wangwei1114
+    driver-class-name: com.mysql.cj.jdbc.Driver
     #邮箱
   mail:
     host: smtp.163.com

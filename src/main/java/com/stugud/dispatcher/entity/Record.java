@@ -4,19 +4,17 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.io.Serializable;
 
 @Data
 @RequiredArgsConstructor
 @Entity
-public class Record {
+@IdClass(RecordMultiKeys.class)
+public class Record  {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
     private long employeeId;
+    @Id
     private long taskId;
     private int scoreChange;
 }

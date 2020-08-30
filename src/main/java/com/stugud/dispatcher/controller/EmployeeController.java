@@ -33,14 +33,14 @@ public class EmployeeController {
 
     @GetMapping("/details")
     public String showEmployeeDetails(Model model, @AuthenticationPrincipal Employee employee){
-        Optional<Employee> employee1 = employeeRepository.findById(employee.getJobNum());
+        Optional<Employee> employee1 = employeeRepository.findById(employee.getId());
         model.addAttribute("employee",employee1.get());
         return "details";
     }
 
     @GetMapping("/task")
     public String showTasks(Model model, @AuthenticationPrincipal Employee employee){
-        Optional<Employee> employee1 = employeeRepository.findById(employee.getJobNum());
+        Optional<Employee> employee1 = employeeRepository.findById(employee.getId());
         model.addAttribute("employee",employee1.get());
         return "details";
     }

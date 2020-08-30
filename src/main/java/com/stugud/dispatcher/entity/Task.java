@@ -29,7 +29,7 @@ public class Task {
     private List<Employee> inCharge;
 
     @NotBlank(message = "任务内容不为空")
-    private String Content;
+    private String content;
 
     @Pattern(regexp = "A|B|C",message = "任务级别为A、B、C")
     private String level;

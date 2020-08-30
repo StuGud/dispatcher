@@ -14,7 +14,7 @@ import javax.validation.constraints.*;
 public class Employee {
 
     @Id
-    private long jobNum;
+    private long id;
     @NotBlank
     @Size(min = 4,max = 12,message = "用户名长度为4-12字符")
     private String username;
