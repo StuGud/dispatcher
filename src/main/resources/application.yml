@@ -1,9 +1,9 @@
 spring:
   #数据库
   datasource:
-    url: jdbc:mysql://127.0.0.1:3306/test?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
+    url: jdbc:mysql://127.0.0.1:3306/dispatcher?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
     username: root
-    password: 123456
+    password: Wangwei1114
     driver-class-name: com.mysql.cj.jdbc.Driver
     #邮箱
   mail:

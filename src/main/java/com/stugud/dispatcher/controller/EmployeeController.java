@@ -4,6 +4,8 @@ import com.stugud.dispatcher.entity.Employee;
 import com.stugud.dispatcher.entity.Task;
 import com.stugud.dispatcher.repository.EmployeeRepository;
 import com.stugud.dispatcher.repository.TaskRepository;
+import com.stugud.dispatcher.service.EmployeeService;
+import com.stugud.dispatcher.service.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -13,42 +15,41 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 @Controller
 @RequestMapping("/employee")
 public class EmployeeController {
 
-    final
-    EmployeeRepository employeeRepository;
+    final EmployeeService employeeService;
 
-    final
-    TaskRepository taskRepository;
+    final TaskService taskService;
 
 
-    public EmployeeController(EmployeeRepository employeeRepository,TaskRepository taskRepository) {
-        this.employeeRepository = employeeRepository;
-        this.taskRepository = taskRepository;
+    public EmployeeController(EmployeeService employeeService,TaskService taskService) {
+        this.employeeService = employeeService;
+        this.taskService = taskService;
     }
 
     @GetMapping("/details")
     public String showEmployeeDetails(Model model, @AuthenticationPrincipal Employee employee){
-        Optional<Employee> employee1 = employeeRepository.findById(employee.getId());
-        model.addAttribute("employee",employee1.get());
+        Employee employee1 = employeeService.findById(employee.getId());
+        model.addAttribute("employee",employee1);
         return "employeeDetails";
     }
 
     @GetMapping("/tasks")
     public String showTasks(Model model, @AuthenticationPrincipal Employee employee){
-        Optional<Employee> employee1 = employeeRepository.findById(employee.getId());
-        model.addAttribute("employee",employee1.get());
+        List<Task> tasks = taskService.findByEmpId(employee.getId());
+        model.addAttribute("tasks",tasks);
         return "tasks";
     }
 
     @GetMapping("/task/{id}")
     public String showTaskDetails(Model model, @PathVariable long id){
-        Optional<Task> taskById = taskRepository.findById(id);
-        model.addAttribute("task",taskById.get());
+        Task task = taskService.findById(id);
+        model.addAttribute("task",task);
         return "taskDetails";
     }
 }
