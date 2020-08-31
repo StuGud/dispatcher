@@ -19,22 +19,43 @@ public class AdminController {
         this.taskRepository = taskRepository;
         this.employeeRepository=employeeRepository;
     }
+
     @RequestMapping("/test")
     public String test(){
         return "task";
     }
 
-    @GetMapping("/task")
-    public String showTasks(Model model){
+    /*
+    =========================================================
+    task
+     */
+    @GetMapping("/tasks")
+    public String showTaskList(Model model){
         Iterable<Task> tasks = taskRepository.findAll();
         model.addAttribute("tasks",tasks);
-        return "task";
+        return "taskList";
     }
 
+    /**
+     * 转到发布任务界面
+     * @param
+     * @return
+     */
+    @GetMapping("/task")
+    public String showTaskForm(){
+        return "taskRelease";
+    }
+
+    /**
+     *
+     * @param task
+     * @return
+     */
     @PostMapping("/task")
-    public String publishTask(Task task){
+    public String postTask(Task task){
         Task save = taskRepository.save(task);
-        return "task/"+save.getId();
+        //redirect
+        return "redirect:/admin/task/id="+save.getId();
     }
 
     @GetMapping("/task/{id}")
@@ -69,16 +90,40 @@ public class AdminController {
         return "taskDetails";
     }
 
+    /*
+    =========================================================
+    employee
+     */
+
+    /**
+     * 来到注册员工页面
+     * @param
+     * @return
+     */
     @GetMapping("/employee")
-    public String showEmployees(Model model){
-        Iterable<Employee> employees = employeeRepository.findAll();
-        model.addAttribute("employees",employees);
-        return "employees";
+    public String showEmployeeRegistration(){
+        return "employeeRegistration";
     }
 
+    /**
+     * 注册新员工，并转到员工列表
+     * @param employee
+     * @return
+     */
     @PostMapping("/employee")
     public String saveEmployee(@RequestBody Employee employee){
         employeeRepository.save(employee);
-        return "employees";
+        return "redirect:/admin/employees";
+    }
+
+    /**
+     * 员工列表
+     * @return
+     */
+    @GetMapping("/employees")
+    public String showEmployees(Model model){
+        Iterable<Employee> employees = employeeRepository.findAll();
+        model.addAttribute("employees",employees);
+        return "employeeList";
     }
 }
