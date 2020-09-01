@@ -6,11 +6,13 @@ import lombok.RequiredArgsConstructor;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Table;
 import javax.validation.constraints.*;
 
 @Data
 @RequiredArgsConstructor
 @Entity
+@Table(name ="t_employee")
 public class Employee {
 
     @Id

@@ -14,6 +14,7 @@ import java.util.List;
 @Data
 @RequiredArgsConstructor
 @Entity
+@Table(name = "t_task")
 public class Task {
 
     @Id
@@ -24,8 +25,10 @@ public class Task {
     @Size(min = 5,message = "任务主题最少5字符")
     private String subject;
 
-    @ManyToMany(targetEntity = Employee.class)
+    @OneToMany(targetEntity = Employee.class)
     @Size(min = 1,message = "最少选择一个负责人")
+    @JoinTable(name = "t_task_employees",joinColumns = {@JoinColumn(name="task",referencedColumnName = "id")},
+    inverseJoinColumns = {@JoinColumn(name = "employee",referencedColumnName = "id")})
     private List<Employee> inCharge;
 
     @NotBlank(message = "任务内容不为空")
@@ -34,6 +37,7 @@ public class Task {
     @Pattern(regexp = "A|B|C",message = "任务级别为A、B、C")
     private String level;
 
+    @Column(name = "created")
     private Date createdAt;
     private Date deadline;
 

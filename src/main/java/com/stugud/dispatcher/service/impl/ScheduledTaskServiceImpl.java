@@ -27,7 +27,7 @@ public class ScheduledTaskServiceImpl {
         this.recordRepository=recordRepository;
     }
 
-    @Scheduled(fixedRate = 3000)
+    @Scheduled(fixedRate = 24*60*60*1000)
     public void remindByEmailTask(){
         System.out.println("remindTask");
 
