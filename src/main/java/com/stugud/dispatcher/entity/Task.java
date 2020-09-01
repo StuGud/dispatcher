@@ -25,7 +25,7 @@ public class Task {
     @Size(min = 5,message = "任务主题最少5字符")
     private String subject;
 
-    @OneToMany(targetEntity = Employee.class)
+    @OneToMany(targetEntity = Employee.class,fetch=FetchType.EAGER)
     @Size(min = 1,message = "最少选择一个负责人")
     @JoinTable(name = "t_task_employees",joinColumns = {@JoinColumn(name="task",referencedColumnName = "id")},
     inverseJoinColumns = {@JoinColumn(name = "employee",referencedColumnName = "id")})

@@ -1,6 +1,8 @@
 package com.stugud.dispatcher.service.impl;
 
+import com.stugud.dispatcher.entity.Employee;
 import com.stugud.dispatcher.entity.Task;
+import com.stugud.dispatcher.repository.EmployeeRepository;
 import com.stugud.dispatcher.repository.RecordRepository;
 import com.stugud.dispatcher.repository.TaskRepository;
 import com.stugud.dispatcher.service.MailService;
@@ -20,11 +22,14 @@ public class ScheduledTaskServiceImpl {
     final MailService mailService;
     final TaskRepository taskRepository;
     final RecordRepository recordRepository;
+    final EmployeeRepository employeeRepository;
 
-    public ScheduledTaskServiceImpl(MailService mailService,TaskRepository taskRepository,RecordRepository recordRepository) {
+    public ScheduledTaskServiceImpl(MailService mailService,TaskRepository taskRepository,
+                                    RecordRepository recordRepository,EmployeeRepository employeeRepository) {
         this.mailService = mailService;
         this.taskRepository=taskRepository;
         this.recordRepository=recordRepository;
+        this.employeeRepository=employeeRepository;
     }
 
     @Scheduled(fixedRate = 24*60*60*1000)
@@ -67,5 +72,12 @@ public class ScheduledTaskServiceImpl {
 
     private void sendRemindMail(Task task){
         //查找该任务的负责人
+        String content=getEmailContent(task);
+        String subject="任务提醒： "+task.getSubject();
+        List<Employee> employees = employeeRepository.findEmployeesByTaskId(task.getId());
+        for (Employee employee :
+                employees) {
+            mailService.sendTxtMail(employee.getMail(),subject,content);
+        }
     }
 }

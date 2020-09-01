@@ -30,4 +30,9 @@ public class EmployeeServiceImpl implements EmployeeService {
     public Employee register(Employee employee) {
         return employeeRepository.save(employee);
     }
+
+    @Override
+    public List<Employee> getInChargeByTaskId(long taskId) {
+        return employeeRepository.findEmployeesByTaskId(taskId);
+    }
 }

@@ -13,6 +13,7 @@ public interface EmployeeService {
     Employee findById(long id);
 
     /**
+     * 返回所有的员工列表
      * 没有限制结果集大小,可能导致内存溢出
      * @return
      */
@@ -24,6 +25,13 @@ public interface EmployeeService {
      * @return
      */
     Employee register(Employee employee);
+
+    /**
+     * 查找负责某任务的员工列表
+     * @param taskId
+     * @return
+     */
+    List<Employee> getInChargeByTaskId(long taskId);
 
 
 }
