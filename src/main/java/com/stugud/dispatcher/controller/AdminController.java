@@ -2,8 +2,6 @@ package com.stugud.dispatcher.controller;
 
 import com.stugud.dispatcher.entity.Employee;
 import com.stugud.dispatcher.entity.Task;
-import com.stugud.dispatcher.repository.EmployeeRepository;
-import com.stugud.dispatcher.repository.TaskRepository;
 import com.stugud.dispatcher.service.EmployeeService;
 import com.stugud.dispatcher.service.TaskService;
 import org.springframework.stereotype.Controller;
@@ -35,32 +33,12 @@ public class AdminController {
      */
     @GetMapping("/tasks")
     public String showTaskList(Model model){
-        List<Task> tasks = taskService.getList();
+        List<Task> tasks = taskService.findAll();
         model.addAttribute("tasks",tasks);
-        return "taskList";
+        return "task";
     }
 
-    /**
-     * 转到发布任务界面
-     * @param
-     * @return
-     */
-    @GetMapping("/task")
-    public String showTaskForm(){
-        return "taskRelease";
-    }
 
-    /**
-     *
-     * @param task
-     * @return
-     */
-    @PostMapping("/task")
-    public String postTask(Task task){
-        Task save = taskService.release(task);
-        //redirect
-        return "redirect:/admin/task/id="+save.getId();
-    }
 
     @GetMapping("/task/{id}")
     public String showTaskDetails(Model model,@PathVariable long id){
@@ -71,6 +49,7 @@ public class AdminController {
 
     @PatchMapping("/task/{id}")
     public String modifyTask(@PathVariable long id, @RequestBody Task patchTask){
+        //这里逻辑有问题，如果本身就是已完成，未考虑页面回显
         if(patchTask.getState()=="已完成"){
             taskService.setCompleted(patchTask);
         }else{
@@ -111,7 +90,7 @@ public class AdminController {
      */
     @GetMapping("/employees")
     public String showEmployees(Model model){
-        Iterable<Employee> employees = employeeService.getList();
+        Iterable<Employee> employees = employeeService.findAll();
         model.addAttribute("employees",employees);
         return "employeeList";
     }

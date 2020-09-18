@@ -5,7 +5,12 @@ spring:
     username: root
     password: Wangwei1114
     driver-class-name: com.mysql.cj.jdbc.Driver
-    #邮箱
+  jpa:
+    hibernate:
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+
+  #邮箱
   mail:
     host: smtp.163.com
     username: dispatchertest@163.com
@@ -15,3 +20,12 @@ spring:
 mail:
   fromMail:
     addr: dispatchertest@163.com
+
+#自定义的变量
+dispatcher:
+  task:
+    pageSize: 10
+    fileRootPathWIN: D:/dispatcher/file
+  employee:
+    pageSize: 10
+

@@ -9,17 +9,17 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "t_task_employees")
 @IdClass(RecordMultiKeys.class)
 public class Record  {
     @Id
-    @Column(name = "employee")
+    @Column(name = "employeeId")
     private long employeeId;
     @Id
-    @Column(name = "task")
+    @Column(name = "taskId")
     private long taskId;
     private int scoreChange;
 }

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+
+<body>
+<div class="form-inline">
+    <label for="details">演示</label>
+    <button type="button" id="add-btn" onclick="add_div()">+</button>&nbsp;&nbsp;&nbsp;
+    <button type="button" id="del-btn" onclick="del_div()">-</button>
+</div>
+
+<form id="form" role="form" method="post" class="formBuilder">
+    <div id="details">
+        <div class="form-inline">
+            <label for="receivable">选项</label>
+            Label：<input id="receivable" onBlur="number()"/>
+            value：<input id="receivable1" onBlur="number()"/>
+        </div>
+    </div>
+</form>
+</body>
+
+<script type="text/javascript">
+    var detail_div = 1;
+    function add_div() {
+        var e = document.getElementById("details");
+        var div = document.createElement("div");
+        div.className = "form-group";
+        div.id = "details" + detail_div;
+        div.innerHTML = e.innerHTML;
+        document.getElementById("form").appendChild(div);
+        detail_div++;
+    }
+
+    function del_div() {
+        if (detail_div > 1) {
+            var id = "details" + (detail_div - 1).toString();
+            var e = document.getElementById(id);
+            document.getElementById("form").removeChild(e);
+            detail_div--;
+        }
+    }
+
+    function number() {
+        var number = document.getElementById("number");
+        var value = number.value;
+        //如果文本值为空,设置为1
+        if (value == "") {
+            number.value = 1;
+        }
+        //如果文本值为非纯数字,设置为1
+        //isNaN()是否为非法数字
+        if (isNaN(value)) {
+            number.value = 1;
+        }
+        //如果文本值小于1,设置为1
+        if (parseInt(value) <= 1) {
+            number.value = 1;
+        }
+    }
+</script>
+
+</html>

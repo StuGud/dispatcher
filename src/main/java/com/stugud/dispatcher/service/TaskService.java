@@ -13,11 +13,11 @@ public interface TaskService {
     Task findById(long id);
 
     /**
-     * 根据员工号查找他负责任务
+     * 根据员工号查找他负责的任务
      * @param empId
      * @return
      */
-    List<Task> findByEmpId(long empId);
+    List<Task> findAllByEmpId(long empId);
 
     /**
      * 发布任务
@@ -34,7 +34,7 @@ public interface TaskService {
     Task modify(Task task);
 
     /**
-     * 设置状态为已完成，计算scoreChange
+     * 设置状态为已完成，并计算scoreChange
      * @return
      */
     Task setCompleted(Task task);
@@ -43,12 +43,32 @@ public interface TaskService {
      * 返回所有的任务
      * @return
      */
-    List<Task> getList();
+    List<Task> findAll();
+
+    /**
+     * 分页返回所有的任务
+     * @param pageNum
+     * @return
+     */
+    List<Task> findAll(int pageNum);
 
     /**
      * 返回未完成的所有任务
      * @return
      */
-    List<Task> getNotCompletedList();
+    List<Task> findAllNotCompleted();
 
+    /**
+     * 分页返回未完成的所有任务
+     * @param pageNum
+     * @return
+     */
+    List<Task> findAllNotCompleted(int pageNum);
+
+    /**
+     * 使用负责人的姓名查找负责人信息并注册
+     * @param task
+     * @return
+     */
+    Task releaseByInChargeUsername(Task task);
 }

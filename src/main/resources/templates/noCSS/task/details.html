@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>任务详情</title>
+</head>
+<body>
+
+<form method="PATCH" action="/admin/task" th:object="${task}" onsubmit="return submit_sure()">
+    <h1>任务详情</h1>
+
+    <label for="subject">主题: </label>
+    <input type="text" name="subject" id="subject" th:value="${subject}"/>
+    <br/>
+
+    <label for="level">级别: </label>
+    <input type="text" name="level" id="level" th:value="${level}"/>
+    <br/>
+
+    <label for="inChargeList">负责人: </label>
+    <div id="inChargeList" th:each="inChargeP : ${inCharge}">
+        <div name="inChargeP" >
+            <input type="text" name="inChargeP.username" th:value="${inChargeP.username}"/>
+            <input type="text" name="inChargeP.mail"  th:value="${inChargeP.mail}"/>
+            <input type="text" name="inChargeP.department"  th:value="${inChargeP.department}"/>
+            <button type="button" onclick="del_div(this)">-</button>
+        </div>
+    </div>
+    <button type="button" id="add-btn" onclick="add_div()">+</button>
+    <br/>
+
+    <label for="content">内容: </label>
+    <input type="text" name="content" id="content"/>
+    <br/>
+
+    <label for="deadline">截止时间: </label>
+    <input type="date" name="deadline" id="deadline"/>
+    <br/>
+
+    <input type="submit" value="修改"/>
+</form>
+
+<button type="button" id="index-btn">返回首页//还是返回哪？</button>
+
+</body>
+
+<script type="text/javascript">
+    function add_div() {
+        let inChargeP = document.createElement("div");
+        inChargeP.name="inChargeP";
+        inChargeP.innerHTML = document.getElementsByName("inChargeP").item(0).innerHTML;
+        document.getElementById("inChargeList").appendChild(inChargeP);
+    }
+    function del_div(btn) {
+
+            let parentNode = btn.parentNode;
+        console.log(parentNode)
+            document.getElementById("inChargeList").removeChild(parentNode);
+    }
+
+    function submit_sure(){
+        const gnl=confirm("确定要修改?");
+        if (gnl==true){
+            return true;
+        }else{
+            return false;
+        }
+    }
+</script>
+
+</html>

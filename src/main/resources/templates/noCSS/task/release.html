@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>发布任务</title>
+</head>
+<body>
+<h1>发布任务界面</h1>
+
+<form method="POST" action="/admin/task">
+    <h1>发布任务</h1>
+
+    <label for="subject">主题: </label>
+    <input type="text" name="subject" id="subject"/>
+    <br/>
+
+    <label for="level">级别: </label>
+    <input type="text" name="level" id="level"/>
+    <br/>
+
+    <label for="inChargeList">负责人: </label>
+    <div id="inChargeList">
+        <input type="text" name="inCharge[0].username" id="inCharge0"/>
+    </div>
+    <button type="button" id="add-btn" onclick="add_div()">+</button>
+    <br/>
+
+    <label for="content">内容: </label>
+    <input type="text" name="content" id="content"/>
+    <br/>
+
+    <label for="deadline">截止时间: </label>
+    <input type="date" name="deadline" id="deadline"/>
+    <br/>
+
+    <input type="submit" value="Submit order"/>
+</form>
+
+</body>
+
+<script type="text/javascript">
+    let inChargeNum = 1;
+    function add_div() {
+        const inputElement = document.createElement("input");
+        inputElement.type="text";
+        inputElement.name = "inCharge[" + inChargeNum +"].username";
+        inputElement.id="inCharge"+inChargeNum;
+        document.getElementById("inChargeList").appendChild(inputElement);
+        inChargeNum++;
+    }
+</script>
+
+</html>

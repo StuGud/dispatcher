@@ -1,0 +1,14 @@
+package com.stugud.dispatcher.repo;
+
+import com.stugud.dispatcher.entity.Employee;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.PagingAndSortingRepository;
+
+import java.util.List;
+
+public interface EmployeeRepo extends PagingAndSortingRepository<Employee,Long> {
+
+    @Query(value = "select * from t_employee,(select employeeId from t_task_employees where taskId=?) inCharge where t_employee.id=inCharge.employeeId",nativeQuery = true)
+    //@Query(value = "select * from t_employee,t_task_employees where t_employee.id=t_task_employees.employee and t_task_employees.task=?",nativeQuery = true)
+    List<Employee> findEmployeesByTaskId(long taskId);
+}
