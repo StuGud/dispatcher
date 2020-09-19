@@ -14,7 +14,7 @@ import javax.validation.constraints.*;
 @Table(name ="t_employee")
 public class Employee {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     @NotBlank
     @Size(min = 4,max = 32,message = "用户名长度为4-32字符")

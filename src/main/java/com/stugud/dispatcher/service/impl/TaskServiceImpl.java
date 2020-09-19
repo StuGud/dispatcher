@@ -3,9 +3,11 @@ package com.stugud.dispatcher.service.impl;
 import com.stugud.dispatcher.entity.Employee;
 import com.stugud.dispatcher.entity.Record;
 import com.stugud.dispatcher.entity.Task;
+import com.stugud.dispatcher.repo.EmployeeRepo;
 import com.stugud.dispatcher.repo.RecordRepo;
 import com.stugud.dispatcher.repo.TaskRepo;
 import com.stugud.dispatcher.service.TaskService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -22,13 +24,16 @@ public class TaskServiceImpl implements TaskService {
     TaskRepo taskRepo;
     final
     RecordRepo recordRepo;
+    final
+    EmployeeRepo employeeRepo;
 
     @Value("${dispatcher.employee.pageSize}")
     int pageSize;
 
-    public TaskServiceImpl(TaskRepo taskRepo, RecordRepo recordRepo) {
+    public TaskServiceImpl(TaskRepo taskRepo, RecordRepo recordRepo, EmployeeRepo employeeRepo) {
         this.taskRepo = taskRepo;
         this.recordRepo = recordRepo;
+        this.employeeRepo = employeeRepo;
     }
 
     @Override
@@ -136,8 +141,24 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public Task releaseByInChargeUsername(Task task) {
+        List<Employee> inChargeList=new ArrayList<>();
         for (Employee inChargeP: task.getInCharge()){
+            List<Employee> employeesWithSameName = employeeRepo.findAllByUsername(inChargeP.getUsername());
+            for(Employee employee:employeesWithSameName){
+                inChargeList.add(employee);
+            }
         }
-        return null;
+        if(inChargeList.isEmpty()){
+            return null;
+        }else {
+            task.setInCharge(inChargeList);
+            Task savedTask=taskRepo.save(task);
+//            System.out.println(task);
+            System.out.println(savedTask);
+            for (Employee inChargeP: task.getInCharge()){
+                inChargeP.setPassword("********");
+            }
+            return task;
+        }
     }
 }

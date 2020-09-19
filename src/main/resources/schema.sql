@@ -1,7 +1,7 @@
 create table if not exists t_employee
 (
     id         bigint      not null auto_increment primary key,
-    username   varchar(32) not null unique ,
+    username   varchar(32) not null ,
     password   varchar(16) not null,
     mail       varchar(64) not null,
     department varchar(32),

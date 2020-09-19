@@ -7,23 +7,31 @@
 </head>
 <body>
 
-<form method="PATCH" action="/admin/task" th:object="${task}" onsubmit="return submit_sure()">
+<form th:method="PUT" action="/admin/task" th:object="${task}" onsubmit="return submit_sure()">
     <h1>任务详情</h1>
 
-    <label for="subject">主题: </label>
-    <input type="text" name="subject" id="subject" th:value="${subject}"/>
+    <label for="id">任务Id: </label>
+    <input type="text" disabled="disabled" name="id" id="id" th:value="${task.id}"/>
     <br/>
 
-    <label for="level">级别: </label>
-    <input type="text" name="level" id="level" th:value="${level}"/>
+    <label for="subject">主题: </label>
+    <input type="text" name="subject" id="subject" th:value="${task.subject}"/>
+    <br/>
+
+    <label>级别: </label>
+<!--    <input type="text" name="level" id="level" th:value="${task.level}"/>-->
+        <input type="radio" name="level" id="level-A" value="A" th:checked="${task.level}==A">A &nbsp;
+        <input type="radio" name="level" id="level-B" value="B" th:checked="${task.level}==B">B &nbsp;
+        <input type="radio" name="level" id="level-C" value="C" th:checked="${task.level}==C">C &nbsp;
     <br/>
 
     <label for="inChargeList">负责人: </label>
-    <div id="inChargeList" th:each="inChargeP : ${inCharge}">
-        <div name="inChargeP" >
-            <input type="text" name="inChargeP.username" th:value="${inChargeP.username}"/>
-            <input type="text" name="inChargeP.mail"  th:value="${inChargeP.mail}"/>
-            <input type="text" name="inChargeP.department"  th:value="${inChargeP.department}"/>
+    <div id="inChargeList">
+        <div name="inChargeP" th:each="inChargeP : ${task.inCharge}">
+            ID：<input type="text" disabled="disabled" name="inChargeP.id" th:value="${inChargeP.id}"/>
+            姓名：<input type="text" name="inChargeP.username" th:value="${inChargeP.username}"/>
+            邮箱：<input type="text" name="inChargeP.mail"  th:value="${inChargeP.mail}"/>
+            部门：<input type="text" name="inChargeP.department"  th:value="${inChargeP.department}"/>
             <button type="button" onclick="del_div(this)">-</button>
         </div>
     </div>
@@ -31,17 +39,35 @@
     <br/>
 
     <label for="content">内容: </label>
-    <input type="text" name="content" id="content"/>
+    <input type="text" name="content" id="content" th:value="${task.content}"/>
     <br/>
 
-    <label for="deadline">截止时间: </label>
-    <input type="date" name="deadline" id="deadline"/>
+    <label for="createdAt">开始时间(不可修改): </label>
+    <input type="text" name="createdAt" id="createdAt" disabled="disabled" th:value="${task.createdAt}"/>
     <br/>
+
+    <label for="deadline">原本截止时间: </label>
+    <input type="text" id="deadlineTxt" disabled="disabled"  th:value="${task.deadline}">
+    修改 &nbsp;<input type="date" name="deadline" id="deadline"/>
+    <br/>
+
+    <label >任务状态: </label>
+    <input type="radio" name="state" id="state-n" value="未完成" th:checked="${task.state}==未完成">未完成 &nbsp;
+    <input type="radio" name="state"  id="state-y" value="已完成" th:checked="${task.state}==未完成">已完成 &nbsp;
+<!--    <input type="button" name="state"  th:if="${task.state}==未完成">-->
+    <br/>
+
+    <div th:if="${task.state}==已完成">
+        <label for="finishedAt">完成时间: </label>
+        <input type="text" id="finishedAt" disabled="disabled"   th:value="${task.finishedAt}">
+        <br/>
+    </div>
 
     <input type="submit" value="修改"/>
 </form>
 
-<button type="button" id="index-btn">返回首页//还是返回哪？</button>
+<button type="button" id="index-btn" >确认无误返回首页//还是返回哪？</button>
+
 
 </body>
 
@@ -53,10 +79,11 @@
         document.getElementById("inChargeList").appendChild(inChargeP);
     }
     function del_div(btn) {
-
+        if(document.getElementById("inChargeList").childElementCount>1){
             let parentNode = btn.parentNode;
-        console.log(parentNode)
+            console.log(parentNode)
             document.getElementById("inChargeList").removeChild(parentNode);
+        }
     }
 
     function submit_sure(){
@@ -67,6 +94,7 @@
             return false;
         }
     }
+
 </script>
 
 </html>

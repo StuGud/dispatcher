@@ -3,8 +3,9 @@ spring:
   datasource:
     url: jdbc:mysql://127.0.0.1:3306/dispatcher?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
     username: root
-    password: Wangwei1114
+    password: Mysql1114
     driver-class-name: com.mysql.cj.jdbc.Driver
+#    initialization-mode: always
   jpa:
     hibernate:
       naming:

@@ -32,13 +32,21 @@ public class AdminTaskController {
      * 发布任务后转到任务详情界面
      * @return
      */
-    @PostMapping
+    @PostMapping("/task")
     public String releaseTask(Task task, Model model){
+        System.out.println("试图新建任务：\n"+task);
+        task.setState("未完成");
         //传来的是inCharge的username
         Task newTask=taskService.releaseByInChargeUsername(task);
-
-
-//        model.addAttribute()
+        if (newTask!=null){
+            model.addAttribute("task",newTask);
+        }else {
+            //重新回到发布任务界面
+            //应该可以直接返回错误信息而不跳转
+            //这里有点问题
+            model.addAttribute("task",task);
+            return "noCSS/task/release";
+        }
         return "noCSS/task/details";
     }
 

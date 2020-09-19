@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>发布任务</title>
@@ -14,8 +15,10 @@
     <input type="text" name="subject" id="subject"/>
     <br/>
 
-    <label for="level">级别: </label>
-    <input type="text" name="level" id="level"/>
+    <label>级别: </label>
+    <input type="radio" name="level" id="level-A" value="A">A &nbsp;
+    <input type="radio" name="level" id="level-B" value="B">B &nbsp;
+    <input type="radio" name="level" id="level-C" value="C">C &nbsp;
     <br/>
 
     <label for="inChargeList">负责人: </label>
@@ -23,6 +26,7 @@
         <input type="text" name="inCharge[0].username" id="inCharge0"/>
     </div>
     <button type="button" id="add-btn" onclick="add_div()">+</button>
+    <button type="button" id="del-btn" onclick="del_div()">-</button>
     <br/>
 
     <label for="content">内容: </label>
@@ -47,6 +51,14 @@
         inputElement.id="inCharge"+inChargeNum;
         document.getElementById("inChargeList").appendChild(inputElement);
         inChargeNum++;
+    }
+    function del_div() {
+        if (inChargeNum > 1) {
+            const id = "inCharge" + (inChargeNum - 1).toString();
+            let e = document.getElementById(id);
+            document.getElementById("inChargeList").removeChild(e);
+            inChargeNum--;
+        }
     }
 </script>
 

@@ -66,7 +66,7 @@ public interface TaskService {
     List<Task> findAllNotCompleted(int pageNum);
 
     /**
-     * 使用负责人的姓名查找负责人信息并注册
+     * 使用负责人的姓名查找负责人信息并发布任务
      * @param task
      * @return
      */
