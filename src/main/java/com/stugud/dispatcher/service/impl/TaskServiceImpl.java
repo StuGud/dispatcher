@@ -142,10 +142,12 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public Task releaseByInChargeUsername(Task task) {
         List<Employee> inChargeList=new ArrayList<>();
-        for (Employee inChargeP: task.getInCharge()){
-            List<Employee> employeesWithSameName = employeeRepo.findAllByUsername(inChargeP.getUsername());
-            for(Employee employee:employeesWithSameName){
-                inChargeList.add(employee);
+        if (task.getInCharge()!=null){
+            for (Employee inChargeP: task.getInCharge()){
+                List<Employee> employeesWithSameName = employeeRepo.findAllByUsername(inChargeP.getUsername());
+                for(Employee employee:employeesWithSameName){
+                    inChargeList.add(employee);
+                }
             }
         }
         if(inChargeList.isEmpty()){

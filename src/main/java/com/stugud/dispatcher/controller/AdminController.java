@@ -40,12 +40,7 @@ public class AdminController {
 
 
 
-    @GetMapping("/task/{id}")
-    public String showTaskDetails(Model model,@PathVariable long id){
-        Task task=taskService.findById(id);
-        model.addAttribute("task",task);
-        return "taskDetails";
-    }
+
 
     @PatchMapping("/task/{id}")
     public String modifyTask(@PathVariable long id, @RequestBody Task patchTask){

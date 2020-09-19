@@ -5,9 +5,11 @@ import com.stugud.dispatcher.service.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletRequestWrapper;
+import java.util.List;
 
 @RequestMapping("/admin")
 @Controller
@@ -50,5 +52,17 @@ public class AdminTaskController {
         return "noCSS/task/details";
     }
 
+    @GetMapping("/task/{id}")
+    public String showTaskDetails(Model model,@PathVariable long id){
+        Task task=taskService.findById(id);
+        model.addAttribute("task",task);
+        return "noCSS/task/details";
+    }
 
+    @PutMapping("/task")
+    public String modifyTask(Model model,Task task){
+        System.out.println("PUT!!"+task);
+        model.addAttribute("task",task);
+        return "noCSS/task/details";
+    }
 }
