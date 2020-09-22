@@ -37,7 +37,7 @@ public interface TaskService {
      * 设置状态为已完成，并计算scoreChange
      * @return
      */
-    Task setCompleted(Task task);
+    Task setCompleted(long taskId);
 
     /**
      * 返回所有的任务
@@ -50,7 +50,7 @@ public interface TaskService {
      * @param pageNum
      * @return
      */
-    List<Task> findAll(int pageNum);
+    List<Task> findTaskPage(int pageNum);
 
     /**
      * 返回未完成的所有任务

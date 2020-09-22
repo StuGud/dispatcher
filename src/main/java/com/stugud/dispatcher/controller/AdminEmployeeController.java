@@ -10,53 +10,20 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * 暂时不实现
+ */
 @RequestMapping("/admin")
 @Controller
-public class AdminController {
+public class AdminEmployeeController {
 
     final TaskService taskService;
     final EmployeeService employeeService;
 
-    public AdminController(TaskService taskService,EmployeeService employeeService) {
+    public AdminEmployeeController(TaskService taskService, EmployeeService employeeService) {
         this.taskService = taskService;
         this.employeeService=employeeService;
     }
-
-    @RequestMapping("/test")
-    public String test(){
-        return "task";
-    }
-
-    /*
-    =========================================================
-    task
-     */
-    @GetMapping("/tasks")
-    public String showTaskList(Model model){
-        List<Task> tasks = taskService.findAll();
-        model.addAttribute("tasks",tasks);
-        return "task";
-    }
-
-
-
-
-
-    @PatchMapping("/task/{id}")
-    public String modifyTask(@PathVariable long id, @RequestBody Task patchTask){
-        //这里逻辑有问题，如果本身就是已完成，未考虑页面回显
-        if(patchTask.getState()=="已完成"){
-            taskService.setCompleted(patchTask);
-        }else{
-            taskService.modify(patchTask);
-        }
-        return "taskDetails";
-    }
-
-    /*
-    =========================================================
-    employee
-     */
 
     /**
      * 来到注册员工页面

@@ -93,8 +93,8 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public Task setCompleted(Task task) {
-        Optional<Task> optionalTask = taskRepo.findById(task.getId());
+    public Task setCompleted(long taskId) {
+        Optional<Task> optionalTask = taskRepo.findById(taskId);
         if(optionalTask.isPresent()) {
             Task task1 = optionalTask.get();
             task1.setState("已完成");
@@ -102,7 +102,7 @@ public class TaskServiceImpl implements TaskService {
             taskRepo.save(task1);
 
             //计算scoreChange
-            long deadline = task.getDeadline().getTime();
+            long deadline = task1.getDeadline().getTime();
             long nowDate = (new Date()).getTime();
             long delay = (nowDate - deadline) / (24 * 60 * 60 * 1000);
             int scoreChange = (int) (-5 * delay);
@@ -133,7 +133,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public List<Task> findAll(int pageNum) {
+    public List<Task> findTaskPage(int pageNum) {
         Pageable pageable = PageRequest.of(pageNum, pageSize);
         List<Task> tasks = (List<Task>) taskRepo.findAll(pageable);
         return tasks;
