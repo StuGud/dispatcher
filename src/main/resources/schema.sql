@@ -8,7 +8,6 @@ create table if not exists t_employee
     score      int default 0
 );
 
-#content以及filePath应该单独建表，暂用。
 create table if not exists t_task
 (
     id         bigint        not null auto_increment primary key,

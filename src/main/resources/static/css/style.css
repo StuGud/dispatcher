@@ -20346,7 +20346,7 @@ code {
 }
 
 .form-control, .dataTables_wrapper select {
-  border: 1px solid #f3f3f3;
+  border: 1px solid #b1acac;
   font-weight: 400;
   font-size: 0.875rem;
 }
@@ -20354,7 +20354,7 @@ code {
 select.form-control, .dataTables_wrapper select {
   padding: .4375rem .75rem;
   border: 0;
-  outline: 1px solid #f3f3f3;
+  outline: 1px solid #b1acac;
   color: #c9c8c8;
 }
 

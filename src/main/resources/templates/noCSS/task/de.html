@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <title>Majestic Admin</title>
+        <link rel="stylesheet" th:href="@{/vendors/mdi/css/materialdesignicons.min.css}">
+        <link rel="stylesheet" th:href="@{/vendors/base/vendor.bundle.base.css}">
+        <!-- endinject -->
+        <!-- End plugin css for this page -->
+        <!-- inject:css -->
+        <link rel="stylesheet" th:href="@{/css/style.css}">
+        <!-- endinject -->
+        <link rel="shortcut icon" th:href="@{/images/favicon.png}" />
+    </head>
+
+    <body>
+        <div class="container-scroller">
+            <!-- partial:../../partials/_navbar.html -->
+
+            <div th:replace="commons/wrapper::wrapper"></div>
+
+            <!-- partial -->
+            <div class="container-fluid page-body-wrapper">
+                <!-- partial:../../partials/_sidebar.html -->
+                <div th:replace="commons/wrapper::sidebar"></div>
+                <!-- partial -->
+                <div class="main-panel">
+                    <div class="content-wrapper">
+                        <div class="row">
+                            <div class="col-12 grid-margin">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h4 class="card-title">任务详情</h4>
+                                        <form class="form-sample" th:method="PUT" action="/admin/task" th:object="${task}" onsubmit="return submit_sure()">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group row">
+                                                        <label class="col-sm-3 col-form-label">任务标题：</label>
+                                                        <div class="col-sm-9">
+                                                            <input type="text" disabled="disabled" name="id" id="id" th:value="${task.id}"   class="form-control" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group row">
+                                                        <label class="col-sm-3 col-form-label">任务等级：</label>
+                                                        <div class="col-sm-9">
+                                                            <select  name="level" class="form-control">
+                                                                <option name="level" value="A" th:selected="${task.level}==A">A</option>
+                                                                <option name="level" value="B" th:selected="${task.level}==B">B</option>
+                                                                <option name="level" value="B" th:selected="${task.level}==C">C</option>
+
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+
+                                                <div class="col-md-6">
+                                                    <div class="form-group row">
+                                                        <label class="col-sm-3 col-form-label">截止时间：</label>
+                                                        <div class="col-sm-9">
+                                                            <input disabled type="text" name="deadline" class="form-control" th:value="${task.deadline}" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-6">
+                                                    <div class="form-group row">
+                                                        <label class="col-sm-3 col-form-label">修改：</label>
+                                                        <div class="col-sm-9">
+                                                            <input  type="date" name="deadline" class="form-control"  />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group row">
+                                                        <label class="col-sm-3 col-form-label">负责人：</label>
+                                                        <div class="col-sm-9" id="inChargeList" th:each="inChargeP : ${task.inCharge}">
+                                                            ID：<input type="text" disabled="disabled" name="inChargeP.id" th:value="${inChargeP.id}" class="form-control"/>
+                                                            姓名：<input type="text" name="inChargeP.username" th:value="${inChargeP.username}" class="form-control"/>
+                                                            邮箱：<input type="text" name="inChargeP.mail"  th:value="${inChargeP.mail}" class="form-control"/>
+                                                            部门：<input type="text" name="inChargeP.department"  th:value="${inChargeP.department}" class="form-control"/>
+
+                                                        </div>
+                                                    </div>
+                                                    <button type="button" class="btn btn-light bg-white btn-icon mr-3 mt-2 mt-xl-0" id="del-btn" onclick="del_div()">
+                                                        <i class="mdi mdi-minus text-muted"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group row">
+                                                        <label class="col-sm-3 col-form-label">描述：</label>
+                                                        <div class="col-sm-9">
+                                                            <input th:value="${task.content}" name="content" type="text" class="form-control" style="width:970px; height:200px;"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group row">
+                                                        <label class="col-sm-3 col-form-label">任务状态</label>
+                                                        <div class="col-sm-9">
+                                                            <select  name="state" class="form-control">
+                                                                <option name="state" value="未完成" th:selected="${task.state}==未完成" >未完成</option>
+                                                                <option name="state" value="已完成" th:selected="${task.state}==已完成">已完成</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-6"  th:if="${task.state}==已完成">
+                                                    <div class="form-group row">
+                                                        <label class="col-sm-3 col-form-label">完成时间：</label>
+                                                        <div class="col-sm-9">
+                                                            <input type="text" id="finishedAt" disabled="disabled"   th:value="${task.finishedAt}" class="form-control">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <input  class="btn btn-block btn-primary btn-lg font-weight-medium auth-form-btn" type="submit" style="width:150px; height:50px;float: right;"></input>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- partial -->
+                </div>
+                <!-- main-panel ends -->
+            </div>
+            <!-- page-body-wrapper ends -->
+        </div>
+        <!-- container-scroller -->
+        <!-- plugins:js -->
+        <script type="text/javascript">
+            let inChargeNum = 1;
+            function add_div() {
+                const inputElement = document.createElement("input");
+                inputElement.type="text";
+                inputElement.name = "inCharge[" + inChargeNum +"].username";
+                inputElement.className="form-control";
+                inputElement.id="inCharge"+inChargeNum;
+                document.getElementById("inChargeList").appendChild(inputElement);
+                inChargeNum++;
+            }
+            function del_div() {
+                if (inChargeNum > 1) {
+                    const id = "inCharge" + (inChargeNum - 1).toString();
+                    let e = document.getElementById(id);
+                    document.getElementById("inChargeList").removeChild(e);
+                    inChargeNum--;
+                }
+            }
+
+            function submit_sure(){
+                const gnl=confirm("确定要修改?");
+                if (gnl==true){
+                    return true;
+                }else{
+                    return false;
+                }
+            }
+
+        </script>
+        <script th:src="@{/vendors/base/vendor.bundle.base.js}"></script>
+        <!-- endinject -->
+        <!-- inject:js -->
+        <script th:src="@{/js/off-canvas.js}"></script>
+        <script th:src="@{/js/hoverable-collapse.js}"></script>
+        <script th:src="@{/js/template.js}"></script>
+        <!-- endinject -->
+        <!-- Custom js for this page-->
+        <script th:src="@{/js/file-upload.js}"></script>
+        <!-- End custom js for this page-->
+    </body>
+</html>

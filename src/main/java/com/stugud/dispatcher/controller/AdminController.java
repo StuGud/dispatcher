@@ -44,7 +44,7 @@ public class AdminController {
     public String showTaskDetails(Model model,@PathVariable long id){
         Task task=taskService.findById(id);
         model.addAttribute("task",task);
-        return "taskDetails";
+        return "noCSS/task/de";
     }
 
     @PatchMapping("/task/{id}")

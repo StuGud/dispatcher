@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <title>Majestic Admin</title>
+        <link rel="stylesheet" th:href="@{/vendors/mdi/css/materialdesignicons.min.css}">
+        <link rel="stylesheet" th:href="@{/vendors/base/vendor.bundle.base.css}">
+        <!-- endinject -->
+        <!-- End plugin css for this page -->
+        <!-- inject:css -->
+        <link rel="stylesheet" th:href="@{/css/style.css}">
+        <!-- endinject -->
+        <link rel="shortcut icon" th:href="@{/images/favicon.png}" />
+    </head>
+
+    <body>
+        <div class="container-scroller">
+            <!-- partial:../../partials/_navbar.html -->
+
+            <div th:replace="commons/wrapper::wrapper"></div>
+
+            <!-- partial -->
+            <div class="container-fluid page-body-wrapper">
+                <!-- partial:../../partials/_sidebar.html -->
+                <div th:replace="commons/wrapper::sidebar"></div>
+                <!-- partial -->
+                <div class="main-panel">
+                    <div class="content-wrapper">
+                        <div class="row">
+                            <div class="col-12 grid-margin">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h4 class="card-title">任务信息</h4>
+                                        <form class="form-sample" method="POST" action="/admin/task">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group row">
+                                                        <label class="col-sm-3 col-form-label">任务标题</label>
+                                                        <div class="col-sm-9">
+                                                            <input type="text" name="subject"   class="form-control" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group row">
+                                                        <label class="col-sm-3 col-form-label">任务等级</label>
+                                                        <div class="col-sm-9">
+                                                            <select name="level" class="form-control">
+                                                                <option name="level" value="A">A</option>
+                                                                <option name="level" value="B">B</option>
+                                                                <option name="level" value="B">C</option>
+
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group row">
+                                                        <label class="col-sm-3 col-form-label">截止时间</label>
+                                                        <div class="col-sm-9">
+                                                            <input type="date" name="deadline" class="form-control" placeholder="dd/mm/yyyy"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group row">
+                                                        <label class="col-sm-3 col-form-label">负责人</label>
+                                                        <div class="col-sm-9" id="inChargeList">
+                                                            <input name="inCharge[0].username" id="inCharge0" class="form-control" />
+                                                        </div>
+                                                    </div>
+                                                    <button type="button" class="btn btn-light bg-white btn-icon mr-3 mt-2 mt-xl-0" id="add-btn" onclick="add_div()">
+                                                        <i class="mdi mdi-plus text-muted"></i>
+                                                    </button>
+                                                    <button type="button" class="btn btn-light bg-white btn-icon mr-3 mt-2 mt-xl-0" id="del-btn" onclick="del_div()">
+                                                        <i class="mdi mdi-minus text-muted"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group row">
+                                                        <label class="col-sm-3 col-form-label">描述</label>
+                                                        <div class="col-sm-9">
+                                                            <input name="content" type="text" class="form-control" style="width:970px; height:200px;"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <input  class="btn btn-block btn-primary btn-lg font-weight-medium auth-form-btn" type="submit" style="width:150px; height:50px;float: right;"></input>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- partial -->
+            </div>
+            <!-- main-panel ends -->
+        </div>
+        <!-- page-body-wrapper ends -->
+        </div>
+        <!-- container-scroller -->
+        <!-- plugins:js -->
+        <script type="text/javascript">
+            let inChargeNum = 1;
+            function add_div() {
+                const inputElement = document.createElement("input");
+                inputElement.type="text";
+                inputElement.name = "inCharge[" + inChargeNum +"].username";
+                inputElement.className="form-control";
+                inputElement.id="inCharge"+inChargeNum;
+                document.getElementById("inChargeList").appendChild(inputElement);
+                inChargeNum++;
+            }
+            function del_div() {
+                if (inChargeNum > 1) {
+                    const id = "inCharge" + (inChargeNum - 1).toString();
+                    let e = document.getElementById(id);
+                    document.getElementById("inChargeList").removeChild(e);
+                    inChargeNum--;
+                }
+            }
+        </script>
+        <script th:src="@{/vendors/base/vendor.bundle.base.js}"></script>
+        <!-- endinject -->
+        <!-- inject:js -->
+        <script th:src="@{/js/off-canvas.js}"></script>
+        <script th:src="@{/js/hoverable-collapse.js}"></script>
+        <script th:src="@{/js/template.js}"></script>
+        <!-- endinject -->
+        <!-- Custom js for this page-->
+        <script th:src="@{/js/file-upload.js}"></script>
+        <!-- End custom js for this page-->
+    </body>
+</html>
