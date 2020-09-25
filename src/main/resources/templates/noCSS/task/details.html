@@ -7,11 +7,12 @@
 </head>
 <body>
 
-<form th:method="PUT" action="/admin/task" th:object="${task}" onsubmit="return submit_sure()">
+<form method="post" action="/admin/task" th:object="${task}" onsubmit="return submit_sure()">
+    <input type="hidden" name="_method" value="PUT">
     <h1>任务详情</h1>
 
     <label for="id">任务Id: </label>
-    <input type="text" disabled="disabled" name="id" id="id" th:value="${task.id}"/>
+    <input type="text" readonly="readonly" name="id" id="id" th:value="${task.id}"/>
     <br/>
 
     <label for="subject">主题: </label>
@@ -19,19 +20,19 @@
     <br/>
 
     <label>级别: </label>
-<!--    <input type="text" name="level" id="level" th:value="${task.level}"/>-->
-        <input type="radio" name="level" id="level-A" value="A" th:checked="${task.level}==A">A &nbsp;
-        <input type="radio" name="level" id="level-B" value="B" th:checked="${task.level}==B">B &nbsp;
-        <input type="radio" name="level" id="level-C" value="C" th:checked="${task.level}==C">C &nbsp;
+    <!--    <input type="text" name="level" id="level" th:value="${task.level}"/>-->
+    <input type="radio" name="level" id="level-A" value="A" th:checked="${task.level}==A">A &nbsp;
+    <input type="radio" name="level" id="level-B" value="B" th:checked="${task.level}==B">B &nbsp;
+    <input type="radio" name="level" id="level-C" value="C" th:checked="${task.level}==C">C &nbsp;
     <br/>
 
     <label for="inChargeList">负责人: </label>
     <div id="inChargeList">
-        <div name="inChargeP" th:each="inChargeP : ${task.inCharge}">
+        <div th:each="inChargeP,inChargePStat : ${task.inCharge}" >
             ID：<input type="text" disabled="disabled" name="inChargeP.id" th:value="${inChargeP.id}"/>
-            姓名：<input type="text" name="inChargeP.username" th:value="${inChargeP.username}"/>
-            邮箱：<input type="text" name="inChargeP.mail"  th:value="${inChargeP.mail}"/>
-            部门：<input type="text" name="inChargeP.department"  th:value="${inChargeP.department}"/>
+            姓名：<input type="text" name="inCharge[0].username" th:name="'inCharge['+${inChargePStat.index}+'].username'" th:value="${inChargeP.username}"/>
+            邮箱：<input type="text" th:name="'inCharge['+${inChargePStat.index}+'].mail'" th:value="${inChargeP.mail}"/>
+            部门：<input type="text" th:name="'inCharge['+${inChargePStat.index}+'].department'" th:value="${inChargeP.department}"/>
             <button type="button" onclick="del_div(this)">-</button>
         </div>
     </div>
@@ -47,50 +48,70 @@
     <br/>
 
     <label for="deadline">原本截止时间: </label>
-    <input type="text" id="deadlineTxt" disabled="disabled"  th:value="${task.deadline}">
+    <input type="text" id="deadlineTxt" readonly="readonly" th:value="${task.deadline}">
     修改 &nbsp;<input type="date" name="deadline" id="deadline"/>
     <br/>
 
-    <label >任务状态: </label>
+    <label>任务状态: </label>
     <input type="radio" name="state" id="state-n" value="未完成" th:checked="${task.state}==未完成">未完成 &nbsp;
-    <input type="radio" name="state"  id="state-y" value="已完成" th:checked="${task.state}==未完成">已完成 &nbsp;
-<!--    <input type="button" name="state"  th:if="${task.state}==未完成">-->
+    <input type="radio" name="state" id="state-y" value="已完成" th:checked="${task.state}==未完成">已完成 &nbsp;
+    <!--    <input type="button" name="state"  th:if="${task.state}==未完成">-->
     <br/>
 
     <div th:if="${task.state}==已完成">
         <label for="finishedAt">完成时间: </label>
-        <input type="text" id="finishedAt" disabled="disabled"   th:value="${task.finishedAt}">
+        <input type="text" id="finishedAt" readonly="readonly" th:value="${task.finishedAt}">
         <br/>
     </div>
 
     <input type="submit" value="修改"/>
 </form>
 
-<button type="button" id="index-btn" >确认无误返回首页//还是返回哪？</button>
+<button type="button" id="index-btn">确认无误返回首页//还是返回哪？</button>
 
 
 </body>
 
+<script id="inChargeP-template" type="text/html">
+        ID：<input type="text" disabled="disabled" name="inChargeP.id" />
+        姓名：<input type="text" name="inChargeP.username" />
+        邮箱：<input type="text" name="inChargeP.mail"/>
+        部门：<input type="text" name="inChargeP.department"/>
+        <button type="button" onclick="del_div(this)">-</button>
+</script>
+
 <script type="text/javascript">
+    let inChargeNum=1;
+    $(function(){
+        inChargeNum=document.getElementById("inChargeList").childElementCount;
+    });
+
     function add_div() {
         let inChargeP = document.createElement("div");
-        inChargeP.name="inChargeP";
-        inChargeP.innerHTML = document.getElementsByName("inChargeP").item(0).innerHTML;
+        inChargeP.nodeName = "inChargeP";
+        // inChargeP.innerHTML = document.getElementsByName("inChargeP").item(0).innerHTML;
+        // document.getElementById("inChargeList").appendChild(inChargeP);
+        inChargeP.innerHTML = document.getElementById("inChargeP-template").innerHTML;
+        for(let i=0;i<5;i++){
+            inChargeP.innerHTML = inChargeP.innerHTML.replace("inChargeP","inCharge["+inChargeNum+"]");
+        }
         document.getElementById("inChargeList").appendChild(inChargeP);
+        inChargeNum++;
     }
+
     function del_div(btn) {
-        if(document.getElementById("inChargeList").childElementCount>1){
+        if (document.getElementById("inChargeList").childElementCount > 1) {
             let parentNode = btn.parentNode;
             console.log(parentNode)
             document.getElementById("inChargeList").removeChild(parentNode);
         }
     }
 
-    function submit_sure(){
-        const gnl=confirm("确定要修改?");
-        if (gnl==true){
+    function submit_sure() {
+        const gnl = confirm("确定要修改?");
+        if (gnl == true) {
             return true;
-        }else{
+        } else {
             return false;
         }
     }

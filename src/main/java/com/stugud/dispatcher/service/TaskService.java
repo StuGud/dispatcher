@@ -20,13 +20,6 @@ public interface TaskService {
     List<Task> findAllByEmpId(long empId);
 
     /**
-     * 发布任务
-     * @param task
-     * @return
-     */
-    Task release(Task task);
-
-    /**
      * 修改任务
      * @param task
      * @return
@@ -34,10 +27,10 @@ public interface TaskService {
     Task modify(Task task);
 
     /**
-     * 设置状态为已完成，并计算scoreChange
+     * 设置状态为已完成,使用当前时间为完成时间，并计算scoreChange
      * @return
      */
-    Task setCompleted(Task task);
+    Task setCompleted(long taskId);
 
     /**
      * 返回所有的任务
@@ -50,7 +43,7 @@ public interface TaskService {
      * @param pageNum
      * @return
      */
-    List<Task> findAll(int pageNum);
+    List<Task> findAllByPageNum(int pageNum);
 
     /**
      * 返回未完成的所有任务
@@ -70,5 +63,5 @@ public interface TaskService {
      * @param task
      * @return
      */
-    Task releaseByInChargeUsername(Task task);
+    Task releaseWithInChargesName(Task task);
 }
