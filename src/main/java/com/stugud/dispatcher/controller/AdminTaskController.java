@@ -26,7 +26,7 @@ public class AdminTaskController {
      */
     @GetMapping("/task")
     public String showTaskRelease() {
-        return "noCSS/task/release";
+        return "noCSS/task/re";
     }
 
     /**
@@ -48,7 +48,7 @@ public class AdminTaskController {
             //应该可以直接返回错误信息而不跳转
             //这里有点问题
             model.addAttribute("task", task);
-            return "noCSS/task/release";
+            return "noCSS/task/re";
         }
         return "noCSS/task/details";
     }
@@ -60,7 +60,7 @@ public class AdminTaskController {
             setEmpPswInvisible(task);
             model.addAttribute("task", task);
         }
-        return "noCSS/task/details";
+        return "noCSS/task/de";
     }
 
     /**
@@ -78,7 +78,7 @@ public class AdminTaskController {
         if(savedTask!=null){
             setEmpPswInvisible(savedTask);
             model.addAttribute("task", savedTask);
-            return "noCSS/task/details";
+            return "noCSS/task/de";
         }else{
             //来到修改不成功的页面
             return "";

@@ -36,11 +36,12 @@
                                         <h4 class="card-title">任务详情</h4>
                                         <form class="form-sample" th:method="PUT" action="/admin/task" th:object="${task}" onsubmit="return submit_sure()">
                                             <div class="row">
+                                                <input type="text" hidden name="id" th:value="${task.id}"  class="form-control" />
                                                 <div class="col-md-6">
                                                     <div class="form-group row">
                                                         <label class="col-sm-3 col-form-label">任务标题：</label>
                                                         <div class="col-sm-9">
-                                                            <input type="text" disabled="disabled" name="id" id="id" th:value="${task.id}"   class="form-control" />
+                                                            <input type="text" disabled="disabled" name="subject" id="id" th:value="${task.subject}"  class="form-control" />
                                                         </div>
                                                     </div>
                                                 </div>
@@ -64,7 +65,7 @@
                                                     <div class="form-group row">
                                                         <label class="col-sm-3 col-form-label">截止时间：</label>
                                                         <div class="col-sm-9">
-                                                            <input disabled type="text" name="deadline" class="form-control" th:value="${task.deadline}" />
+                                                            <input disabled type="text" name="deadline" class="form-control" th:value="${#dates.format(task.deadline,'yyyy-MM-dd')}" />
                                                         </div>
                                                     </div>
                                                 </div>
@@ -79,22 +80,26 @@
                                                 </div>
                                             </div>
 
-                                            <div class="row">
-                                                <div class="col-md-6">
+                                            <div class="row" name="parent">
+                                                <div class="col-md-6"  th:each="inChargeP,inChargePStat : ${task.inCharge}" name="input_inCharge" th:id="${inChargeP.id}" >
                                                     <div class="form-group row">
                                                         <label class="col-sm-3 col-form-label">负责人：</label>
-                                                        <div class="col-sm-9" id="inChargeList" th:each="inChargeP : ${task.inCharge}">
-                                                            ID：<input type="text" disabled="disabled" name="inChargeP.id" th:value="${inChargeP.id}" class="form-control"/>
-                                                            姓名：<input type="text" name="inChargeP.username" th:value="${inChargeP.username}" class="form-control"/>
-                                                            邮箱：<input type="text" name="inChargeP.mail"  th:value="${inChargeP.mail}" class="form-control"/>
-                                                            部门：<input type="text" name="inChargeP.department"  th:value="${inChargeP.department}" class="form-control"/>
+                                                        <div class="col-sm-9" >
+                                                            ID：<input type="text" disabled="disabled" th:name="'inCharge['+${inChargePStat.index}+'].id'" th:value="${inChargeP.id}" class="form-control"/>
+                                                            姓名：<input type="text" th:name="'inCharge['+${inChargePStat.index}+'].username'" th:value="${inChargeP.username}" class="form-control"/>
+                                                            邮箱：<input type="text" th:name="'inCharge['+${inChargePStat.index}+'].mail'"  th:value="${inChargeP.mail}" class="form-control"/>
+                                                            部门：<input type="text" th:name="'inCharge['+${inChargePStat.index}+'].department'"  th:value="${inChargeP.department}" class="form-control"/>
 
                                                         </div>
+
                                                     </div>
-                                                    <button type="button" class="btn btn-light bg-white btn-icon mr-3 mt-2 mt-xl-0" id="del-btn" onclick="del_div()">
-                                                        <i class="mdi mdi-minus text-muted"></i>
-                                                    </button>
                                                 </div>
+                                                <button type="button" class="btn btn-light bg-white btn-icon mr-3 mt-2 mt-xl-0" id="add-btn" th:onclick="add_div()">
+                                                    <i class="mdi mdi-plus text-muted"></i>
+                                                </button>
+                                                <button  type="button" class="btn btn-light bg-white btn-icon mr-3 mt-2 mt-xl-0" id="del-btn" th:onclick="del_div()">
+                                                    <i class="mdi mdi-minus text-muted"></i>
+                                                </button>
                                             </div>
 
                                             <div class="row">
@@ -113,7 +118,7 @@
                                                     <div class="form-group row">
                                                         <label class="col-sm-3 col-form-label">任务状态</label>
                                                         <div class="col-sm-9">
-                                                            <select  name="state" class="form-control">
+                                                            <select  name="state" class="form-control" th:disabled="${task.state}==已完成">
                                                                 <option name="state" value="未完成" th:selected="${task.state}==未完成" >未完成</option>
                                                                 <option name="state" value="已完成" th:selected="${task.state}==已完成">已完成</option>
                                                             </select>
@@ -125,7 +130,7 @@
                                                     <div class="form-group row">
                                                         <label class="col-sm-3 col-form-label">完成时间：</label>
                                                         <div class="col-sm-9">
-                                                            <input type="text" id="finishedAt" disabled="disabled"   th:value="${task.finishedAt}" class="form-control">
+                                                            <input type="text" id="finishedAt" disabled="disabled"   th:value="${#dates.format(task.finishedAt,'yyyy-MM-dd')}" class="form-control">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -148,21 +153,34 @@
         <script type="text/javascript">
             let inChargeNum = 1;
             function add_div() {
-                const inputElement = document.createElement("input");
-                inputElement.type="text";
-                inputElement.name = "inCharge[" + inChargeNum +"].username";
-                inputElement.className="form-control";
-                inputElement.id="inCharge"+inChargeNum;
-                document.getElementById("inChargeList").appendChild(inputElement);
-                inChargeNum++;
+                var parent = document.getElementsByName("parent")[0];
+                var input_inCharge = document.getElementsByName("input_inCharge");
+                var btn=document.getElementById("add-btn");
+                var newNode=input_inCharge[input_inCharge.length-1].cloneNode(true);
+
+                newNode.id=parseInt(newNode.id)+1;
+                var idx=newNode.id;
+
+                newNode.getElementsByTagName("input")[0].name="inCharge["+idx+"].id";
+                newNode.getElementsByTagName("input")[1].name="inCharge["+idx+"].username";
+                newNode.getElementsByTagName("input")[2].name="inCharge["+idx+"].mail";
+                newNode.getElementsByTagName("input")[3].name="inCharge["+idx+"].department";
+
+                newNode.getElementsByTagName("input")[0].value="";
+                newNode.getElementsByTagName("input")[1].value="";
+                newNode.getElementsByTagName("input")[2].value="";
+                newNode.getElementsByTagName("input")[3].value="";
+
+                newNode.getElementsByTagName("input")[0].name=newNode.getElementsByTagName("input")[0]
+
+                parent.insertBefore(newNode,btn);
+
             }
             function del_div() {
-                if (inChargeNum > 1) {
-                    const id = "inCharge" + (inChargeNum - 1).toString();
-                    let e = document.getElementById(id);
-                    document.getElementById("inChargeList").removeChild(e);
-                    inChargeNum--;
-                }
+
+                var del=document.getElementsByName("input_inCharge");
+                if(del.length!=0)
+                    del[del.length-1].remove();
             }
 
             function submit_sure(){

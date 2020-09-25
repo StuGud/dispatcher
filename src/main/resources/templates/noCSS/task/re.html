@@ -63,7 +63,7 @@
                                                     <div class="form-group row">
                                                         <label class="col-sm-3 col-form-label">截止时间</label>
                                                         <div class="col-sm-9">
-                                                            <input type="date" name="deadline" class="form-control" placeholder="dd/mm/yyyy"/>
+                                                            <input type="date" name="deadline" class="form-control" />
                                                         </div>
                                                     </div>
                                                 </div>
@@ -119,7 +119,10 @@
                 inputElement.name = "inCharge[" + inChargeNum +"].username";
                 inputElement.className="form-control";
                 inputElement.id="inCharge"+inChargeNum;
+                const x = document.createElement("p");
+                document.getElementById("inChargeList").appendChild(x);
                 document.getElementById("inChargeList").appendChild(inputElement);
+
                 inChargeNum++;
             }
             function del_div() {

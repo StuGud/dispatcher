@@ -10,16 +10,19 @@ import java.io.Serializable;
 
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 @Entity
 @Table(name = "t_task_employees")
 @IdClass(RecordMultiKeys.class)
 public class Record  {
     @Id
-    @Column(name = "employeeId")
     private long employeeId;
     @Id
-    @Column(name = "taskId")
     private long taskId;
     private int scoreChange;
+
+    public Record( long taskId,long employeeId, int scoreChange) {
+        this.employeeId = employeeId;
+        this.taskId = taskId;
+        this.scoreChange = scoreChange;
+    }
 }

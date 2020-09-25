@@ -105,6 +105,7 @@ public class TaskServiceImpl implements TaskService {
             long delay = (nowDate - deadline) / (24 * 60 * 60 * 1000);
             int scoreChange = (int) (-5 * delay);
             for (Employee employee : task1.getInCharge()) {
+                System.out.println(task1);
                 recordRepo.save(new Record(task1.getId(), employee.getId(), scoreChange));
                 employee.setScore(employee.getScore()+scoreChange);
                 employeeRepo.save(employee);

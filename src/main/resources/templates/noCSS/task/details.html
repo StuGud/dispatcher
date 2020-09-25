@@ -29,8 +29,8 @@
     <label for="inChargeList">负责人: </label>
     <div id="inChargeList">
         <div th:each="inChargeP,inChargePStat : ${task.inCharge}" >
-            ID：<input type="text" disabled="disabled" name="inChargeP.id" th:value="${inChargeP.id}"/>
-            姓名：<input type="text" name="inCharge[0].username" th:name="'inCharge['+${inChargePStat.index}+'].username'" th:value="${inChargeP.username}"/>
+            ID：<input type="text" disabled="disabled" th:name="'inCharge['+${inChargePStat.index}+'].id'" th:value="${inChargeP.id}"/>
+            姓名：<input type="text" th:name="'inCharge['+${inChargePStat.index}+'].username'" th:value="${inChargeP.username}"/>
             邮箱：<input type="text" th:name="'inCharge['+${inChargePStat.index}+'].mail'" th:value="${inChargeP.mail}"/>
             部门：<input type="text" th:name="'inCharge['+${inChargePStat.index}+'].department'" th:value="${inChargeP.department}"/>
             <button type="button" onclick="del_div(this)">-</button>
