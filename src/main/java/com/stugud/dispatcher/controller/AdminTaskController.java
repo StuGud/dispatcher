@@ -1,5 +1,6 @@
 package com.stugud.dispatcher.controller;
 
+import com.stugud.dispatcher.entity.Employee;
 import com.stugud.dispatcher.entity.Task;
 import com.stugud.dispatcher.service.TaskService;
 import org.springframework.stereotype.Controller;
@@ -38,8 +39,9 @@ public class AdminTaskController {
         System.out.println("试图新建任务：\n" + task);
         task.setState("未完成");
         //传来的是inCharge的username
-        Task newTask = taskService.releaseByInChargeUsername(task);
+        Task newTask = taskService.releaseWithInChargesName(task);
         if (newTask != null) {
+            setEmpPswInvisible(newTask);
             model.addAttribute("task", newTask);
         } else {
             //重新回到发布任务界面
@@ -54,7 +56,10 @@ public class AdminTaskController {
     @GetMapping("/task/{id}")
     public String showTaskDetails(Model model, @PathVariable long id) {
         Task task = taskService.findById(id);
-        model.addAttribute("task", task);
+        if (null!=task){
+            setEmpPswInvisible(task);
+            model.addAttribute("task", task);
+        }
         return "noCSS/task/details";
     }
 
@@ -69,14 +74,24 @@ public class AdminTaskController {
     @PutMapping("/task")
     public String modifyTask(Model model, Task task) {
         System.out.println("PUT!!" + task);
-        model.addAttribute("task", task);
-        return "noCSS/task/details";
+        Task savedTask=taskService.modify(task);
+        if(savedTask!=null){
+            setEmpPswInvisible(savedTask);
+            model.addAttribute("task", savedTask);
+            return "noCSS/task/details";
+        }else{
+            //来到修改不成功的页面
+            return "";
+        }
     }
 
     @PatchMapping("/task/{id}/setCompleted")
     @ResponseBody
     public Task setCompleted(@PathVariable(name = "id") long taskId) {
         Task task = taskService.setCompleted(taskId);
+        if (task!=null){
+            setEmpPswInvisible(task);
+        }
         return task;
     }
 
@@ -87,17 +102,20 @@ public class AdminTaskController {
     @GetMapping("/tasks")
     public String showTaskList(Model model) {
         List<Task> tasks = taskService.findAll();
+        for (Task task:tasks){
+            setEmpPswInvisible(task);
+        }
         model.addAttribute("tasks", tasks);
         return "task";
     }
 
     @GetMapping("/taskPageInit")
     public List<Task> initTaskPage() {
-        return taskService.findTaskPage(0);
+        return taskService.findAllByPageNum(0);
     }
     @GetMapping("/taskPage/{pageNum}")
     public List<Task> showTaskPage(@PathVariable int pageNum) {
-        return taskService.findTaskPage(pageNum);
+        return taskService.findAllByPageNum(pageNum);
     }
 
     @GetMapping("/testJSON/{id}")
@@ -107,5 +125,12 @@ public class AdminTaskController {
         return task;
     }
 
+    private void setEmpPswInvisible(Task task){
+        if (null!=task){
+            for(Employee employee: task.getInCharge()){
+                employee.setPassword("******");
+            }
+        }
+    }
 
 }

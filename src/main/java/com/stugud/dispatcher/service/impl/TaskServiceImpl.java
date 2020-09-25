@@ -56,14 +56,6 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public Task release(Task task) {
-        for (Employee employee : task.getInCharge()) {
-            recordRepo.save(new Record(task.getId(), employee.getId(), 0));
-        }
-        return taskRepo.save(task);
-    }
-
-    @Override
     public Task modify(Task modifiedTask) {
         Optional<Task> optionalTask = taskRepo.findById(modifiedTask.getId());
         if(optionalTask.isPresent()) {
@@ -74,23 +66,29 @@ public class TaskServiceImpl implements TaskService {
             if (modifiedTask.getContent() != null) {
                 task.setContent(modifiedTask.getContent());
             }
+            if (modifiedTask.getLevel() != null) {
+                task.setLevel(modifiedTask.getLevel());
+            }
             if (modifiedTask.getDeadline() != null) {
                 task.setDeadline(modifiedTask.getDeadline());
             }
             if (modifiedTask.getInCharge() != null) {
-                task.setInCharge(modifiedTask.getInCharge());
-            }
-            if (modifiedTask.getLevel() != null) {
-                task.setLevel(modifiedTask.getLevel());
+                task.setInCharge(findAllEmployeesByNameOrId(modifiedTask.getInCharge()));
             }
             if (modifiedTask.getState() != null) {
-                task.setState(modifiedTask.getState());
+                if(task.getState().equals("未完成")&&modifiedTask.getState().equals("已完成")){
+                    Task completed = setCompleted(task.getId());
+                    task.setState("已完成");
+                    task.setFinishedAt(completed.getFinishedAt());
+                }else{
+                    task.setState(modifiedTask.getState());
+                }
             }
-            taskRepo.save(task);
             return taskRepo.save(task);
         }
         return null;
     }
+
 
     @Override
     public Task setCompleted(long taskId) {
@@ -108,8 +106,9 @@ public class TaskServiceImpl implements TaskService {
             int scoreChange = (int) (-5 * delay);
             for (Employee employee : task1.getInCharge()) {
                 recordRepo.save(new Record(task1.getId(), employee.getId(), scoreChange));
+                employee.setScore(employee.getScore()+scoreChange);
+                employeeRepo.save(employee);
             }
-
             return task1;
         }
         return null;
@@ -133,34 +132,47 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public List<Task> findTaskPage(int pageNum) {
+    public List<Task> findAllByPageNum(int pageNum) {
         Pageable pageable = PageRequest.of(pageNum, pageSize);
         List<Task> tasks = (List<Task>) taskRepo.findAll(pageable);
         return tasks;
     }
 
     @Override
-    public Task releaseByInChargeUsername(Task task) {
+    public Task releaseWithInChargesName(Task task) {
         List<Employee> inChargeList=new ArrayList<>();
         if (task.getInCharge()!=null){
-            for (Employee inChargeP: task.getInCharge()){
+            inChargeList=findAllEmployeesByNameOrId(task.getInCharge());
+        }
+        if(inChargeList.isEmpty()){
+            return null;
+        }else {
+            task.setInCharge(inChargeList);
+            return taskRepo.save(task);
+        }
+    }
+
+    /**
+     *
+     * @param employees 为null或为空时，返回空的list；
+     * @return
+     */
+    private List<Employee> findAllEmployeesByNameOrId(List<Employee> employees){
+        List<Employee> inChargeList=new ArrayList<>();
+        for (Employee inChargeP: employees){
+            if(inChargeP.getId()!=0){
+                Optional<Employee> optionalEmployee = employeeRepo.findById(inChargeP.getId());
+                if(optionalEmployee.isPresent()){
+                    inChargeList.add(optionalEmployee.get());
+                }
+            }else if(inChargeP.getUsername()!=null){
                 List<Employee> employeesWithSameName = employeeRepo.findAllByUsername(inChargeP.getUsername());
                 for(Employee employee:employeesWithSameName){
                     inChargeList.add(employee);
                 }
             }
         }
-        if(inChargeList.isEmpty()){
-            return null;
-        }else {
-            task.setInCharge(inChargeList);
-            Task savedTask=taskRepo.save(task);
-//            System.out.println(task);
-            System.out.println(savedTask);
-            for (Employee inChargeP: task.getInCharge()){
-                inChargeP.setPassword("********");
-            }
-            return task;
-        }
+        return inChargeList;
     }
+
 }

@@ -34,8 +34,10 @@ class TaskRepoTest {
     @Rollback(value = false)
     void saveTask() {
         ArrayList<Employee> list = new ArrayList<>();
-        list.add(new Employee(4,"ecaca","dafasaagdsg","maildfasfda","cdasvsav",12));
-        Task task=new Task("ces","content1","A",new Date(),new Date(),"未完成",list);
+//        list.add(new Employee(10,"ecaca","dafasaagdsg","maildfasfda","cdasvsav",12));
+        list.add(new Employee(1));
+        list.add(new Employee("employee2"));
+        Task task=new Task("cedzss","content1","A",new Date(),new Date(),"未完成",list);
         System.out.println(task);
         //taskRepo.save(task);
     }

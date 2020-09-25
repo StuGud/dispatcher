@@ -29,5 +29,11 @@ public class Employee {
     private String department;
     private int score;
 
+    public Employee(long id) {
+        this.id = id;
+    }
 
+    public Employee(@NotBlank @Size(min = 4, max = 32, message = "用户名长度为4-32字符") String username) {
+        this.username = username;
+    }
 }
