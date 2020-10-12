@@ -91,15 +91,15 @@
                                                             部门：<input type="text" th:name="'inCharge['+${inChargePStat.index}+'].department'"  th:value="${inChargeP.department}" class="form-control"/>
 
                                                         </div>
-
+                                                        <button  type="button" class="btn btn-light bg-white btn-icon mr-3 mt-2 mt-xl-0" id="del-btn" th:onclick="del_div(this)">
+                                                            <i class="mdi mdi-minus text-muted"></i>
+                                                        </button>
                                                     </div>
                                                 </div>
                                                 <button type="button" class="btn btn-light bg-white btn-icon mr-3 mt-2 mt-xl-0" id="add-btn" th:onclick="add_div()">
                                                     <i class="mdi mdi-plus text-muted"></i>
                                                 </button>
-                                                <button  type="button" class="btn btn-light bg-white btn-icon mr-3 mt-2 mt-xl-0" id="del-btn" th:onclick="del_div()">
-                                                    <i class="mdi mdi-minus text-muted"></i>
-                                                </button>
+
                                             </div>
 
                                             <div class="row">
@@ -107,7 +107,7 @@
                                                     <div class="form-group row">
                                                         <label class="col-sm-3 col-form-label">描述：</label>
                                                         <div class="col-sm-9">
-                                                            <input th:value="${task.content}" name="content" type="text" class="form-control" style="width:970px; height:200px;"/>
+                                                            <input th:value="${task.content}"  name="content" type="text" class="form-control" style="width:970px; height:200px;"/>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -158,9 +158,9 @@
                 var btn=document.getElementById("add-btn");
                 var newNode=input_inCharge[input_inCharge.length-1].cloneNode(true);
 
-                newNode.id=parseInt(newNode.id)+1;
+                newNode.id=input_inCharge.length;
                 var idx=newNode.id;
-
+                newNode.getElementsByTagName("input")[0].disabled=false;
                 newNode.getElementsByTagName("input")[0].name="inCharge["+idx+"].id";
                 newNode.getElementsByTagName("input")[1].name="inCharge["+idx+"].username";
                 newNode.getElementsByTagName("input")[2].name="inCharge["+idx+"].mail";
@@ -171,16 +171,15 @@
                 newNode.getElementsByTagName("input")[2].value="";
                 newNode.getElementsByTagName("input")[3].value="";
 
-                newNode.getElementsByTagName("input")[0].name=newNode.getElementsByTagName("input")[0]
+                newNode.getElementsByTagName("input")[0].disabled=true;
 
                 parent.insertBefore(newNode,btn);
 
             }
-            function del_div() {
-
+            function del_div(e) {
                 var del=document.getElementsByName("input_inCharge");
-                if(del.length!=0)
-                    del[del.length-1].remove();
+                if(del.length!=1)
+                    e.parentNode.parentNode.remove();
             }
 
             function submit_sure(){
