@@ -7,7 +7,7 @@ import com.stugud.dispatcher.repo.EmployeeRepo;
 import com.stugud.dispatcher.repo.RecordRepo;
 import com.stugud.dispatcher.repo.TaskRepo;
 import com.stugud.dispatcher.service.TaskService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.stugud.dispatcher.util.MailUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -26,14 +26,17 @@ public class TaskServiceImpl implements TaskService {
     RecordRepo recordRepo;
     final
     EmployeeRepo employeeRepo;
+    final
+    MailUtils mailUtils;
 
     @Value("${dispatcher.employee.pageSize}")
     int pageSize;
 
-    public TaskServiceImpl(TaskRepo taskRepo, RecordRepo recordRepo, EmployeeRepo employeeRepo) {
+    public TaskServiceImpl(TaskRepo taskRepo, RecordRepo recordRepo, EmployeeRepo employeeRepo, MailUtils mailUtils) {
         this.taskRepo = taskRepo;
         this.recordRepo = recordRepo;
         this.employeeRepo = employeeRepo;
+        this.mailUtils = mailUtils;
     }
 
     @Override
@@ -84,6 +87,7 @@ public class TaskServiceImpl implements TaskService {
                     task.setState(modifiedTask.getState());
                 }
             }
+            mailUtils.sendTaskRemindMail("任务修改！ ",task);
             return taskRepo.save(task);
         }
         return null;
@@ -149,9 +153,13 @@ public class TaskServiceImpl implements TaskService {
             return null;
         }else {
             task.setInCharge(inChargeList);
+            //发送新任务提醒
+            mailUtils.sendTaskRemindMail("新任务！ ",task);
             return taskRepo.save(task);
         }
     }
+
+
 
     /**
      *

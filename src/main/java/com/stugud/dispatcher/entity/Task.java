@@ -9,6 +9,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -24,13 +25,13 @@ public class Task {
     private long id;
 
     @NotBlank
-    @Size(min = 4,max = 32,message = "任务主题4-32字符")
+    @Size(min = 4, max = 32, message = "任务主题4-32字符")
     private String subject;
 
     @NotBlank(message = "任务内容不为空")
     private String content;
 
-    @Pattern(regexp = "A|B|C",message = "任务级别为A、B、C")
+    @Pattern(regexp = "A|B|C", message = "任务级别为A、B、C")
     private String level;
 
     @Column(name = "createdAt")
@@ -47,14 +48,14 @@ public class Task {
     private String filePath;
 
     @PrePersist
-    void createdAt(){
-        this.createdAt=new Date();
+    void createdAt() {
+        this.createdAt = new Date();
     }
 
-    @OneToMany(targetEntity = Employee.class,fetch=FetchType.EAGER)
-    @Size(min = 1,message = "最少选择一个负责人")
-    @JoinTable(name = "t_task_employees",joinColumns = {@JoinColumn(name="taskId",referencedColumnName = "id")},
-            inverseJoinColumns = {@JoinColumn(name = "employeeId",referencedColumnName = "id")})
+    @OneToMany(targetEntity = Employee.class, fetch = FetchType.EAGER)
+    @Size(min = 1, message = "最少选择一个负责人")
+    @JoinTable(name = "t_task_employees", joinColumns = {@JoinColumn(name = "taskId", referencedColumnName = "id")},
+            inverseJoinColumns = {@JoinColumn(name = "employeeId", referencedColumnName = "id")})
     private List<Employee> inCharge;
 
     public Task(@NotBlank @Size(min = 4, max = 32, message = "任务主题4-32字符") String subject, @NotBlank(message = "任务内容不为空") String content, @Pattern(regexp = "A|B|C", message = "任务级别为A、B、C") String level, Date createdAt, Date deadline, String state, @Size(min = 1, message = "最少选择一个负责人") List<Employee> inCharge) {
@@ -66,4 +67,6 @@ public class Task {
         this.state = state;
         this.inCharge = inCharge;
     }
+
+
 }

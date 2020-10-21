@@ -1,9 +1,9 @@
 spring:
   #数据库
   datasource:
-    url: jdbc:mysql://127.0.0.1:3306/test?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
+    url: jdbc:mysql://127.0.0.1:3306/dispatcher?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
     username: root
-    password: 123456
+    password: Mysql1114
     driver-class-name: com.mysql.cj.jdbc.Driver
 #    initialization-mode: always
   jpa:
@@ -21,6 +21,11 @@ spring:
     username: dispatchertest@163.com
     password: YAXMHJEHDHWSGULA
     default-encoding: UTF-8
+    properties:
+      mail:
+        smtp:
+          ssl:
+            enable: true
 
 mail:
   fromMail:
@@ -29,8 +34,10 @@ mail:
 #自定义的变量
 dispatcher:
   task:
-    pageSize: 10
+    pageSize: 20
     fileRootPathWIN: D:/dispatcher/file
   employee:
-    pageSize: 10
+    pageSize: 20
 
+server:
+  port: 8080

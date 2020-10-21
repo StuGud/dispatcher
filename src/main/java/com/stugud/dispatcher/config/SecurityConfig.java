@@ -1,11 +1,11 @@
 package com.stugud.dispatcher.config;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.sql.DataSource;
 
@@ -23,29 +23,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.inMemoryAuthentication()
-                .withUser("admin").password("admin123456")
-                .authorities("ROLE_ADMIN")
-                .and()
-                .withUser("employee").password("123456")
-                .authorities("ROLE_EMPLOYEE");
-
-
-//        auth.jdbcAuthentication().dataSource(dataSource)
-//                .usersByUsernameQuery("select username,password from t_employee where username=?")
-//                .authoritiesByUsernameQuery("select username,authority from t_authorities where username=?");
-
+                .passwordEncoder(new BCryptPasswordEncoder())
+                .withUser("admin").password(new BCryptPasswordEncoder().encode("admin4dfl"))
+                .authorities("ROLE_ADMIN");
     }
 
     @Override
     public void configure(HttpSecurity http) throws Exception {
         http.csrf().disable();
-//        http
-//                .authorizeRequests()
-//                .antMatchers("/admin","/admin/*").hasRole("ADMIN")
-//                .antMatchers("/employee","/employee/*").hasRole("EMPLOYEE")
-//                .antMatchers("/","/**").permitAll()
-//                .and()
-//                .formLogin()
-//                .successForwardUrl("/admin");
+        http
+                .authorizeRequests()
+                .antMatchers("/admin", "/admin/*").hasRole("ADMIN")
+                .antMatchers("/", "/**").permitAll()
+                .and().formLogin().defaultSuccessUrl("/admin/tasks",true);
     }
 }

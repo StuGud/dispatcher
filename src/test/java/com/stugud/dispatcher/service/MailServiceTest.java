@@ -1,5 +1,6 @@
 package com.stugud.dispatcher.service;
 
+import com.stugud.dispatcher.util.MailUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,10 +12,10 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 class MailServiceTest {
 
     @Autowired
-    private MailService MailService;
+    private MailUtils MailUtils;
 
     @Test
     void sendTxtMail() {
-        MailService.sendTxtMail("741498908@qq.com","test simple mail"," hello this is simple mail");
+        MailUtils.sendTxtMail("741498908@qq.com","test simple mail"," hello this is simple mail");
     }
 }

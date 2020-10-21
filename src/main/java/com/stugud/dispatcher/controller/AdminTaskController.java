@@ -26,7 +26,7 @@ public class AdminTaskController {
      */
     @GetMapping("/task")
     public String showTaskRelease() {
-        return "release";
+        return "task/release";
     }
 
     /**
@@ -48,9 +48,9 @@ public class AdminTaskController {
             //应该可以直接返回错误信息而不跳转
             //这里有点问题
             model.addAttribute("task", task);
-            return "release";
+            return "task/release";
         }
-        return "details";
+        return "task/details";
     }
 
     @GetMapping("/task/{id}")
@@ -60,7 +60,7 @@ public class AdminTaskController {
             setEmpPswInvisible(task);
             model.addAttribute("task", task);
         }
-        return "details";
+        return "task/details";
     }
 
     /**
@@ -78,7 +78,7 @@ public class AdminTaskController {
         if(savedTask!=null){
             setEmpPswInvisible(savedTask);
             model.addAttribute("task", savedTask);
-            return "details";
+            return "task/details";
         }else{
             //来到修改不成功的页面
             return "";
@@ -106,23 +106,16 @@ public class AdminTaskController {
             setEmpPswInvisible(task);
         }
         model.addAttribute("tasks", tasks);
-        return "task";
+        return "task/tasks";
     }
 
     @GetMapping("/taskPageInit")
     public List<Task> initTaskPage() {
         return taskService.findAllByPageNum(0);
     }
-    @GetMapping("/taskPage/{pageNum}")
-    public List<Task> showTaskPage(@PathVariable int pageNum) {
+    @GetMapping("/taskPage")
+    public List<Task> showTaskPage(int pageNum) {
         return taskService.findAllByPageNum(pageNum);
-    }
-
-    @GetMapping("/testJSON/{id}")
-    @ResponseBody
-    public Task testJSON(@PathVariable(name = "id") long taskId) {
-        Task task = taskService.findById(taskId);
-        return task;
     }
 
     private void setEmpPswInvisible(Task task){

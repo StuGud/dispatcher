@@ -32,7 +32,7 @@ public class AdminEmployeeController {
      */
     @GetMapping("/employee")
     public String showEmployeeRegistration(){
-        return "employeeRegistration";
+        return "employee/register";
     }
 
     /**
@@ -41,7 +41,7 @@ public class AdminEmployeeController {
      * @return
      */
     @PostMapping("/employee")
-    public String saveEmployee(@RequestBody Employee employee){
+    public String saveEmployee( Employee employee){
         employeeService.register(employee);
         return "redirect:/admin/employees";
     }
@@ -54,6 +54,6 @@ public class AdminEmployeeController {
     public String showEmployees(Model model){
         Iterable<Employee> employees = employeeService.findAll();
         model.addAttribute("employees",employees);
-        return "employeeList";
+        return "employee/employees";
     }
 }

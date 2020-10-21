@@ -1,9 +1,9 @@
 create table if not exists t_employee
 (
     id         bigint      not null auto_increment primary key,
-    username   varchar(32) not null ,
+    username   varchar(32) not null,
     password   varchar(16) not null,
-    mail       varchar(64) not null,
+    mail       varchar(64) not null unique ,
     department varchar(32),
     score      int default 0
 );
