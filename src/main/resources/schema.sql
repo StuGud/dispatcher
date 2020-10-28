@@ -26,6 +26,7 @@ create table if not exists t_task_employees
     taskId      bigint not null,
     employeeId  bigint not null,
     scoreChange int default 0,
+    finishedAt date,
     primary key (taskId, employeeId)
 );
 

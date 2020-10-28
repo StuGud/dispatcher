@@ -50,6 +50,13 @@ class TaskRepoTest {
         //taskRepo.save(task);
     }
 
+    @Test
+    @Transactional
+    @Rollback(value = false)
+    void findAllByMonth(){
+        List<Task> allByMonth = taskRepo.findAllByMonth(2020, 10);
+        System.out.println(allByMonth);
+    }
 
 
 }

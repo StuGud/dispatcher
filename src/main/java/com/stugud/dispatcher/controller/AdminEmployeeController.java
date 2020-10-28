@@ -8,7 +8,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 暂时不实现
@@ -55,5 +57,19 @@ public class AdminEmployeeController {
         Iterable<Employee> employees = employeeService.findAll();
         model.addAttribute("employees",employees);
         return "employee/employees";
+    }
+
+    /**
+     *
+     * @param model
+     * @param year url中指定年
+     * @param month url中指定月份
+     * @return
+     */
+    @GetMapping("/employees/monthlyScore")
+    public String showEmpMonthlyScore(Model model,int year,int month){
+        Map<Employee, Integer> employeeIntegerMap = employeeService.countScoresByMonth(year,month);
+        model.addAttribute("employees",employeeIntegerMap);
+        return "employee/monthlyScore";
     }
 }

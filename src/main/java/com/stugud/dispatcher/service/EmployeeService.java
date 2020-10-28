@@ -2,9 +2,18 @@ package com.stugud.dispatcher.service;
 
 import com.stugud.dispatcher.entity.Employee;
 
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 public interface EmployeeService {
+    /**
+     *
+     * @param month
+     * @return 返回员工以及指定月份的总分
+     */
+    Map<Employee, Integer> countScoresByMonth(int year,int month);
+
     /**
      * 查找对应工号的员工的信息
      * @param id

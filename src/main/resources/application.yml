@@ -5,7 +5,7 @@ spring:
     username: root
     password: Mysql1114
     driver-class-name: com.mysql.cj.jdbc.Driver
-#    initialization-mode: always
+    #nitialization-mode: always
   jpa:
     hibernate:
       naming:
@@ -14,7 +14,6 @@ spring:
     hiddenmethod:
       filter:
         enabled: true
-
   #邮箱
   mail:
     host: smtp.163.com
