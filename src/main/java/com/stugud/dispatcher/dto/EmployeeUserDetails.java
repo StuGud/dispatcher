@@ -2,6 +2,7 @@ package com.stugud.dispatcher.dto;
 
 import com.stugud.dispatcher.entity.Employee;
 import com.stugud.dispatcher.entity.SimplePermission;
+import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,6 +15,7 @@ import java.util.stream.Collectors;
  * 注意：使用mail作为username
  * Created By Gud on 2020/10/31 3:12 下午
  */
+@Data
 public class EmployeeUserDetails implements UserDetails {
     private Employee employee;
     private List<SimplePermission> permissionList;

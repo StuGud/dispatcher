@@ -1,5 +1,6 @@
 package com.stugud.dispatcher.service.impl;
 
+import com.stugud.dispatcher.dto.EmployeeUserDetails;
 import com.stugud.dispatcher.entity.Employee;
 import com.stugud.dispatcher.entity.Record;
 import com.stugud.dispatcher.entity.SimplePermission;
@@ -16,7 +17,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -54,6 +57,14 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
+    public Employee getCurrentEmployee() {
+        SecurityContext securityContext = SecurityContextHolder.getContext();
+        Authentication authentication = securityContext.getAuthentication();
+        EmployeeUserDetails employeeUserDetails = (EmployeeUserDetails) authentication.getPrincipal();
+        return employeeUserDetails.getEmployee();
+    }
+
+    @Override
     public String login(String username, String password) {
         String token = null;
         try {
@@ -70,6 +81,8 @@ public class EmployeeServiceImpl implements EmployeeService {
         }
         return token;
     }
+
+
 
     @Override
     public Employee findByMail(String mail) {
