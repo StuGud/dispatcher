@@ -143,6 +143,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public List<SimplePermission> getPermissionList(long empId) {
+        //hello
         return permissionRepo.findAllByEmployeeId(empId);
     }
 }
