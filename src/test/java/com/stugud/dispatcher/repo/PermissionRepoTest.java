@@ -15,18 +15,5 @@ import java.util.List;
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
 public class PermissionRepoTest {
-    @Autowired
-    PermissionRepo permissionRepo;
 
-    @Test
-    void findAllByEmployeeMail(){
-        List<SimplePermission> permissions = permissionRepo.findAllByEmployeeMail("741498908@qq.com");
-        System.out.println(permissions);
-    }
-
-    @Test
-    void findAllByEmployeeId(){
-        List<SimplePermission> permissions = permissionRepo.findAllByEmployeeId(1L);
-        System.out.println(permissions);
-    }
 }

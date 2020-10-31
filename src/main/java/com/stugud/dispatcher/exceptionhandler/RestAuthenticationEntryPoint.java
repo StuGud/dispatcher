@@ -1,4 +1,4 @@
-package com.stugud.dispatcher.component;
+package com.stugud.dispatcher.exceptionhandler;
 
 import cn.hutool.json.JSONUtil;
 import org.springframework.security.core.AuthenticationException;

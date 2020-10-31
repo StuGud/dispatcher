@@ -5,7 +5,6 @@ import com.stugud.dispatcher.entity.Employee;
 import com.stugud.dispatcher.entity.Record;
 import com.stugud.dispatcher.entity.SimplePermission;
 import com.stugud.dispatcher.repo.EmployeeRepo;
-import com.stugud.dispatcher.repo.PermissionRepo;
 import com.stugud.dispatcher.repo.RecordRepo;
 import com.stugud.dispatcher.service.EmployeeService;
 import com.stugud.dispatcher.util.JwtUtil;
@@ -44,16 +43,13 @@ public class EmployeeServiceImpl implements EmployeeService {
     final
     RecordRepo recordRepo;
 
-    final
-    PermissionRepo permissionRepo;
 
     @Value("${dispatcher.employee.pageSize}")
     int pageSize;
 
-    public EmployeeServiceImpl(EmployeeRepo employeeRepo, RecordRepo recordRepo, PermissionRepo permissionRepo) {
+    public EmployeeServiceImpl(EmployeeRepo employeeRepo, RecordRepo recordRepo) {
         this.employeeRepo = employeeRepo;
         this.recordRepo = recordRepo;
-        this.permissionRepo = permissionRepo;
     }
 
     @Override
@@ -143,7 +139,6 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public List<SimplePermission> getPermissionList(long empId) {
-        //hello
-        return permissionRepo.findAllByEmployeeId(empId);
+        return null;
     }
 }

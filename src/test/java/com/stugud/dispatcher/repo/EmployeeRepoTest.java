@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.List;
@@ -24,8 +25,11 @@ class EmployeeRepoTest {
 
     @Test
     void findById(){
-        Employee employee = employeeRepo.findById((long) 0).get();
-        System.out.println(employee);
+        for (int i = 0; i < 100; i++) {
+            String encode = new BCryptPasswordEncoder().encode("123456");
+            System.out.println(encode.length());
+        }
+
     }
 
 }
