@@ -1,4 +1,4 @@
-package com.stugud.dispatcher.repository;
+package com.stugud.dispatcher.repo;
 
 import com.stugud.dispatcher.entity.Employee;
 import com.stugud.dispatcher.entity.Task;
@@ -34,21 +34,34 @@ class TaskRepoTest {
     @Rollback(value = false)
     void saveTask() {
         ArrayList<Employee> list = new ArrayList<>();
-//        list.add(new Employee(10,"ecaca","dafasaagdsg","maildfasfda","cdasvsav",12));
-        list.add(new Employee(1));
-        list.add(new Employee("employee2"));
+        //list.add(new Employee(10,"ecaca","dafasaagdsg","maildfasfda","cdasvsav",12));
+        list.add(new Employee(1,"dasb"));
+
         Task task=new Task("cedzss","content1","A",new Date(),new Date(),"未完成",list);
         System.out.println(task);
-        //taskRepo.save(task);
+        Task save = taskRepo.save(task);
+        System.out.println(save);
+    }
+
+    @Test
+    @Transactional
+    @Rollback(value = false)
+    void updateTask() {
+        ArrayList<Employee> list = new ArrayList<>();
+        list.add(new Employee(2,"dasb"));
+        Task task=new Task("cedzss","contentUpdate","A",new Date(),new Date(),"未完成",list);
+        task.setId(11L);
+        taskRepo.save(task);
     }
 
     @Test
     @Transactional
     @Rollback(value = false)
     void deleteTask() {
-       taskRepo.deleteById((long) 4);
+       taskRepo.deleteById(13L);
         //taskRepo.save(task);
     }
+
 
     @Test
     @Transactional

@@ -1,17 +1,15 @@
 package com.stugud.dispatcher.entity;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 
 import javax.persistence.*;
-import java.io.Serializable;
+import java.util.Date;
 
 @Data
 @NoArgsConstructor
 @Entity
-@Table(name = "t_task_employees")
+@Table(name = "t_task_employee")
 @IdClass(RecordMultiKeys.class)
 public class Record  {
     @Id
@@ -19,6 +17,8 @@ public class Record  {
     @Id
     private long taskId;
     private int scoreChange;
+
+    private Date finishedAt;
 
     public Record( long taskId,long employeeId, int scoreChange) {
         this.employeeId = employeeId;

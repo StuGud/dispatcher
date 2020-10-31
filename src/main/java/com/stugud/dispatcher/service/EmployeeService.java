@@ -1,6 +1,7 @@
 package com.stugud.dispatcher.service;
 
 import com.stugud.dispatcher.entity.Employee;
+import com.stugud.dispatcher.entity.SimplePermission;
 
 import java.util.Date;
 import java.util.List;
@@ -20,6 +21,11 @@ public interface EmployeeService {
      * @return
      */
     Employee findById(long id);
+
+    Employee findByMail(String mail);
+
+
+    String login(String username,String password);
 
     /**
      * 注册员工
@@ -48,4 +54,6 @@ public interface EmployeeService {
      * @return
      */
     List<Employee> findAllByPageNum(int pageNum);
+
+    List<SimplePermission> getPermissionList(long empId);
 }

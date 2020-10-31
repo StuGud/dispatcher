@@ -30,11 +30,32 @@ create table if not exists t_task_employees
     primary key (taskId, employeeId)
 );
 
-alter table t_task_employees
+alter table t_task_employee
     add foreign key (taskId) references t_task (id);
 
-alter table t_task_employees
+alter table t_task_employee
     add foreign key (employeeId) references t_employee (id);
+
+
+create table if not exists t_permission
+(
+    id    bigint      not null auto_increment primary key,
+    value varchar(64) not null
+);
+
+create table if not exists t_employee_permission
+(
+    employeeId   bigint not null,
+    permissionId bigint not null,
+    primary key (employeeId,permissionId)
+);
+
+alter table t_employee_permission
+    add foreign key (permissionId) references t_permission (id);
+
+alter table t_employee_permission
+    add foreign key (employeeId) references t_employee (id);
+
 
 
 

@@ -10,7 +10,9 @@ public interface EmployeeRepo extends PagingAndSortingRepository<Employee,Long> 
 
     @Query(value = "select * from t_employee,(select employeeId from t_task_employees where taskId=?) inCharge where t_employee.id=inCharge.employeeId",nativeQuery = true)
     //@Query(value = "select * from t_employee,t_task_employees where t_employee.id=t_task_employees.employee and t_task_employees.task=?",nativeQuery = true)
-    List<Employee> findEmployeesByTaskId(long taskId);
+    List<Employee> findAllByTaskId(long taskId);
 
     List<Employee> findAllByUsername(String username);
+
+    Employee findByMail(String mail);
 }

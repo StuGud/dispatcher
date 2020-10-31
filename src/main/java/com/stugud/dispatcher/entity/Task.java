@@ -9,7 +9,6 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -54,7 +53,7 @@ public class Task {
 
     @OneToMany(targetEntity = Employee.class, fetch = FetchType.EAGER)
     @Size(min = 1, message = "最少选择一个负责人")
-    @JoinTable(name = "t_task_employees", joinColumns = {@JoinColumn(name = "taskId", referencedColumnName = "id")},
+    @JoinTable(name = "t_task_employee", joinColumns = {@JoinColumn(name = "taskId", referencedColumnName = "id")},
             inverseJoinColumns = {@JoinColumn(name = "employeeId", referencedColumnName = "id")})
     private List<Employee> inCharge;
 

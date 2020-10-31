@@ -1,8 +1,7 @@
-package com.stugud.dispatcher.util.impl;
+package com.stugud.dispatcher.util;
 
 import com.stugud.dispatcher.entity.Employee;
 import com.stugud.dispatcher.entity.Task;
-import com.stugud.dispatcher.util.MailUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +13,7 @@ import org.springframework.stereotype.Component;
 import java.text.SimpleDateFormat;
 
 @Component
-public class MailUtilsImpl implements MailUtils {
+public class MailUtil {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private final JavaMailSender mailSender;
@@ -23,11 +22,10 @@ public class MailUtilsImpl implements MailUtils {
     private String from;
 
     @Autowired
-    public MailUtilsImpl(JavaMailSender mailSender) {
+    public MailUtil(JavaMailSender mailSender) {
         this.mailSender = mailSender;
     }
 
-    @Override
     public void sendTxtMail(String to, String subject, String content) {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom(from);

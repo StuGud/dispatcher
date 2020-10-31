@@ -1,7 +1,6 @@
-package com.stugud.dispatcher.repository;
+package com.stugud.dispatcher.repo;
 
 import com.stugud.dispatcher.entity.Employee;
-import com.stugud.dispatcher.repo.EmployeeRepo;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,11 +18,10 @@ class EmployeeRepoTest {
 
     @Test
     void findEmployeesByTaskId(){
-        List<Employee> employees = employeeRepo.findEmployeesByTaskId(1);
+        List<Employee> employees = employeeRepo.findAllByTaskId(1);
         System.out.println(employees);
     }
 
-    //success
     @Test
     void findById(){
         Employee employee = employeeRepo.findById((long) 0).get();

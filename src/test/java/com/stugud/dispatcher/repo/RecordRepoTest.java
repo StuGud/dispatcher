@@ -1,6 +1,7 @@
 package com.stugud.dispatcher.repo;
 
 import com.stugud.dispatcher.entity.Record;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * @Description
  * @date 2020/10/29 12:31 上午
  */
+@Slf4j
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
 class RecordRepoTest {
@@ -30,6 +32,7 @@ class RecordRepoTest {
 
     @Test
     void findAllByEmployeeId() {
+        log.info("测试lombok的日志");
     }
 
     @Test

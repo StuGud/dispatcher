@@ -9,8 +9,9 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface RecordRepo extends PagingAndSortingRepository<Record,Long> {
-    //findAllByEmpId
+
     List<Record> findAllByEmployeeId(long employeeId);
+
     List<Record> findAllByEmployeeId(long employeeId, Pageable pageable);
 
     @Query(value = "select * from t_task_employees where year(finishedAt)= :year and month(finishedAt)= :month",nativeQuery = true)
