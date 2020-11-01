@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Dispatcher 任务详情</title>
+    <link rel="stylesheet" th:href="@{/vendors/mdi/css/materialdesignicons.min.css}">
+    <link rel="stylesheet" th:href="@{/vendors/base/vendor.bundle.base.css}">
+    <!-- endinject -->
+    <!-- End plugin css for this page -->
+    <!-- inject:css -->
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <!-- endinject -->
+    <link rel="shortcut icon" th:href="@{/images/favicon.png}"/>
+</head>
+
+<body>
+<div class="container-scroller">
+    <!-- partial:../../partials/_navbar.html -->
+
+    <div th:replace="employee/wrapper::wrapper"></div>
+
+    <!-- partial -->
+    <div class="container-fluid page-body-wrapper">
+        <!-- partial:../../partials/_sidebar.html -->
+        <div th:replace="employee/wrapper::sidebar"></div>
+        <!-- partial -->
+        <div class="main-panel">
+            <div class="content-wrapper">
+                <div class="row">
+                    <div class="col-md-12 stretch-card">
+                        <div class="card">
+                            <div class="card-body">
+                                <p class="card-title">任务详情</p>
+                                <div class="table-responsive">
+                                    <table id="recent-purchases-listing" class="table">
+                                        <tr>
+                                            <td>ID</td>
+                                            <td th:text="${task.id}"></td>
+                                        </tr>
+                                        <tr>
+                                            <th>主题</th>
+                                            <td th:text="${task.subject}"></td>
+                                        </tr>
+                                        <tr>
+                                            <th>级别</th>
+                                            <td th:text="${task.level}"></td>
+                                        </tr>
+                                        <tr>
+                                            <th>详情</th>
+                                            <td th:text="${task.content}"></td>
+                                        </tr>
+                                        <tr>
+                                            <th>创建日期</th>
+                                            <td th:text="${#dates.format(task.createdAt, 'yyyy-MM-dd')}"></td>
+                                        </tr>
+                                        <tr>
+                                            <th>截止时间</th>
+                                            <td th:text="${#dates.format(task.deadline, 'yyyy-MM-dd')}"></td>
+                                        </tr>
+                                        <tr>
+                                            <th>状态</th>
+                                            <td th:text="${task.state}"></td>
+                                        </tr>
+                                        <tr th:if="${task.state}=='已完成'">
+                                            <th>完成时间</th>
+                                            <td th:text="${#dates.format(task.finishedAt, 'yyyy-MM-dd')}"></td>
+                                        </tr>
+                                        <tr>
+                                            <th>操作</th>
+                                            <td th:if="${task.state}=='未完成'">
+                                                <a th:href="@{employee/task/{id}/commit(id=${task.id})}">提交</a>
+                                            </td>
+                                            <td th:if="${task.state}=='已完成'">
+                                                <a th:href="@{employee/commit/{commitId}/download(taskId=${task.id},commitId=${commitDownloadId})}">
+                                                    下载commit
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12 stretch-card">
+                        <div class="card">
+                            <div class="card-body">
+                                <p class="card-title">提交记录</p>
+                                <div class="table-responsive">
+                                    <table id="recent-purchases-listing1" class="table">
+                                        <thead>
+                                        <tr>
+                                            <th>序号</th>
+                                            <th>提交人ID</th>
+                                            <th>提交日期</th>
+                                            <th>备注</th>
+                                            <th>管理员回复</th>
+                                            <th>状态</th>
+                                            <th>操作</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr th:each="commit:${commits}">
+                                            <td th:text="${commit.commitNo}"></td>
+                                            <td th:text="${commit.employeeId}"></td>
+                                            <td th:text="${#dates.format(commit.commitAt, 'yyyy-MM-dd')}"></td>
+                                            <td th:text="${commit.message}"></td>
+                                            <td th:text="${commit.reply}"></td>
+                                            <td>
+                                                <div th:if="${commit.state}==0" text="未审核"></div>
+                                                <div th:if="${commit.state}==1" text="没通过"></div>
+                                                <div th:if="${commit.state}==2" text="已通过"></div>
+                                            </td>
+                                            <td>
+                                                <a th:href="@{employee/commit/{commitId}/download(commitId=${commit.id})}">
+                                                    下载commit
+                                                </a>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- partial -->
+    </div>
+    <!-- main-panel ends -->
+</div>
+<!-- page-body-wrapper ends -->
+</div>
+<!-- container-scroller -->
+<!-- plugins:js -->
+
+
+
+<script th:src="@{/vendors/base/vendor.bundle.base.js}"></script>
+<!-- endinject -->
+<!-- inject:js -->
+<script th:src="@{/js/off-canvas.js}"></script>
+<script th:src="@{/js/hoverable-collapse.js}"></script>
+<script th:src="@{/js/template.js}"></script>
+<!-- endinject -->
+<!-- Custom js for this page-->
+<script th:src="@{/js/file-upload.js}"></script>
+<!-- End custom js for this page-->
+</body>
+</html>

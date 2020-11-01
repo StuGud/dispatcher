@@ -15,4 +15,7 @@ public interface EmployeeRepo extends PagingAndSortingRepository<Employee,Long> 
     List<Employee> findAllByUsername(String username);
 
     Employee findByMail(String mail);
+
+    @Query(value = "update t_employee set username=:#{#employee.username},mail=:#{#employee.mail},password=:#{#employee.password} where id= :#{#employee.id} ",nativeQuery = true)
+    Employee modifyByEmp(Employee employee);
 }

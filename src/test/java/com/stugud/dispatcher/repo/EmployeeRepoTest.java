@@ -32,4 +32,10 @@ class EmployeeRepoTest {
 
     }
 
+    @Test
+    void modifyByEmp(){
+        Employee employee = new Employee(1);
+        System.out.println(employeeRepo.modifyByEmp(employee));
+    }
+
 }

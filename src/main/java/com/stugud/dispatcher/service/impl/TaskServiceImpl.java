@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class TaskServiceImpl implements TaskService {
@@ -141,6 +142,23 @@ public class TaskServiceImpl implements TaskService {
         Pageable pageable = PageRequest.of(pageNum, pageSize);
         List<Task> tasks = (List<Task>) taskRepo.findAll(pageable);
         return tasks;
+    }
+
+    @Override
+    public List<Task> findAllByEmpIdAndState(long empId, String state) {
+        List<Task> allTasks = findAllByEmpId(empId);
+        if (state.equals("completed")){
+            return filter(allTasks,"已完成");
+        }else if(state.equals("notCompleted")){
+            return filter(allTasks,"未完成");
+        }
+        return allTasks;
+    }
+
+    private List<Task> filter(List<Task> taskList,String state){
+        return taskList.stream()
+                .filter(task -> task.getState().equals(state))
+                .collect(Collectors.toList());
     }
 
     @Override

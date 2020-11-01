@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Majestic Admin</title>
+    <link rel="stylesheet" th:href="@{/vendors/mdi/css/materialdesignicons.min.css}">
+    <link rel="stylesheet" th:href="@{/vendors/base/vendor.bundle.base.css}">
+    <!-- endinject -->
+    <!-- End plugin css for this page -->
+    <!-- inject:css -->
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <!-- endinject -->
+    <link rel="shortcut icon" th:href="@{/images/favicon.png}"/>
+</head>
+
+<body>
+<div class="container-scroller">
+    <!-- partial:../../partials/_navbar.html -->
+
+    <div th:replace="employee/wrapper::wrapper"></div>
+
+    <!-- partial -->
+    <div class="container-fluid page-body-wrapper">
+        <!-- partial:../../partials/_sidebar.html -->
+        <div th:replace="employee/wrapper::sidebar"></div>
+        <!-- partial -->
+        <div class="main-panel">
+            <div class="content-wrapper">
+                <div class="row">
+                    <div class="col-12 grid-margin">
+                        <div class="card">
+                            <div class="card-body">
+
+                                <h1 class="card-title">个人信息详情</h1>
+
+                                <form class="form-sample" th:method="POST" action="/employee/details" th:object="${employee}"
+                                      onsubmit="return submit_sure()">
+                                    <input type="hidden" name="_method" value="PUT">
+                                    <input type="hidden" name="id" th:value="${employee.id}"/>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group row">
+                                                <label class="col-sm-3 col-form-label">用户名：</label>
+                                                <div class="col-sm-9">
+                                                    <input type="text" readonly name="username" id="id"
+                                                           th:value="${employee.username}" class="form-control"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group row">
+                                                <label class="col-sm-3 col-form-label">密码：</label>
+                                                <div class="col-sm-9">
+                                                    <input type="password" name="password" th:value="${employee.password}"
+                                                           class="form-control"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group row">
+                                                <label class="col-sm-3 col-form-label">邮箱：</label>
+                                                <div class="col-sm-9">
+                                                    <input type="text" readonly name="mail" th:value="${employee.mail}"
+                                                           class="form-control"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group row">
+                                                <label class="col-sm-3 col-form-label">部门：</label>
+                                                <div class="col-sm-9">
+                                                    <input type="text" readonly name="department"
+                                                           th:value="${employee.department}" class="form-control"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group row">
+                                                <label class="col-sm-3 col-form-label">目前得分：</label>
+                                                <div class="col-sm-9">
+                                                    <input type="text" readonly name="score"
+                                                           th:value="${employee.score}" class="form-control"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <input class="btn btn-block btn-primary btn-lg font-weight-medium auth-form-btn"
+                                           type="submit" style="width:150px; height:50px;float: right;">
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- partial -->
+        </div>
+        <!-- main-panel ends -->
+    </div>
+    <!-- page-body-wrapper ends -->
+</div>
+<!-- container-scroller -->
+<!-- plugins:js -->
+
+<script type="text/javascript">
+    function submit_sure() {
+        const gnl = confirm("确定要修改?");
+        if (gnl == true) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+</script>
+
+<script th:src="@{/vendors/base/vendor.bundle.base.js}"></script>
+<!-- endinject -->
+<!-- inject:js -->
+<script th:src="@{/js/off-canvas.js}"></script>
+<script th:src="@{/js/hoverable-collapse.js}"></script>
+<script th:src="@{/js/template.js}"></script>
+<!-- endinject -->
+<!-- Custom js for this page-->
+<script th:src="@{/js/file-upload.js}"></script>
+<!-- End custom js for this page-->
+</body>
+</html>

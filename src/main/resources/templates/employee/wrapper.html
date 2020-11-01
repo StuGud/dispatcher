@@ -1,0 +1,173 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row" th:fragment="wrapper">
+    <div class="navbar-brand-wrapper d-flex justify-content-center">
+        <div class="navbar-brand-inner-wrapper d-flex justify-content-between align-items-center w-100">
+            <a class="navbar-brand brand-logo" ><img th:src="@{/images/logo.png}" alt="logo"/></a>
+            <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
+                <span class="mdi mdi-sort-variant"></span>
+            </button>
+        </div>
+    </div>
+<!--    <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end">-->
+<!--&lt;!&ndash;        <ul class="navbar-nav mr-lg-4 w-100">&ndash;&gt;-->
+<!--&lt;!&ndash;            <li class="nav-item nav-search d-none d-lg-block w-100">&ndash;&gt;-->
+<!--&lt;!&ndash;                <div class="input-group">&ndash;&gt;-->
+<!--&lt;!&ndash;                    <div class="input-group-prepend">&ndash;&gt;-->
+<!--&lt;!&ndash;                <span class="input-group-text" id="search">&ndash;&gt;-->
+<!--&lt;!&ndash;                  <i class="mdi mdi-magnify"></i>&ndash;&gt;-->
+<!--&lt;!&ndash;                </span>&ndash;&gt;-->
+<!--&lt;!&ndash;                    </div>&ndash;&gt;-->
+<!--&lt;!&ndash;                    <input type="text" class="form-control" placeholder="Search now" aria-label="search" aria-describedby="search">&ndash;&gt;-->
+<!--&lt;!&ndash;                </div>&ndash;&gt;-->
+<!--&lt;!&ndash;            </li>&ndash;&gt;-->
+<!--&lt;!&ndash;        </ul>&ndash;&gt;-->
+<!--&lt;!&ndash;        <ul class="navbar-nav navbar-nav-right">&ndash;&gt;-->
+<!--&lt;!&ndash;            <li class="nav-item dropdown mr-1">&ndash;&gt;-->
+<!--&lt;!&ndash;                <a class="nav-link count-indicator dropdown-toggle d-flex justify-content-center align-items-center" id="messageDropdown" href="#" data-toggle="dropdown">&ndash;&gt;-->
+<!--&lt;!&ndash;                    <i class="mdi mdi-message-text mx-0"></i>&ndash;&gt;-->
+<!--&lt;!&ndash;                    <span class="count"></span>&ndash;&gt;-->
+<!--&lt;!&ndash;                </a>&ndash;&gt;-->
+<!--&lt;!&ndash;                <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="messageDropdown">&ndash;&gt;-->
+<!--&lt;!&ndash;                    <p class="mb-0 font-weight-normal float-left dropdown-header">Messages</p>&ndash;&gt;-->
+<!--&lt;!&ndash;                    <a class="dropdown-item">&ndash;&gt;-->
+<!--&lt;!&ndash;                        <div class="item-thumbnail">&ndash;&gt;-->
+<!--&lt;!&ndash;                            <img th:src="@{/images/faces/face4.jpg}" alt="image" class="profile-pic">&ndash;&gt;-->
+<!--&lt;!&ndash;                        </div>&ndash;&gt;-->
+<!--&lt;!&ndash;                        <div class="item-content flex-grow">&ndash;&gt;-->
+<!--&lt;!&ndash;                            <h6 class="ellipsis font-weight-normal">David Grey&ndash;&gt;-->
+<!--&lt;!&ndash;                            </h6>&ndash;&gt;-->
+<!--&lt;!&ndash;                            <p class="font-weight-light small-text text-muted mb-0">&ndash;&gt;-->
+<!--&lt;!&ndash;                                The meeting is cancelled&ndash;&gt;-->
+<!--&lt;!&ndash;                            </p>&ndash;&gt;-->
+<!--&lt;!&ndash;                        </div>&ndash;&gt;-->
+<!--&lt;!&ndash;                    </a>&ndash;&gt;-->
+<!--&lt;!&ndash;                    <a class="dropdown-item">&ndash;&gt;-->
+<!--&lt;!&ndash;                        <div class="item-thumbnail">&ndash;&gt;-->
+<!--&lt;!&ndash;                            <img th:src="@{images/faces/face2.jpg}" alt="image" class="profile-pic">&ndash;&gt;-->
+<!--&lt;!&ndash;                        </div>&ndash;&gt;-->
+<!--&lt;!&ndash;                        <div class="item-content flex-grow">&ndash;&gt;-->
+<!--&lt;!&ndash;                            <h6 class="ellipsis font-weight-normal">Tim Cook&ndash;&gt;-->
+<!--&lt;!&ndash;                            </h6>&ndash;&gt;-->
+<!--&lt;!&ndash;                            <p class="font-weight-light small-text text-muted mb-0">&ndash;&gt;-->
+<!--&lt;!&ndash;                                New product launch&ndash;&gt;-->
+<!--&lt;!&ndash;                            </p>&ndash;&gt;-->
+<!--&lt;!&ndash;                        </div>&ndash;&gt;-->
+<!--&lt;!&ndash;                    </a>&ndash;&gt;-->
+<!--&lt;!&ndash;                    <a class="dropdown-item">&ndash;&gt;-->
+<!--&lt;!&ndash;                        <div class="item-thumbnail">&ndash;&gt;-->
+<!--&lt;!&ndash;                            <img th:src="@{images/faces/face3.jpg}" alt="image" class="profile-pic">&ndash;&gt;-->
+<!--&lt;!&ndash;                        </div>&ndash;&gt;-->
+<!--&lt;!&ndash;                        <div class="item-content flex-grow">&ndash;&gt;-->
+<!--&lt;!&ndash;                            <h6 class="ellipsis font-weight-normal"> Johnson&ndash;&gt;-->
+<!--&lt;!&ndash;                            </h6>&ndash;&gt;-->
+<!--&lt;!&ndash;                            <p class="font-weight-light small-text text-muted mb-0">&ndash;&gt;-->
+<!--&lt;!&ndash;                                Upcoming board meeting&ndash;&gt;-->
+<!--&lt;!&ndash;                            </p>&ndash;&gt;-->
+<!--&lt;!&ndash;                        </div>&ndash;&gt;-->
+<!--&lt;!&ndash;                    </a>&ndash;&gt;-->
+<!--&lt;!&ndash;                </div>&ndash;&gt;-->
+<!--&lt;!&ndash;            </li>&ndash;&gt;-->
+<!--&lt;!&ndash;            <li class="nav-item dropdown mr-4">&ndash;&gt;-->
+<!--&lt;!&ndash;                <a class="nav-link count-indicator dropdown-toggle d-flex align-items-center justify-content-center notification-dropdown" id="notificationDropdown" href="#" data-toggle="dropdown">&ndash;&gt;-->
+<!--&lt;!&ndash;                    <i class="mdi mdi-bell mx-0"></i>&ndash;&gt;-->
+<!--&lt;!&ndash;                    <span class="count"></span>&ndash;&gt;-->
+<!--&lt;!&ndash;                </a>&ndash;&gt;-->
+<!--&lt;!&ndash;                <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="notificationDropdown">&ndash;&gt;-->
+<!--&lt;!&ndash;                    <p class="mb-0 font-weight-normal float-left dropdown-header">Notifications</p>&ndash;&gt;-->
+<!--&lt;!&ndash;                    <a class="dropdown-item">&ndash;&gt;-->
+<!--&lt;!&ndash;                        <div class="item-thumbnail">&ndash;&gt;-->
+<!--&lt;!&ndash;                            <div class="item-icon bg-success">&ndash;&gt;-->
+<!--&lt;!&ndash;                                <i class="mdi mdi-information mx-0"></i>&ndash;&gt;-->
+<!--&lt;!&ndash;                            </div>&ndash;&gt;-->
+<!--&lt;!&ndash;                        </div>&ndash;&gt;-->
+<!--&lt;!&ndash;                        <div class="item-content">&ndash;&gt;-->
+<!--&lt;!&ndash;                            <h6 class="font-weight-normal">Application Error</h6>&ndash;&gt;-->
+<!--&lt;!&ndash;                            <p class="font-weight-light small-text mb-0 text-muted">&ndash;&gt;-->
+<!--&lt;!&ndash;                                Just now&ndash;&gt;-->
+<!--&lt;!&ndash;                            </p>&ndash;&gt;-->
+<!--&lt;!&ndash;                        </div>&ndash;&gt;-->
+<!--&lt;!&ndash;                    </a>&ndash;&gt;-->
+<!--&lt;!&ndash;                    <a class="dropdown-item">&ndash;&gt;-->
+<!--&lt;!&ndash;                        <div class="item-thumbnail">&ndash;&gt;-->
+<!--&lt;!&ndash;                            <div class="item-icon bg-warning">&ndash;&gt;-->
+<!--&lt;!&ndash;                                <i class="mdi mdi-settings mx-0"></i>&ndash;&gt;-->
+<!--&lt;!&ndash;                            </div>&ndash;&gt;-->
+<!--&lt;!&ndash;                        </div>&ndash;&gt;-->
+<!--&lt;!&ndash;                        <div class="item-content">&ndash;&gt;-->
+<!--&lt;!&ndash;                            <h6 class="font-weight-normal">Settings</h6>&ndash;&gt;-->
+<!--&lt;!&ndash;                            <p class="font-weight-light small-text mb-0 text-muted">&ndash;&gt;-->
+<!--&lt;!&ndash;                                Private message&ndash;&gt;-->
+<!--&lt;!&ndash;                            </p>&ndash;&gt;-->
+<!--&lt;!&ndash;                        </div>&ndash;&gt;-->
+<!--&lt;!&ndash;                    </a>&ndash;&gt;-->
+<!--&lt;!&ndash;                    <a class="dropdown-item">&ndash;&gt;-->
+<!--&lt;!&ndash;                        <div class="item-thumbnail">&ndash;&gt;-->
+<!--&lt;!&ndash;                            <div class="item-icon bg-info">&ndash;&gt;-->
+<!--&lt;!&ndash;                                <i class="mdi mdi-account-box mx-0"></i>&ndash;&gt;-->
+<!--&lt;!&ndash;                            </div>&ndash;&gt;-->
+<!--&lt;!&ndash;                        </div>&ndash;&gt;-->
+<!--&lt;!&ndash;                        <div class="item-content">&ndash;&gt;-->
+<!--&lt;!&ndash;                            <h6 class="font-weight-normal">New user registration</h6>&ndash;&gt;-->
+<!--&lt;!&ndash;                            <p class="font-weight-light small-text mb-0 text-muted">&ndash;&gt;-->
+<!--&lt;!&ndash;                                2 days ago&ndash;&gt;-->
+<!--&lt;!&ndash;                            </p>&ndash;&gt;-->
+<!--&lt;!&ndash;                        </div>&ndash;&gt;-->
+<!--&lt;!&ndash;                    </a>&ndash;&gt;-->
+<!--&lt;!&ndash;                </div>&ndash;&gt;-->
+<!--&lt;!&ndash;            </li>&ndash;&gt;-->
+<!--&lt;!&ndash;            <li class="nav-item nav-profile dropdown">&ndash;&gt;-->
+<!--&lt;!&ndash;                <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" id="profileDropdown">&ndash;&gt;-->
+<!--&lt;!&ndash;                    <img th:src="@{images/faces/face5.jpg}" alt="profile"/>&ndash;&gt;-->
+<!--&lt;!&ndash;                    <span class="nav-profile-name">Louis Barnett</span>&ndash;&gt;-->
+<!--&lt;!&ndash;                </a>&ndash;&gt;-->
+<!--&lt;!&ndash;                <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown">&ndash;&gt;-->
+<!--&lt;!&ndash;                    <a class="dropdown-item">&ndash;&gt;-->
+<!--&lt;!&ndash;                        <i class="mdi mdi-settings text-primary"></i>&ndash;&gt;-->
+<!--&lt;!&ndash;                        Settings&ndash;&gt;-->
+<!--&lt;!&ndash;                    </a>&ndash;&gt;-->
+<!--&lt;!&ndash;                    <a class="dropdown-item">&ndash;&gt;-->
+<!--&lt;!&ndash;                        <i class="mdi mdi-logout text-primary" th:href="login.html"></i>&ndash;&gt;-->
+<!--&lt;!&ndash;                        Logout&ndash;&gt;-->
+<!--&lt;!&ndash;                    </a>&ndash;&gt;-->
+<!--&lt;!&ndash;                </div>&ndash;&gt;-->
+<!--&lt;!&ndash;            </li>&ndash;&gt;-->
+<!--&lt;!&ndash;        </ul>&ndash;&gt;-->
+<!--&lt;!&ndash;        <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-toggle="offcanvas">&ndash;&gt;-->
+<!--&lt;!&ndash;            <span class="mdi mdi-menu"></span>&ndash;&gt;-->
+<!--&lt;!&ndash;        </button>&ndash;&gt;-->
+<!--&lt;!&ndash;    </div>&ndash;&gt;-->
+</nav>
+
+<!-- 侧边栏-->
+<nav class="sidebar sidebar-offcanvas" id="sidebar" th:fragment="sidebar">
+    <ul class="nav">
+
+        <li class="nav-item">
+            <a class="nav-link" th:href="@{'/employee/tasks?state=all'}">
+                <i class="mdi mdi-home menu-icon"></i>
+                <span class="menu-title">全部任务</span>
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link" th:href="@{/admin/commit}">
+                <i class="mdi mdi-view-headline menu-icon"></i>
+                <span class="menu-title">提交任务</span>
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link" th:href="@{/employee/details}">
+                <i class="mdi mdi-view-headline menu-icon"></i>
+                <span class="menu-title">个人信息</span>
+            </a>
+        </li>
+
+    </ul>
+</nav>
+
+</body>
+</html>

@@ -1,15 +1,12 @@
 package com.stugud.dispatcher.controller;
 
 import com.stugud.dispatcher.entity.Employee;
-import com.stugud.dispatcher.entity.Task;
 import com.stugud.dispatcher.service.EmployeeService;
 import com.stugud.dispatcher.service.TaskService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -34,7 +31,7 @@ public class AdminEmployeeController {
      */
     @GetMapping("/employee")
     public String showEmployeeRegistration(){
-        return "employee/register";
+        return "admin/employee/register";
     }
 
     /**
@@ -56,7 +53,7 @@ public class AdminEmployeeController {
     public String showEmployees(Model model){
         Iterable<Employee> employees = employeeService.findAll();
         model.addAttribute("employees",employees);
-        return "employee/employees";
+        return "admin/employee/employees";
     }
 
     /**

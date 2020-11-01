@@ -64,4 +64,6 @@ public interface TaskService {
      * @return
      */
     Task releaseWithInChargesName(Task task);
+
+    List<Task> findAllByEmpIdAndState(long empId,String state);
 }

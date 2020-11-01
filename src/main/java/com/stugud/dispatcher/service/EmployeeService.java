@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 public interface EmployeeService {
+    Employee modifyByEmpself(Employee modifiedEmployee);
 
     Employee getCurrentEmployee();
 
@@ -28,10 +29,8 @@ public interface EmployeeService {
     Employee findByMail(String mail);
 
 
-    String login(String username,String password);
-
     /**
-     * 注册员工
+     * 注册员工；Ps.只有管理员才可以注册新员工
      * @param employee
      * @return
      */

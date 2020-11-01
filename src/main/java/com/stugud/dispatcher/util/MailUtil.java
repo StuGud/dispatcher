@@ -18,7 +18,7 @@ public class MailUtil {
 
     private final JavaMailSender mailSender;
 
-    @Value("${mail.fromMail.addr}")
+    @Value("${dispatcher.mail.fromMail.addr}")
     private String from;
 
     @Autowired
@@ -53,7 +53,22 @@ public class MailUtil {
         String mailContent = "任务编号： " + task.getId()
                 + "\n任务主题： " + task.getSubject()
                 + "\n任务级别： " + task.getLevel()
-                + "\n任务详情： " + task.getInCharge();
+                + "\n任务详情： " + task.getContent();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String time = simpleDateFormat.format(task.getDeadline().getTime());//这个就是把时间戳经过处理得到期望格式的时间
+        mailContent += "\n截止时间： " + time;
+        return mailContent;
+    }
+
+    public String getSimpleMailContentPlusInCharge(Task task) {
+        String mailContent = "任务编号： " + task.getId()
+                + "\n任务主题： " + task.getSubject()
+                + "\n任务级别： " + task.getLevel()
+                + "\n任务详情： " + task.getContent();
+        String inCharge="\n任务负责人：";
+        for (Employee employee:task.getInCharge()){
+            inCharge+="\n     "+employee.getUsername()+" "+employee.getDepartment()+" "+employee.getMail();
+        }
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String time = simpleDateFormat.format(task.getDeadline().getTime());//这个就是把时间戳经过处理得到期望格式的时间
         mailContent += "\n截止时间： " + time;

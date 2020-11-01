@@ -1,0 +1,20 @@
+package com.stugud.dispatcher.service;
+
+import com.stugud.dispatcher.entity.Commit;
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
+
+/**
+ * Created By Gud on 2020/11/2 12:53 上午
+ */
+@Service
+public interface CommitService {
+    Commit findById(long commitId);
+    List<Commit> findAllByEmpId(long empId);
+    List<Commit> findAllByTaskId(long taskId);
+    List<Commit> findAllByState(int state);
+    Commit findLastPassedCommitByTaskId(long taskId);
+    Commit commit(Commit commit,MultipartFile file);
+}

@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Home</title>
+    <!-- plugins:css -->
+    <link rel="stylesheet" th:href="@{/vendors/mdi/css/materialdesignicons.min.css}">
+    <link rel="stylesheet" th:href="@{/vendors/base/vendor.bundle.base.css}">
+    <!-- endinject -->
+    <!-- plugin css for this page -->
+    <link rel="stylesheet" th:href="@{/vendors/datatables.net-bs4/dataTables.bootstrap4.css}">
+    <!-- End plugin css for this page -->
+    <!-- inject:css -->
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <!-- endinject -->
+    <link rel="shortcut icon" th:href="@{/images/favicon.png}" />
+  </head>
+  <body>
+    <div class="container-scroller">
+      <!-- partial:partials/_navbar.html -->
+      <div th:replace="admin/wrapper::wrapper"></div>
+      <!-- partial -->
+      <div class="container-fluid page-body-wrapper">
+        <!-- partial:partials/_sidebar.html -->
+        <div th:replace="admin/wrapper::sidebar"></div>
+        <!-- partial -->
+        <div class="main-panel">
+          <div class="content-wrapper">
+            <div class="row">
+              <div class="col-md-12 grid-margin">
+                <div class="d-flex justify-content-between flex-wrap">
+                  <div class="d-flex align-items-end flex-wrap">
+                    <div class="mr-md-3 mr-xl-5">
+                      <h2>欢迎回来</h2>
+                      <p class="mb-md-0">祝您快乐每一天</p>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
+            <div class="row">
+              <div class="col-md-12 stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <p class="card-title">任务列表</p>
+                    <div class="table-responsive">
+                      <table id="recent-purchases-listing" class="table">
+                        <thead>
+                          <tr>
+                            <th>ID</th>
+                            <th>主题</th>
+                            <th>创建日期</th>
+                            <th>截止时间</th>
+                            <th>状态</th>
+                            <th>操作</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr th:each="task:${tasks}">
+                            <td th:text="${task.id}"></td>
+                            <td>
+                              <a  th:href="@{/admin/task/{id}(id=${task.id})}" />
+                            </td>
+                            <td th:text="${#dates.format(task.createdAt, 'yyyy-MM-dd')}"></td>
+                            <td th:text="${#dates.format(task.deadline, 'yyyy-MM-dd')}"></td>
+                            <td th:id="${task.id}" th:text="${task.state}"></td>
+                            <td id="login_click">
+                              <a th:id="${task.id}+'_button'" th:if="${task.state}==未完成" th:onclick="submit_set([[${task.id}]]);">完成</a>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- content-wrapper ends -->
+          <!-- partial:partials/_footer.html -->
+
+          <!-- partial -->
+        </div>
+        <!-- main-panel ends -->
+      </div>
+      <!-- page-body-wrapper ends -->
+    </div>
+    <!-- container-scroller -->
+    <script>
+      function submit_set(e) {
+        $.ajax({
+          type:"PATCH",
+          url:"http://localhost:8080/admin/task/"+e+"/setCompleted",
+          success:function(data){
+            console.log(data);
+            if(data.state=="已完成"){
+              $("#"+e).text("已完成");
+              $("#"+e+"_button").hide();
+            }
+          },
+          error:function(jqXHR){
+            alert("发生错误："+ jqXHR.status);
+          }
+        });
+
+
+      }
+    </script>
+
+    <style>
+
+      #login_click{ margin-top:32px; height:40px; width: 100px}
+      #login_click a
+      {
+
+
+        text-decoration:none;
+        background:#2f435e;
+        color:#f2f2f2;
+
+        padding: 10px 30px 10px 30px;
+        font-size:16px;
+        font-family: 微软雅黑,宋体,Arial,Helvetica,Verdana,sans-serif;
+        font-weight:bold;
+        border-radius:3px;
+
+        -webkit-transition:all linear 0.30s;
+        -moz-transition:all linear 0.30s;
+        transition:all linear 0.30s;
+
+      }
+      #login_click a:hover { background:#385f9e; }
+
+    </style>
+    <!-- plugins:js -->
+    <script th:src="@{/vendors/base/vendor.bundle.base.js}"></script>
+    <!-- endinject -->
+    <!-- Plugin js for this page-->
+    <script th:src="@{/vendors/chart.js/Chart.min.js}"></script>
+    <script th:src="@{/vendors/datatables.net/jquery.dataTables.js}"></script>
+    <script th:src="@{/vendors/datatables.net-bs4/dataTables.bootstrap4.js}"></script>
+    <!-- End plugin js for this page-->
+    <!-- inject:js -->
+    <script th:src="@{/js/off-canvas.js}"></script>
+    <script th:src="@{/js/hoverable-collapse.js}"></script>
+    <script th:src="@{/js/template.js}"></script>
+    <!-- endinject -->
+    <!-- Custom js for this page-->
+    <script th:src="@{/js/dashboard.js}"></script>
+    <script th:src="@{/js/data-table.js}"></script>
+    <script th:src="@{/js/jquery.dataTables.js}"></script>
+    <script th:src="@{/js/dataTables.bootstrap4.js}"></script>
+    <!-- End custom js for this page-->
+  </body>
+
+</html>
+

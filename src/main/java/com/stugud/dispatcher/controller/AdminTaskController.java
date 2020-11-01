@@ -25,8 +25,8 @@ public class AdminTaskController {
      * @return
      */
     @GetMapping("/task")
-    public String showTaskRelease() {
-        return "task/release";
+    public String showReleasePage() {
+        return "admin/task/release";
     }
 
     /**
@@ -60,7 +60,7 @@ public class AdminTaskController {
             setEmpPswInvisible(task);
             model.addAttribute("task", task);
         }
-        return "task/details";
+        return "admin/task/details";
     }
 
     /**
@@ -78,7 +78,7 @@ public class AdminTaskController {
         if(savedTask!=null){
             setEmpPswInvisible(savedTask);
             model.addAttribute("task", savedTask);
-            return "task/details";
+            return "admin/task/details";
         }else{
             //来到修改不成功的页面
             return "";
@@ -106,7 +106,7 @@ public class AdminTaskController {
             setEmpPswInvisible(task);
         }
         model.addAttribute("tasks", tasks);
-        return "task/tasks";
+        return "admin/task/tasks";
     }
 
     @GetMapping("/taskPageInit")

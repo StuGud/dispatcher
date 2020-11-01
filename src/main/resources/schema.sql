@@ -2,7 +2,7 @@ create table if not exists t_employee
 (
     id         bigint      not null auto_increment primary key,
     username   varchar(32) not null,
-    password   varchar(16) not null,
+    password   varchar(64) not null,
     mail       varchar(64) not null unique ,
     department varchar(32),
     score      int default 0
@@ -37,24 +37,7 @@ alter table t_task_employee
     add foreign key (employeeId) references t_employee (id);
 
 
-create table if not exists t_permission
-(
-    id    bigint      not null auto_increment primary key,
-    value varchar(64) not null
-);
 
-create table if not exists t_employee_permission
-(
-    employeeId   bigint not null,
-    permissionId bigint not null,
-    primary key (employeeId,permissionId)
-);
-
-alter table t_employee_permission
-    add foreign key (permissionId) references t_permission (id);
-
-alter table t_employee_permission
-    add foreign key (employeeId) references t_employee (id);
 
 
 
