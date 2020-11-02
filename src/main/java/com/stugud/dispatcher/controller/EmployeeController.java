@@ -1,6 +1,5 @@
 package com.stugud.dispatcher.controller;
 
-import com.stugud.dispatcher.dto.EmployeeUserDetails;
 import com.stugud.dispatcher.entity.Commit;
 import com.stugud.dispatcher.entity.Employee;
 import com.stugud.dispatcher.entity.Task;
@@ -11,13 +10,11 @@ import com.stugud.dispatcher.util.FileUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 

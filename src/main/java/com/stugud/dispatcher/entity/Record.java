@@ -20,9 +20,10 @@ public class Record  {
 
     private Date finishedAt;
 
-    public Record( long taskId,long employeeId, int scoreChange) {
+    public Record( long taskId,long employeeId, int scoreChange,Date finishedAt) {
         this.employeeId = employeeId;
         this.taskId = taskId;
         this.scoreChange = scoreChange;
+        this.finishedAt=finishedAt;
     }
 }

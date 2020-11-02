@@ -1,5 +1,7 @@
 package com.stugud.dispatcher.service.impl;
 
+import com.stugud.dispatcher.controller.EmployeeController;
+import com.stugud.dispatcher.entity.Commit;
 import com.stugud.dispatcher.entity.Employee;
 import com.stugud.dispatcher.entity.Record;
 import com.stugud.dispatcher.entity.Task;
@@ -7,12 +9,19 @@ import com.stugud.dispatcher.repo.EmployeeRepo;
 import com.stugud.dispatcher.repo.RecordRepo;
 import com.stugud.dispatcher.repo.TaskRepo;
 import com.stugud.dispatcher.service.TaskService;
+import com.stugud.dispatcher.util.FileUtil;
 import com.stugud.dispatcher.util.MailUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -21,6 +30,8 @@ import java.util.stream.Collectors;
 
 @Service
 public class TaskServiceImpl implements TaskService {
+    private static final Logger LOGGER= LoggerFactory.getLogger(EmployeeController.class);
+
     final
     TaskRepo taskRepo;
     final
@@ -29,6 +40,9 @@ public class TaskServiceImpl implements TaskService {
     EmployeeRepo employeeRepo;
     final
     MailUtil mailUtil;
+
+    @Autowired
+    FileUtil fileUtil;
 
     @Value("${dispatcher.employee.pageSize}")
     int pageSize;
@@ -48,6 +62,8 @@ public class TaskServiceImpl implements TaskService {
         }
         return null;
     }
+
+
 
     @Override
     public List<Task> findAllByEmpId(long empId) {
@@ -96,6 +112,7 @@ public class TaskServiceImpl implements TaskService {
 
 
     @Override
+    @Transactional
     public Task setCompleted(long taskId) {
         Optional<Task> optionalTask = taskRepo.findById(taskId);
         if(optionalTask.isPresent()) {
@@ -111,11 +128,22 @@ public class TaskServiceImpl implements TaskService {
             int scoreChange = (int) (-5 * delay);
             for (Employee employee : task1.getInCharge()) {
                 System.out.println(task1);
-                recordRepo.save(new Record(task1.getId(), employee.getId(), scoreChange));
+                recordRepo.save(new Record(task1.getId(), employee.getId(), scoreChange,task1.getFinishedAt()));
                 employee.setScore(employee.getScore()+scoreChange);
                 employeeRepo.save(employee);
             }
             return task1;
+        }
+        return null;
+    }
+
+    @Override
+    @Transactional
+    public Task setCompleted(long taskId, Commit passedCommit) {
+        Task task = setCompleted(taskId);
+        if(task!=null){
+            task.setFilePath(passedCommit.getFilePath());
+            return task;
         }
         return null;
     }
@@ -202,4 +230,14 @@ public class TaskServiceImpl implements TaskService {
         return inChargeList;
     }
 
+    @Override
+    public void downloadFile(HttpServletResponse response, Task task) {
+        if(null!=task){
+            try {
+                fileUtil.downloadCommit(response, task.getFilePath());
+            } catch (UnsupportedEncodingException e) {
+                LOGGER.info("下载文件失败{}",e);
+            }
+        }
+    }
 }

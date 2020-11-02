@@ -14,9 +14,18 @@ public class CommonController {
     @GetMapping("/loginSuccess")
     public String login(Authentication authentication){
         if (authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))){
-            return "redirect:admin/tasks";
+            return "redirect:/admin/tasks";
         }else{
-            return "redirect:employee/tasks";
+            return "redirect:/employee/tasks";
+        }
+    }
+
+    @GetMapping("/home")
+    public String home(Authentication authentication){
+        if (authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))){
+            return "redirect:/admin/tasks";
+        }else{
+            return "redirect:/employee/tasks";
         }
     }
 }

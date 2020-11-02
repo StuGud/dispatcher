@@ -6,7 +6,7 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Dispatcher 员工列表</title>
+    <title>Dispatcher 提交列表</title>
     <!-- plugins:css -->
     <link rel="stylesheet" th:href="@{/vendors/mdi/css/materialdesignicons.min.css}">
     <link rel="stylesheet" th:href="@{/vendors/base/vendor.bundle.base.css}">
@@ -19,7 +19,6 @@
     <!-- endinject -->
     <link rel="shortcut icon" th:href="@{/images/favicon.png}"/>
 </head>
-
 <body>
 <div class="container-scroller">
     <!-- partial:partials/_navbar.html -->
@@ -39,17 +38,6 @@
                                     <h2>欢迎回来</h2>
                                     <p class="mb-md-0">祝您快乐每一天</p>
                                 </div>
-
-                            </div>
-                            <div class="d-flex justify-content-between align-items-end flex-wrap">
-
-                                <button type="button" class="btn btn-light bg-white btn-icon mr-3 mt-2 mt-xl-0">
-                                    <i class="mdi mdi-clock-outline text-muted"></i>
-                                </button>
-                                <button type="button" class="btn btn-light bg-white btn-icon mr-3 mt-2 mt-xl-0">
-                                    <i class="mdi mdi-plus text-muted"></i>
-                                </button>
-
                             </div>
                         </div>
                     </div>
@@ -60,28 +48,44 @@
                     <div class="col-md-12 stretch-card">
                         <div class="card">
                             <div class="card-body">
-                                <p class="card-title">员工列表</p>
+                                <p class="card-title">提交记录</p>
                                 <div class="table-responsive">
                                     <table id="recent-purchases-listing" class="table">
                                         <thead>
                                         <tr>
                                             <th>ID</th>
-                                            <th>姓名</th>
-                                            <th>邮件</th>
-                                            <th>部门</th>
-                                            <th>score</th>
+                                            <th>TaskID</th>
+                                            <th>commit序号</th>
+                                            <th>备注</th>
+                                            <th>提交时间</th>
+                                            <th>回复</th>
+                                            <th>状态</th>
+                                            <th>操作</th>
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        <tr th:each="employee:${employees}">
-                                            <td th:text="${employee.id}"></td>
+                                        <tr th:each="commit:${commits}">
+                                            <td th:text="${commit.id}"></td>
                                             <td>
-                                                <a th:href="@{/admin/employee/{id}(id=${employee.id})}"
-                                                   th:text="${employee.username}"/>
+                                                <a th:href="@{/employee/task/{id}(id=${commit.taskId})}"
+                                                   th:text="${commit.taskId}"/>
                                             </td>
-                                            <td th:text="${employee.mail}"></td>
-                                            <td th:text="${employee.department}"></td>
-                                            <td th:text="${employee.score}"></td>
+                                            <td th:text="${commit.commitNo}"></td>
+                                            <td th:text="${commit.message}"></td>
+                                            <td th:text="${#dates.format(commit.commitAt, 'yyyy-MM-dd')}"></td>
+                                            <td>
+                                                <input type="text" th:id="'reply'+${commit.id}">
+                                            </td>
+                                            <td>
+                                                <div th:if="${commit.state}==0">未审核</div>
+                                                <div th:if="${commit.state}==1">没通过</div>
+                                                <div th:if="${commit.state}==2">已通过</div>
+                                            </td>
+                                            <td>
+                                                <a th:href="@{/admin/commit/{commitId}/download(commitId=${commit.id})}"><button class="btn">下载commit</button></a>
+                                                <button th:onclick="not_pass([[${commit.id}]])" class="btn">不通过</button>
+                                                <button th:onclick="pass([[${commit.id}]]);" class="btn">通过</button>
+                                            </td>
                                         </tr>
                                         </tbody>
                                     </table>
@@ -111,8 +115,6 @@
     }
 
     #login_click a {
-
-
         text-decoration: none;
         background: #2f435e;
         color: #f2f2f2;
@@ -154,6 +156,59 @@
 <script th:src="@{/js/dataTables.bootstrap4.js}"></script>
 <!-- End custom js for this page-->
 </body>
+
+<script>
+    function pass(e) {
+
+        var reply = document.getElementById("reply" + e);
+        var rowIndex = reply.parentNode.parentNode.rowIndex;
+        var table = document.getElementById("recent-purchases-listing");
+        var replyStr = reply.value;
+
+        $.ajax({
+            type: "GET",
+            url: "/admin/commit/" + e + "/setPassed",
+            data: {
+                reply: replyStr
+            },
+            success: function (data) {
+                if (data.state == 2) {
+                    alert("已提交为通过")
+                    table.deleteRow(rowIndex);
+                    console.log(data);
+                }
+            },
+            error: function (jqXHR) {
+                alert("发生错误：" + jqXHR.status);
+            }
+        });
+    }
+
+    function not_pass(e) {
+        var reply = document.getElementById("reply" + e);
+        var rowIndex = reply.parentNode.parentNode.rowIndex;
+        var table = document.getElementById("recent-purchases-listing");
+        var replyStr = reply.value;
+
+        $.ajax({
+            type: "GET",
+            url: "/admin/commit/" + e + "/setNotPassed",
+            data: {
+                reply: replyStr
+            },
+            success: function (data) {
+                if (data.state == 1) {
+                    alert("已提交为不通过")
+                    table.deleteRow(rowIndex);
+                    console.log(data);
+                }
+            },
+            error: function (jqXHR) {
+                alert("发生错误：" + jqXHR.status);
+            }
+        });
+    }
+</script>
 
 </html>
 

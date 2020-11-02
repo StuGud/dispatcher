@@ -1,28 +1,39 @@
 package com.stugud.dispatcher.controller;
 
+import com.stugud.dispatcher.entity.Commit;
 import com.stugud.dispatcher.entity.Employee;
 import com.stugud.dispatcher.entity.Task;
+import com.stugud.dispatcher.service.CommitService;
 import com.stugud.dispatcher.service.TaskService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 @RequestMapping("/admin")
 @Controller
 public class AdminTaskController {
+
+    private static final Logger LOGGER= LoggerFactory.getLogger(EmployeeController.class);
+
     final
     TaskService taskService;
+
+
+    @Autowired
+    CommitService commitService;
 
     public AdminTaskController(TaskService taskService) {
         this.taskService = taskService;
     }
 
     /**
-     * 转到任务发布界面
-     *
-     * @return
+     * @return 转到任务发布界面
      */
     @GetMapping("/task")
     public String showReleasePage() {
@@ -30,13 +41,12 @@ public class AdminTaskController {
     }
 
     /**
-     * 发布任务后转到任务详情界面
-     *
-     * @return
+     * 发布任务
+     * @return 转到任务详情界面
      */
     @PostMapping("/task")
     public String releaseTask(Task task, Model model) {
-        System.out.println("试图新建任务：\n" + task);
+        LOGGER.info("试图新建任务{}",task);
         task.setState("未完成");
         //传来的是inCharge的username
         Task newTask = taskService.releaseWithInChargesName(task);
@@ -48,9 +58,9 @@ public class AdminTaskController {
             //应该可以直接返回错误信息而不跳转
             //这里有点问题
             model.addAttribute("task", task);
-            return "task/release";
+            return "/admin/task/release";
         }
-        return "task/details";
+        return "/admin/task/details";
     }
 
     @GetMapping("/task/{id}")
@@ -60,7 +70,7 @@ public class AdminTaskController {
             setEmpPswInvisible(task);
             model.addAttribute("task", task);
         }
-        return "admin/task/details";
+        return "/admin/task/details";
     }
 
     /**
@@ -126,4 +136,52 @@ public class AdminTaskController {
         }
     }
 
+    /**
+     *
+     * @param model
+     * @param state
+     * @return
+     */
+    @GetMapping("/commits")
+    public String showCommitsPage(Model model,String state){
+        List<Commit> commits=null;
+        if(state.equals("pending")){
+            commits = commitService.findAllByState(0);
+        }else if (state.equals("notPassed")){
+            commits = commitService.findAllByState(1);
+        }else if (state.equals("passed")){
+            commits=commitService.findAllByState(2);
+        }
+        model.addAttribute("commits",commits);
+        return "/admin/task/commit/commits";
+    }
+
+    /**
+     *
+     * @param commitId
+     * @param reply
+     * @return
+     */
+    @GetMapping("/commit/{commitId}/setPassed")
+    @ResponseBody
+    public Commit setCommitPassed(@PathVariable(name = "commitId") long commitId,String reply){
+        Commit passedCommit = commitService.setPassed(commitId, reply);
+        Task task = taskService.setCompleted(passedCommit.getTaskId(), passedCommit);
+        return passedCommit;
+    }
+
+    @GetMapping("/commit/{commitId}/setNotPassed")
+    @ResponseBody
+    public Commit setCommitNotPassed(@PathVariable(name = "commitId") long commitId,String reply){
+        LOGGER.info("{}:{}",commitId,reply);
+        return null;
+    }
+
+    @GetMapping("/commit/{commitId}/download")
+    public void downloadCommit(@PathVariable(name = "commitId") long commitId,
+                               HttpServletResponse response){
+        Commit commit = commitService.findById(commitId);
+        commitService.downloadFile(response,commit);
+
+    }
 }

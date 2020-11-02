@@ -14,7 +14,7 @@ public interface RecordRepo extends PagingAndSortingRepository<Record,Long> {
 
     List<Record> findAllByEmployeeId(long employeeId, Pageable pageable);
 
-    @Query(value = "select * from t_task_employees where year(finishedAt)= :year and month(finishedAt)= :month",nativeQuery = true)
+    @Query(value = "select * from t_task_employee where year(finishedAt)= :year and month(finishedAt)= :month",nativeQuery = true)
     List<Record> findAllByMonth(@Param("year") int year, @Param("month") int month);
 
     Record findByEmployeeIdAndTaskId(long employeeId,long taskId);

@@ -153,14 +153,14 @@
         </li>
 
         <li class="nav-item">
-            <a class="nav-link" th:href="@{/templates/admin/task}">
+            <a class="nav-link" th:href="@{/admin/task}">
                 <i class="mdi mdi-view-headline menu-icon"></i>
                 <span class="menu-title">发布任务</span>
             </a>
         </li>
 
         <li class="nav-item">
-            <a class="nav-link" th:href="@{/admin/task/pendingCommits}">
+            <a class="nav-link" th:href="@{'/admin/commits?state=pending'}">
                 <i class="mdi mdi-view-headline menu-icon"></i>
                 <span class="menu-title">待审核提交</span>
             </a>
@@ -170,6 +170,20 @@
             <a class="nav-link" th:href="@{/admin/employees}">
                 <i class="mdi mdi-view-headline menu-icon"></i>
                 <span class="menu-title">员工列表</span>
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link" th:href="@{/admin/employees/monthlyScore}">
+                <i class="mdi mdi-view-headline menu-icon"></i>
+                <span class="menu-title">月度分数</span>
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link" th:href="@{/logout}">
+                <i class="mdi mdi-view-headline menu-icon"></i>
+                <span class="menu-title">退出登录</span>
             </a>
         </li>
 

@@ -85,13 +85,25 @@ public class CommitServiceImpl implements CommitService {
 
     @Override
     public void downloadFile(HttpServletResponse response, Commit commit) {
-
         if(null!=commit){
             try {
-                fileUtil.downloadCommit(response, commit);
+                fileUtil.downloadCommit(response, commit.getFilePath());
             } catch (UnsupportedEncodingException e) {
                 LOGGER.info("下载文件失败{}",e);
             }
         }
+    }
+
+    @Override
+    public Commit setPassed(long commitId, String reply) {
+        Optional<Commit> optionalCommit = commitRepo.findById(commitId);
+        if(optionalCommit.isPresent()){
+            Commit commit = optionalCommit.get();
+            commit.setState(2);
+            commit.setReply(reply);
+            commitRepo.save(commit);
+            return commit;
+        }
+        return null;
     }
 }

@@ -20,7 +20,7 @@ public class Employee {
     @Size(min = 4,max = 32,message = "用户名长度为4-32字符")
     private String username;
     @NotBlank
-    @Size(min = 8,max = 32,message = "密码长度为8-32字符")
+    @Size(min = 8,max = 64,message = "密码长度为8-64字符")
     private String password;
     @NotBlank
     @Email

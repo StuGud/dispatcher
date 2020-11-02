@@ -1,7 +1,9 @@
 package com.stugud.dispatcher.service;
 
+import com.stugud.dispatcher.entity.Commit;
 import com.stugud.dispatcher.entity.Task;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 public interface TaskService {
@@ -31,6 +33,12 @@ public interface TaskService {
      * @return
      */
     Task setCompleted(long taskId);
+
+    /**
+     * 设置状态为已完成,使用当前时间为完成时间，并计算scoreChange
+     * @return
+     */
+    Task setCompleted(long taskId, Commit passedCommit);
 
     /**
      * 返回所有的任务
@@ -66,6 +74,8 @@ public interface TaskService {
     Task releaseWithInChargesName(Task task);
 
     List<Task> findAllByEmpIdAndState(long empId,String state);
+
+    void downloadFile(HttpServletResponse response,Task task);
 
 
 }

@@ -28,7 +28,7 @@ public class Commit {
     private String message;
     private String reply;
     /**
-     * 0 -> pending待审核 ; 1 ->  没通过; 2 -> 通过
+     * 0 -> pending待审核 ; 1 -> notPassed没通过; 2 -> Passed通过
      */
     private int state;
     private String filePath;

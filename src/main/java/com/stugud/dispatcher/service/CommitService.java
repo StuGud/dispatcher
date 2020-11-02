@@ -19,4 +19,11 @@ public interface CommitService {
     Commit findLastPassedCommitByTaskId(long taskId);
     Commit commit(Commit commit,MultipartFile file);
     void downloadFile(HttpServletResponse response,Commit commit);
+
+    /**
+     * 通过commit
+     * 需要设置reply、state
+     * @return
+     */
+    Commit setPassed(long commitId, String reply);
 }

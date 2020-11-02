@@ -45,8 +45,12 @@ public class FileUtil {
         return filePath;
     }
 
-    public void downloadCommit(HttpServletResponse response, Commit commit) throws UnsupportedEncodingException {
-        File file=new File(commit.getFilePath());
+    public void downloadCommit(HttpServletResponse response, String filePath) throws UnsupportedEncodingException {
+        if (filePath==null){
+            LOGGER.info("企图下载空文件");
+            return;
+        }
+        File file=new File(filePath);
         String fileName=file.getName();
         // 配置文件下载
         response.setHeader("content-type", "application/octet-stream");
@@ -69,7 +73,7 @@ public class FileUtil {
             }
         }
         catch (Exception e) {
-            LOGGER.info("commit{}文件{}下载失败",commit,fileName);
+            LOGGER.info("文件{}下载失败",fileName);
         }
         finally {
             if (bis != null) {
