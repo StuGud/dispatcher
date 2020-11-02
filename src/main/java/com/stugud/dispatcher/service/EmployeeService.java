@@ -58,4 +58,6 @@ public interface EmployeeService {
     List<Employee> findAllByPageNum(int pageNum);
 
     List<SimplePermission> getPermissionList(long empId);
+
+    boolean isEmployeeInChargeTask(long employeeId,long taskId);
 }

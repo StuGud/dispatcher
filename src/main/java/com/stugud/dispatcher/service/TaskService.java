@@ -66,4 +66,6 @@ public interface TaskService {
     Task releaseWithInChargesName(Task task);
 
     List<Task> findAllByEmpIdAndState(long empId,String state);
+
+
 }

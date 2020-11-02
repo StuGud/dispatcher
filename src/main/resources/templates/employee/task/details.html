@@ -71,10 +71,10 @@
                                         <tr>
                                             <th>操作</th>
                                             <td th:if="${task.state}=='未完成'">
-                                                <a th:href="@{employee/task/{id}/commit(id=${task.id})}">提交</a>
+                                                <a th:href="@{/employee/task/{id}/commit(id=${task.id})}">提交</a>
                                             </td>
                                             <td th:if="${task.state}=='已完成'">
-                                                <a th:href="@{employee/commit/{commitId}/download(taskId=${task.id},commitId=${commitDownloadId})}">
+                                                <a th:href="@{/employee/commit/{commitId}/download(taskId=${task.id},commitId=${commitDownloadId})}">
                                                     下载commit
                                                 </a>
                                             </td>
@@ -112,12 +112,12 @@
                                             <td th:text="${commit.message}"></td>
                                             <td th:text="${commit.reply}"></td>
                                             <td>
-                                                <div th:if="${commit.state}==0" text="未审核"></div>
-                                                <div th:if="${commit.state}==1" text="没通过"></div>
-                                                <div th:if="${commit.state}==2" text="已通过"></div>
+                                                <div th:if="${commit.state}==0" >未审核</div>
+                                                <div th:if="${commit.state}==1" >没通过</div>
+                                                <div th:if="${commit.state}==2" >已通过</div>
                                             </td>
                                             <td>
-                                                <a th:href="@{employee/commit/{commitId}/download(commitId=${commit.id})}">
+                                                <a th:href="@{/employee/commit/{commitId}/download(commitId=${commit.id})}">
                                                     下载commit
                                                 </a>
                                             </td>

@@ -4,6 +4,7 @@ import com.stugud.dispatcher.entity.Commit;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 /**
@@ -17,4 +18,5 @@ public interface CommitService {
     List<Commit> findAllByState(int state);
     Commit findLastPassedCommitByTaskId(long taskId);
     Commit commit(Commit commit,MultipartFile file);
+    void downloadFile(HttpServletResponse response,Commit commit);
 }

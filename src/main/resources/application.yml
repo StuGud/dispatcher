@@ -36,7 +36,7 @@ dispatcher:
   employee:
     pageSize: 20
   commit:
-    root: D:/
+    root: /Users/gud/Desktop/
   mail:
     fromMail:
       addr: dispatchertest@163.com

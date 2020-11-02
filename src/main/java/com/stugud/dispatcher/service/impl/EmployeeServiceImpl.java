@@ -131,4 +131,9 @@ public class EmployeeServiceImpl implements EmployeeService {
     public List<SimplePermission> getPermissionList(long empId) {
         return null;
     }
+
+    @Override
+    public boolean isEmployeeInChargeTask(long employeeId, long taskId) {
+        return recordRepo.findByEmployeeIdAndTaskId(employeeId,taskId)!=null;
+    }
 }

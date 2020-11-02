@@ -36,6 +36,27 @@ alter table t_task_employee
 alter table t_task_employee
     add foreign key (employeeId) references t_employee (id);
 
+create table if not exists t_commit
+(
+    id         bigint not null auto_increment primary key,
+    taskId     bigint,
+    employeeId bigint,
+    commitNo   int,
+    commitAt   date,
+    message    varchar(64),
+    reply      varchar(64),
+    state      int default 0,
+    filePath   varchar(256)
+);
+
+alter table t_commit
+    add foreign key (employeeId) references t_employee (id);
+
+alter table t_commit
+    add foreign key (taskId) references t_task (id);
+
+ALTER TABLE t_commit ADD unique(taskId,commitNo);
+
 
 
 
