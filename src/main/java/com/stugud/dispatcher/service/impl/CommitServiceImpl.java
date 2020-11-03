@@ -106,4 +106,17 @@ public class CommitServiceImpl implements CommitService {
         }
         return null;
     }
+
+    @Override
+    public Commit setNotPassed(long commitId, String reply) {
+        Optional<Commit> optionalCommit = commitRepo.findById(commitId);
+        if(optionalCommit.isPresent()){
+            Commit commit = optionalCommit.get();
+            commit.setState(1);
+            commit.setReply(reply);
+            commitRepo.save(commit);
+            return commit;
+        }
+        return null;
+    }
 }

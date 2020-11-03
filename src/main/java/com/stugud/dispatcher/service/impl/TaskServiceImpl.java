@@ -30,7 +30,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class TaskServiceImpl implements TaskService {
-    private static final Logger LOGGER= LoggerFactory.getLogger(EmployeeController.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(EmployeeController.class);
 
     final
     TaskRepo taskRepo;
@@ -57,13 +57,11 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public Task findById(long id) {
         Optional<Task> optionalTask = taskRepo.findById(id);
-        if (optionalTask.isPresent()){
+        if (optionalTask.isPresent()) {
             return optionalTask.get();
         }
         return null;
     }
-
-
 
     @Override
     public List<Task> findAllByEmpId(long empId) {
@@ -73,79 +71,6 @@ public class TaskServiceImpl implements TaskService {
             tasks.add(taskRepo.findById(record.getTaskId()).get());
         }
         return tasks;
-    }
-
-    @Override
-    public Task modify(Task modifiedTask) {
-        Optional<Task> optionalTask = taskRepo.findById(modifiedTask.getId());
-        if(optionalTask.isPresent()) {
-            Task task=optionalTask.get();
-            if (modifiedTask.getSubject() != null) {
-                task.setSubject(modifiedTask.getSubject());
-            }
-            if (modifiedTask.getContent() != null) {
-                task.setContent(modifiedTask.getContent());
-            }
-            if (modifiedTask.getLevel() != null) {
-                task.setLevel(modifiedTask.getLevel());
-            }
-            if (modifiedTask.getDeadline() != null) {
-                task.setDeadline(modifiedTask.getDeadline());
-            }
-            if (modifiedTask.getInCharge() != null) {
-                task.setInCharge(findAllEmployeesByNameOrId(modifiedTask.getInCharge()));
-            }
-            if (modifiedTask.getState() != null) {
-                if(task.getState().equals("未完成")&&modifiedTask.getState().equals("已完成")){
-                    Task completed = setCompleted(task.getId());
-                    task.setState("已完成");
-                    task.setFinishedAt(completed.getFinishedAt());
-                }else{
-                    task.setState(modifiedTask.getState());
-                }
-            }
-            mailUtil.sendTaskRemindMail("任务修改！ ",task);
-            return taskRepo.save(task);
-        }
-        return null;
-    }
-
-
-    @Override
-    @Transactional
-    public Task setCompleted(long taskId) {
-        Optional<Task> optionalTask = taskRepo.findById(taskId);
-        if(optionalTask.isPresent()) {
-            Task task1 = optionalTask.get();
-            task1.setState("已完成");
-            task1.setFinishedAt(new Date());
-            taskRepo.save(task1);
-
-            //计算scoreChange
-            long deadline = task1.getDeadline().getTime();
-            long nowDate = (new Date()).getTime();
-            long delay = (nowDate - deadline) / (24 * 60 * 60 * 1000);
-            int scoreChange = (int) (-5 * delay);
-            for (Employee employee : task1.getInCharge()) {
-                System.out.println(task1);
-                recordRepo.save(new Record(task1.getId(), employee.getId(), scoreChange,task1.getFinishedAt()));
-                employee.setScore(employee.getScore()+scoreChange);
-                employeeRepo.save(employee);
-            }
-            return task1;
-        }
-        return null;
-    }
-
-    @Override
-    @Transactional
-    public Task setCompleted(long taskId, Commit passedCommit) {
-        Task task = setCompleted(taskId);
-        if(task!=null){
-            task.setFilePath(passedCommit.getFilePath());
-            return task;
-        }
-        return null;
     }
 
     @Override
@@ -175,15 +100,15 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public List<Task> findAllByEmpIdAndState(long empId, String state) {
         List<Task> allTasks = findAllByEmpId(empId);
-        if (state.equals("completed")){
-            return filter(allTasks,"已完成");
-        }else if(state.equals("notCompleted")){
-            return filter(allTasks,"未完成");
+        if (state.equals("completed")) {
+            return filter(allTasks, "已完成");
+        } else if (state.equals("notCompleted")) {
+            return filter(allTasks, "未完成");
         }
         return allTasks;
     }
 
-    private List<Task> filter(List<Task> taskList,String state){
+    private List<Task> filter(List<Task> taskList, String state) {
         return taskList.stream()
                 .filter(task -> task.getState().equals(state))
                 .collect(Collectors.toList());
@@ -191,38 +116,36 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public Task releaseWithInChargesName(Task task) {
-        List<Employee> inChargeList=new ArrayList<>();
-        if (task.getInCharge()!=null){
-            inChargeList=findAllEmployeesByNameOrId(task.getInCharge());
+        List<Employee> inChargeList = new ArrayList<>();
+        if (task.getInCharge() != null) {
+            inChargeList = findAllEmployeesByNameOrId(task.getInCharge());
         }
-        if(inChargeList.isEmpty()){
+        if (inChargeList.isEmpty()) {
             return null;
-        }else {
+        } else {
             task.setInCharge(inChargeList);
             //发送新任务提醒
-            mailUtil.sendTaskRemindMail("新任务！ ",task);
+            mailUtil.sendTaskRemindMail("新任务！ ", task);
             return taskRepo.save(task);
         }
     }
 
 
-
     /**
-     *
      * @param employees 为null或为空时，返回空的list；
      * @return
      */
-    private List<Employee> findAllEmployeesByNameOrId(List<Employee> employees){
-        List<Employee> inChargeList=new ArrayList<>();
-        for (Employee inChargeP: employees){
-            if(inChargeP.getId()!=0){
+    private List<Employee> findAllEmployeesByNameOrId(List<Employee> employees) {
+        List<Employee> inChargeList = new ArrayList<>();
+        for (Employee inChargeP : employees) {
+            if (inChargeP.getId() != 0) {
                 Optional<Employee> optionalEmployee = employeeRepo.findById(inChargeP.getId());
-                if(optionalEmployee.isPresent()){
+                if (optionalEmployee.isPresent()) {
                     inChargeList.add(optionalEmployee.get());
                 }
-            }else if(inChargeP.getUsername()!=null){
+            } else if (inChargeP.getUsername() != null) {
                 List<Employee> employeesWithSameName = employeeRepo.findAllByUsername(inChargeP.getUsername());
-                for(Employee employee:employeesWithSameName){
+                for (Employee employee : employeesWithSameName) {
                     inChargeList.add(employee);
                 }
             }
@@ -232,12 +155,128 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public void downloadFile(HttpServletResponse response, Task task) {
-        if(null!=task){
+        if (null != task) {
             try {
                 fileUtil.downloadCommit(response, task.getFilePath());
             } catch (UnsupportedEncodingException e) {
-                LOGGER.info("下载文件失败{}",e);
+                LOGGER.info("下载文件失败{}", e);
             }
         }
+    }
+
+    @Override
+    public Task modify(Task modifiedTask) {
+        Task completed=null;
+        Optional<Task> optionalTask = taskRepo.findById(modifiedTask.getId());
+        if (optionalTask.isPresent()) {
+            Task savingTask = optionalTask.get();
+
+            //已完成的任务不可以修改
+            if (savingTask.getState().equals("已完成")) {
+                return null;
+            }
+
+            if (modifiedTask.getSubject() != null) {
+                savingTask.setSubject(modifiedTask.getSubject());
+            }
+            if (modifiedTask.getContent() != null) {
+                savingTask.setContent(modifiedTask.getContent());
+            }
+            if (modifiedTask.getLevel() != null) {
+                savingTask.setLevel(modifiedTask.getLevel());
+            }
+            if (modifiedTask.getDeadline() != null) {
+                savingTask.setDeadline(modifiedTask.getDeadline());
+            }
+            if (modifiedTask.getInCharge() != null) {
+                savingTask.setInCharge(findAllEmployeesByNameOrId(modifiedTask.getInCharge()));
+            }
+
+            Task savedTask = taskRepo.save(savingTask);
+            if (modifiedTask.getState() != null) {
+                if(savingTask.getState().equals("未完成")&&modifiedTask.getState().equals("已完成")){
+                     completed= setCompleted(savingTask.getId());
+
+                }
+            }
+            if (null!=completed){
+                mailUtil.sendTaskRemindMail("任务完成！ ", completed);
+                return completed;
+            }else{
+                mailUtil.sendTaskRemindMail("任务修改！ ", savedTask);
+                return savedTask;
+            }
+        }
+        return null;
+    }
+
+
+    @Override
+    @Transactional
+    public Task setCompleted(long taskId) {
+        Optional<Task> optionalTask = taskRepo.findById(taskId);
+        if (optionalTask.isPresent()) {
+            Task task1 = optionalTask.get();
+            task1.setState("已完成");
+            task1.setFinishedAt(new Date());
+            taskRepo.save(task1);
+
+            int scoreChange = calculateScore(task1.getDeadline());
+            for (Employee employee : task1.getInCharge()) {
+                System.out.println(task1);
+                recordRepo.save(new Record(task1.getId(), employee.getId(), scoreChange, task1.getFinishedAt()));
+                employee.setScore(employee.getScore() + scoreChange);
+                employeeRepo.save(employee);
+            }
+            return task1;
+        }
+        return null;
+    }
+
+    @Override
+    @Transactional
+    public Task setCompleted(long taskId, Commit passedCommit) {
+        Task task = setCompleted(taskId);
+        if (task != null) {
+            task.setFilePath(passedCommit.getFilePath());
+            return task;
+        }
+        return null;
+    }
+
+    private int calculateScore(Date deadline) {
+        long deadlineLong = deadline.getTime();
+        long nowDate = (new Date()).getTime();
+        long delay = (nowDate - deadlineLong) / (24 * 60 * 60 * 1000);
+        int scoreChange = (int) (-5 * delay);
+        return scoreChange;
+    }
+
+    @Override
+    @Transactional
+    public Task setNotCompleted(long taskId) throws Exception {
+        Optional<Task> optionalTask = taskRepo.findById(taskId);
+        if (optionalTask.isPresent()) {
+            Task task = optionalTask.get();
+            for (Employee employee : task.getInCharge()) {
+                Record record = recordRepo.findByEmployeeIdAndTaskId(employee.getId(), task.getId());
+                if (record == null) {
+                    throw new Exception();
+                }
+                record.setScoreChange(0);
+                record.setFinishedAt(new Date(0L));
+                recordRepo.save(record);
+                employee.setScore(employee.getScore() - record.getScoreChange());
+                employeeRepo.save(employee);
+            }
+            Optional<Task> optionalTask1 = taskRepo.findById(taskId);
+            if (optionalTask1.isPresent()){
+                optionalTask1.get().setState("未完成");
+                optionalTask1.get().setFinishedAt(new Date(0L));
+                Task save = taskRepo.save(optionalTask1.get());
+                return save;
+            }
+        }
+        return null;
     }
 }

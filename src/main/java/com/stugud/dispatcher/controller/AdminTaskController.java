@@ -51,7 +51,6 @@ public class AdminTaskController {
         //传来的是inCharge的username
         Task newTask = taskService.releaseWithInChargesName(task);
         if (newTask != null) {
-            setEmpPswInvisible(newTask);
             model.addAttribute("task", newTask);
         } else {
             //重新回到发布任务界面
@@ -67,7 +66,8 @@ public class AdminTaskController {
     public String showTaskDetails(Model model, @PathVariable long id) {
         Task task = taskService.findById(id);
         if (null!=task){
-            setEmpPswInvisible(task);
+
+
             model.addAttribute("task", task);
         }
         return "/admin/task/details";
@@ -86,7 +86,6 @@ public class AdminTaskController {
         System.out.println("PUT!!" + task);
         Task savedTask=taskService.modify(task);
         if(savedTask!=null){
-            setEmpPswInvisible(savedTask);
             model.addAttribute("task", savedTask);
             return "admin/task/details";
         }else{
@@ -99,8 +98,17 @@ public class AdminTaskController {
     @ResponseBody
     public Task setCompleted(@PathVariable(name = "id") long taskId) {
         Task task = taskService.setCompleted(taskId);
-        if (task!=null){
-            setEmpPswInvisible(task);
+        return task;
+    }
+
+    @GetMapping("/task/{id}/setNotCompleted")
+    @ResponseBody
+    public Task setNotCompleted(@PathVariable(name = "id") long taskId) {
+        Task task = null;
+        try {
+            task = taskService.setNotCompleted(taskId);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return task;
     }
@@ -112,9 +120,6 @@ public class AdminTaskController {
     @GetMapping("/tasks")
     public String showTaskList(Model model) {
         List<Task> tasks = taskService.findAll();
-        for (Task task:tasks){
-            setEmpPswInvisible(task);
-        }
         model.addAttribute("tasks", tasks);
         return "admin/task/tasks";
     }
@@ -126,14 +131,6 @@ public class AdminTaskController {
     @GetMapping("/taskPage")
     public List<Task> showTaskPage(int pageNum) {
         return taskService.findAllByPageNum(pageNum);
-    }
-
-    private void setEmpPswInvisible(Task task){
-        if (null!=task){
-            for(Employee employee: task.getInCharge()){
-                employee.setPassword("******");
-            }
-        }
     }
 
     /**
@@ -174,7 +171,8 @@ public class AdminTaskController {
     @ResponseBody
     public Commit setCommitNotPassed(@PathVariable(name = "commitId") long commitId,String reply){
         LOGGER.info("{}:{}",commitId,reply);
-        return null;
+        Commit passedCommit = commitService.setNotPassed(commitId, reply);
+        return passedCommit;
     }
 
     @GetMapping("/commit/{commitId}/download")
@@ -182,6 +180,5 @@ public class AdminTaskController {
                                HttpServletResponse response){
         Commit commit = commitService.findById(commitId);
         commitService.downloadFile(response,commit);
-
     }
 }

@@ -109,10 +109,9 @@ public class EmployeeController {
      * @return
      */
     @GetMapping("/task/{taskId}/download")
-    public String downloadCommitByTaskId(Model model,@PathVariable(name = "taskId") long taskId){
-        Commit commit = commitService.findLastPassedCommitByTaskId(taskId);
-
-        return "noCSS/employee/commit";
+    public void downloadTask(HttpServletResponse response,@PathVariable(name = "taskId") long taskId){
+        Task task = taskService.findById(taskId);
+        taskService.downloadFile(response,task);
     }
 
     /**

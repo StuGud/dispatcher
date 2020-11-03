@@ -97,7 +97,7 @@
       function submit_set(e) {
         $.ajax({
           type:"PATCH",
-          url:"http://localhost:8080/admin/task/"+e+"/setCompleted",
+          url:"/admin/task/"+e+"/setCompleted",
           success:function(data){
             console.log(data);
             if(data.state=="已完成"){

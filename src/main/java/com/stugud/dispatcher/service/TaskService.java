@@ -22,25 +22,6 @@ public interface TaskService {
     List<Task> findAllByEmpId(long empId);
 
     /**
-     * 修改任务
-     * @param task
-     * @return
-     */
-    Task modify(Task task);
-
-    /**
-     * 设置状态为已完成,使用当前时间为完成时间，并计算scoreChange
-     * @return
-     */
-    Task setCompleted(long taskId);
-
-    /**
-     * 设置状态为已完成,使用当前时间为完成时间，并计算scoreChange
-     * @return
-     */
-    Task setCompleted(long taskId, Commit passedCommit);
-
-    /**
      * 返回所有的任务
      * @return
      */
@@ -76,6 +57,28 @@ public interface TaskService {
     List<Task> findAllByEmpIdAndState(long empId,String state);
 
     void downloadFile(HttpServletResponse response,Task task);
+
+    /**
+     * 修改任务；不会修改任务状态，任务状态需要单独设置
+     * @param task
+     * @return
+     */
+    Task modify(Task task);
+
+    /**
+     * 设置状态为已完成,使用当前时间为完成时间，并计算scoreChange
+     * @return
+     */
+    Task setCompleted(long taskId);
+
+    Task setCompleted(long taskId, Commit passedCommit);
+
+    /**
+     * 任务状态 已完成 -> 未完成 时使用，会回滚之前的得分
+     * @param taskId
+     * @return
+     */
+    Task setNotCompleted(long taskId) throws Exception;
 
 
 }

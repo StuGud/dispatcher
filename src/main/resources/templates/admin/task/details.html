@@ -70,7 +70,7 @@
                                                     </div>
                                                 </div>
 
-                                                <div class="col-md-6">
+                                                <div th:if="${task.state=='未完成'}" class="col-md-6">
                                                     <div class="form-group row">
                                                         <label class="col-sm-3 col-form-label">修改：</label>
                                                         <div class="col-sm-9">
@@ -135,7 +135,9 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <input  class="btn btn-block btn-primary btn-lg font-weight-medium auth-form-btn" type="submit" style="width:150px; height:50px;float: right;"></input>
+                                            <input  class="btn btn-block btn-primary btn-lg font-weight-medium auth-form-btn" type="submit" value="提交修改" style="width:150px; height:50px;float: right;"></input>
+                                            <a th:href="@{/admin/task/{taskId}/setNotCompleted(taskId=${task.id})}"><button type="button"  class="btn btn-block btn-primary btn-lg font-weight-medium auth-form-btn" style="width:300px; height:50px;float: left;">重设任务为未完成</button></a>
+
                                         </form>
                                     </div>
                                 </div>

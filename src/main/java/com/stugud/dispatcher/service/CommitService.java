@@ -26,4 +26,6 @@ public interface CommitService {
      * @return
      */
     Commit setPassed(long commitId, String reply);
+
+    Commit setNotPassed(long commitId,String reply);
 }
