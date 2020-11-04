@@ -19,17 +19,17 @@ import java.util.List;
 @Controller
 public class AdminTaskController {
 
-    private static final Logger LOGGER= LoggerFactory.getLogger(EmployeeController.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(EmployeeController.class);
 
     final
     TaskService taskService;
 
-
-    @Autowired
+    final
     CommitService commitService;
 
-    public AdminTaskController(TaskService taskService) {
+    public AdminTaskController(TaskService taskService, CommitService commitService) {
         this.taskService = taskService;
+        this.commitService = commitService;
     }
 
     /**
@@ -42,12 +42,11 @@ public class AdminTaskController {
 
     /**
      * 发布任务
+     *
      * @return 转到任务详情界面
      */
     @PostMapping("/task")
     public String releaseTask(Task task, Model model) {
-        LOGGER.info("试图新建任务{}",task);
-        task.setState("未完成");
         //传来的是inCharge的username
         Task newTask = taskService.releaseWithInChargesName(task);
         if (newTask != null) {
@@ -65,33 +64,31 @@ public class AdminTaskController {
     @GetMapping("/task/{id}")
     public String showTaskDetails(Model model, @PathVariable long id) {
         Task task = taskService.findById(id);
-        if (null!=task){
-
-
-            model.addAttribute("task", task);
+        List<Commit> commits = commitService.findAllByTaskId(id);
+        if (null == task) {
+            LOGGER.info("查找任务taskId{}失败", id);
         }
+        model.addAttribute("task", task);
+        model.addAttribute("commits",commits);
         return "/admin/task/details";
     }
 
     /**
      * 修改任务 以任务id为基础进行修改
      * 未完成-》已完成 单独处理;计算score;发送邮件提醒
-     *
+     * @// TODO: 2020/11/4 返回错误页面
      * @param model
      * @param task
      * @return
      */
     @PutMapping("/task")
     public String modifyTask(Model model, Task task) {
-        System.out.println("PUT!!" + task);
-        Task savedTask=taskService.modify(task);
-        if(savedTask!=null){
-            model.addAttribute("task", savedTask);
-            return "admin/task/details";
-        }else{
-            //来到修改不成功的页面
+        Task savedTask = taskService.modify(task);
+        if (savedTask == null) {
             return "";
         }
+        model.addAttribute("task", savedTask);
+        return "admin/task/details";
     }
 
     @PatchMapping("/task/{id}/setCompleted")
@@ -128,40 +125,39 @@ public class AdminTaskController {
     public List<Task> initTaskPage() {
         return taskService.findAllByPageNum(0);
     }
+
     @GetMapping("/taskPage")
     public List<Task> showTaskPage(int pageNum) {
         return taskService.findAllByPageNum(pageNum);
     }
 
     /**
-     *
      * @param model
      * @param state
      * @return
      */
     @GetMapping("/commits")
-    public String showCommitsPage(Model model,String state){
-        List<Commit> commits=null;
-        if(state.equals("pending")){
+    public String showCommitsPage(Model model, String state) {
+        List<Commit> commits = null;
+        if (state.equals("pending")) {
             commits = commitService.findAllByState(0);
-        }else if (state.equals("notPassed")){
+        } else if (state.equals("notPassed")) {
             commits = commitService.findAllByState(1);
-        }else if (state.equals("passed")){
-            commits=commitService.findAllByState(2);
+        } else if (state.equals("passed")) {
+            commits = commitService.findAllByState(2);
         }
-        model.addAttribute("commits",commits);
+        model.addAttribute("commits", commits);
         return "/admin/task/commit/commits";
     }
 
     /**
-     *
      * @param commitId
      * @param reply
      * @return
      */
     @GetMapping("/commit/{commitId}/setPassed")
     @ResponseBody
-    public Commit setCommitPassed(@PathVariable(name = "commitId") long commitId,String reply){
+    public Commit setCommitPassed(@PathVariable(name = "commitId") long commitId, String reply) {
         Commit passedCommit = commitService.setPassed(commitId, reply);
         Task task = taskService.setCompleted(passedCommit.getTaskId(), passedCommit);
         return passedCommit;
@@ -169,16 +165,15 @@ public class AdminTaskController {
 
     @GetMapping("/commit/{commitId}/setNotPassed")
     @ResponseBody
-    public Commit setCommitNotPassed(@PathVariable(name = "commitId") long commitId,String reply){
-        LOGGER.info("{}:{}",commitId,reply);
+    public Commit setCommitNotPassed(@PathVariable(name = "commitId") long commitId, String reply) {
         Commit passedCommit = commitService.setNotPassed(commitId, reply);
         return passedCommit;
     }
 
     @GetMapping("/commit/{commitId}/download")
     public void downloadCommit(@PathVariable(name = "commitId") long commitId,
-                               HttpServletResponse response){
+                               HttpServletResponse response) {
         Commit commit = commitService.findById(commitId);
-        commitService.downloadFile(response,commit);
+        commitService.downloadFile(response, commit);
     }
 }

@@ -27,15 +27,13 @@ public class EmployeeController {
 
     final TaskService taskService;
 
-    @Autowired
-    FileUtil fileUtil;
-
-    @Autowired
+    final
     CommitService commitService;
 
-    public EmployeeController(EmployeeService employeeService, TaskService taskService) {
+    public EmployeeController(EmployeeService employeeService, TaskService taskService, CommitService commitService) {
         this.employeeService = employeeService;
         this.taskService = taskService;
+        this.commitService = commitService;
     }
 
     /**
@@ -53,6 +51,7 @@ public class EmployeeController {
     /**
      * 修改员工个人信息
      * 暂时说，只可以修改密码
+     * @// TODO: 2020/11/4 改为ajax，输出提示信息（成功或失败）
      * @param modifiedEmp
      * @return
      */
@@ -94,7 +93,6 @@ public class EmployeeController {
                 commitDownloadId=lastPassedCommit.getId();
             }
         }
-
         List<Commit> commits=commitService.findAllByTaskId(id);
         model.addAttribute("task", task);
         model.addAttribute("commitDownloadId", commitDownloadId);
@@ -154,7 +152,7 @@ public class EmployeeController {
     @GetMapping("/commit/{commitId}/download")
     public void downloadCommit(@PathVariable(name = "commitId") long commitId,
                                HttpServletResponse response){
-        //做一些认证：有没有权限提交该commit
+        //做一些认证：有没有权限下载该commit
         Employee currentEmployee = employeeService.getCurrentEmployee();
         Commit commit = commitService.findById(commitId);
         if(employeeService.isEmployeeInChargeTask(currentEmployee.getId(),commit.getTaskId())){

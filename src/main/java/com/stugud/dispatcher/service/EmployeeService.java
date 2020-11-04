@@ -60,4 +60,6 @@ public interface EmployeeService {
     List<SimplePermission> getPermissionList(long empId);
 
     boolean isEmployeeInChargeTask(long employeeId,long taskId);
+
+    boolean isMailExist(String mail);
 }

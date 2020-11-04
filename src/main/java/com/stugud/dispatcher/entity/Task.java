@@ -57,6 +57,18 @@ public class Task {
             inverseJoinColumns = {@JoinColumn(name = "employeeId", referencedColumnName = "id")})
     private List<Employee> inCharge;
 
+    public Task(@NotBlank @Size(min = 4, max = 32, message = "任务主题4-32字符") String subject, @NotBlank(message = "任务内容不为空") String content, @Pattern(regexp = "A|B|C", message = "任务级别为A、B、C") String level, Date deadline, @Size(min = 1, message = "最少选择一个负责人") List<Employee> inCharge) {
+        this.subject = subject;
+        this.content = content;
+        this.level = level;
+        this.deadline = deadline;
+        this.inCharge = inCharge;
+    }
+
+    public static Task release(Task task){
+        return new Task(task.getSubject(), task.getContent(), task.getLevel(),task.getDeadline(),task.getInCharge());
+    }
+
     public Task(@NotBlank @Size(min = 4, max = 32, message = "任务主题4-32字符") String subject, @NotBlank(message = "任务内容不为空") String content, @Pattern(regexp = "A|B|C", message = "任务级别为A、B、C") String level, Date createdAt, Date deadline, String state, @Size(min = 1, message = "最少选择一个负责人") List<Employee> inCharge) {
         this.subject = subject;
         this.content = content;

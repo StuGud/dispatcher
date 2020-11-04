@@ -143,6 +143,53 @@
                                 </div>
                             </div>
                         </div>
+
+
+                        <div class="row">
+                            <div class="col-md-12 stretch-card">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <p class="card-title">提交记录</p>
+                                        <div class="table-responsive">
+                                            <table id="recent-purchases-listing1" class="table">
+                                                <thead>
+                                                <tr>
+                                                    <th>序号</th>
+                                                    <th>提交人ID</th>
+                                                    <th>提交日期</th>
+                                                    <th>备注</th>
+                                                    <th>管理员回复</th>
+                                                    <th>状态</th>
+                                                    <th>操作</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                <tr th:each="commit:${commits}">
+                                                    <td th:text="${commit.commitNo}"></td>
+                                                    <td th:text="${commit.employeeId}"></td>
+                                                    <td th:text="${#dates.format(commit.commitAt, 'yyyy-MM-dd')}"></td>
+                                                    <td th:text="${commit.message}"></td>
+                                                    <td th:text="${commit.reply}"></td>
+                                                    <td>
+                                                        <div th:if="${commit.state}==0" >未审核</div>
+                                                        <div th:if="${commit.state}==1" >没通过</div>
+                                                        <div th:if="${commit.state}==2" >已通过</div>
+                                                    </td>
+                                                    <td>
+                                                        <a th:href="@{/employee/commit/{commitId}/download(commitId=${commit.id})}">
+                                                            下载commit
+                                                        </a>
+                                                    </td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
                     </div>
                     <!-- partial -->
                 </div>

@@ -112,7 +112,10 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public Employee register(Employee employee) {
-        return employeeRepo.save(employee);
+        Employee savingEmployee = Employee.register(employee);
+        Employee savedEmployee = employeeRepo.save(savingEmployee);
+        LOGGER.info("创建新员工{}",savedEmployee);
+        return savedEmployee;
     }
 
     @Override
@@ -135,5 +138,10 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public boolean isEmployeeInChargeTask(long employeeId, long taskId) {
         return recordRepo.findByEmployeeIdAndTaskId(employeeId,taskId)!=null;
+    }
+
+    @Override
+    public boolean isMailExist(String mail) {
+        return false;
     }
 }

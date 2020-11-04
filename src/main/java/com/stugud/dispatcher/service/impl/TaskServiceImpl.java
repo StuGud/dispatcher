@@ -124,9 +124,12 @@ public class TaskServiceImpl implements TaskService {
             return null;
         } else {
             task.setInCharge(inChargeList);
+            Task savingTask=Task.release(task);
+            Task savedTask = taskRepo.save(savingTask);
+            LOGGER.info("新建任务{}",savedTask);
             //发送新任务提醒
             mailUtil.sendTaskRemindMail("新任务！ ", task);
-            return taskRepo.save(task);
+            return savedTask;
         }
     }
 
@@ -165,17 +168,17 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
+    @Transactional
     public Task modify(Task modifiedTask) {
         Task completed=null;
         Optional<Task> optionalTask = taskRepo.findById(modifiedTask.getId());
         if (optionalTask.isPresent()) {
             Task savingTask = optionalTask.get();
-
             //已完成的任务不可以修改
             if (savingTask.getState().equals("已完成")) {
                 return null;
             }
-
+            LOGGER.info("正在修改任务{}",savingTask);
             if (modifiedTask.getSubject() != null) {
                 savingTask.setSubject(modifiedTask.getSubject());
             }
@@ -196,20 +199,20 @@ public class TaskServiceImpl implements TaskService {
             if (modifiedTask.getState() != null) {
                 if(savingTask.getState().equals("未完成")&&modifiedTask.getState().equals("已完成")){
                      completed= setCompleted(savingTask.getId());
-
                 }
             }
             if (null!=completed){
                 mailUtil.sendTaskRemindMail("任务完成！ ", completed);
+                LOGGER.info("任务修改为{}",completed);
                 return completed;
             }else{
                 mailUtil.sendTaskRemindMail("任务修改！ ", savedTask);
+                LOGGER.info("任务修改为{}",savedTask);
                 return savedTask;
             }
         }
         return null;
     }
-
 
     @Override
     @Transactional
@@ -223,10 +226,10 @@ public class TaskServiceImpl implements TaskService {
 
             int scoreChange = calculateScore(task1.getDeadline());
             for (Employee employee : task1.getInCharge()) {
-                System.out.println(task1);
                 recordRepo.save(new Record(task1.getId(), employee.getId(), scoreChange, task1.getFinishedAt()));
                 employee.setScore(employee.getScore() + scoreChange);
                 employeeRepo.save(employee);
+                LOGGER.info("任务{}员工{}得分{}",task1,employee,scoreChange);
             }
             return task1;
         }
