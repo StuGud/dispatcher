@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 /**
+ * Todo 主键并非是Long
  * Created By Gud on 2020/11/2 1:15 上午
  */
 public interface CommitRepo extends JpaRepository<Commit,Long> {

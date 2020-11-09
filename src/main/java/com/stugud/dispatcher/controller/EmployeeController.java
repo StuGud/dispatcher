@@ -87,7 +87,7 @@ public class EmployeeController {
     public String showTaskDetails(Model model, @PathVariable long id) {
         Task task = taskService.findById(id);
         long commitDownloadId=0;
-        if (task.getState().equals("已完成")){
+        if (task.getState()==1){
             Commit lastPassedCommit = commitService.findLastPassedCommitByTaskId(id);
             if (null!=lastPassedCommit){
                 commitDownloadId=lastPassedCommit.getId();

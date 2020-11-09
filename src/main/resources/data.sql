@@ -1,15 +1,98 @@
-
 insert into t_employee (id,username,password,mail,department)
-values (1,'employee1','password1','741498908@qq.com','department1'),
-       (2,'employee2','password2','1174145941@qq.com','department2');
+values (1,'gud','$2a$10$4s0Z2d0grlBxie2fynVUEOrRjMGRt.sBLRwfSul/rnQw1fMf4g6mm','741498908@qq.com','dispatcher');
 
-insert into t_task(id,subject, content, level, createdAt, deadline)
-values (1,'task1_subject','task1_content','A','2020-8-1','2020-9-1'),
-       (2,'task2_subject','task2_content','B','2020-8-30','2020-9-30');
+INSERT INTO t_employee ( id , department , username , mail )
+VALUES
+('180','技术部-项目组','黄信静','huangxinjing@jsdfl.com'),
+('181','总经办','孙凯明','sunkaiming@jsdfl.com'),
+('182','总经办','孙书名','sunshuming@jsdfl.com'),
+('183','技术部-项目组','徐军红','xujunhong@jsdfl.com'),
+('184','技术部-电器组','朱兆柳','zhuzhaoliu@jsdfl.com'),
+('186','技术部-遮阳帘组','周更更','zhougenggeng@jsdfl.com'),
+('187','技术部-工装组','张宇鹏','zhangyupeng@jsdfl.com'),
+('188','总经办','徐以枢','xuyishu@jsdfl.com'),
+('189','技术部-导风网组','李长亮','lichangliang@jsdfl.com'),
+('190','技术部-项目组','王聪','wangcong@jsdfl.com'),
+('191','技术部-项目组','李彦珀','liyanpo@jsdfl.com'),
+('194','技术部-导风网组','黄磊','huanglei@jsdfl.com'),
+('196','技术部-玻璃组','王元磊','wangyuanlei@jsdfl.com'),
+('197','技术部-机械组','张孟琦','zhangmengqi@jsdfl.com'),
+('199','技术部-项目组','张帝','zhangdi@jsdfl.com'),
+('200','总经办','陈诚','chencheng@jsdfl.com'),
+('201','技术部-试验室','周佩','zhoupei@jsdfl.com'),
+('202','技术部-工装组','郑浩天','none1@jsdfl.com'),
+('204','技术部-框架组','卢林','lulin@jsdfl.com'),
+('207','技术部-工艺组','王宏','wanghong@jsdfl.com'),
+('212','技术部-遮阳帘组','赵清华','zhaoqinghua@jsdfl.com'),
+('218','技术部-电器组','樊慧鹏','fanhuipengjs@163.com'),
+('219','技术部-试验室','蔡慧','caihui@jsdfl.com'),
+('220','技术部-试验室','成吉海','chengjihai@jsdfl.com'),
+('239','技术部-工艺组','刘军','liujun@jsdfl.com'),
+('240','技术部-框架组','高玉森','gaoyusen@jsdfl.com'),
+('242','技术部-机械组','徐蔡冬','xucaidong@jsdfl.com'),
+('243','技术部-玻璃组','范晨宇','fanchenyu@jsdfl.com'),
+('247','技术部-项目组','赵泽','zhaoze@jsdfl.com'),
+('248','技术部-框架组','向奎峰','xiangkuifeng@jsdfl.com'),
+('251','技术部-玻璃组','何武','hewu@jsdfl.com'),
+('255','技术部-玻璃组','宋力楠','songlinan@jsdfl.com'),
+('258','技术部-工艺组','邓永义','dengyongyi@jsdfl.com'),
+('262','技术部-试验室','蔡奇隆','caiqilong@jsdfl.com'),
+('263','技术部-工装组','周源','none2@jsdfl.com'),
+('264','技术部-工装组','何立寒','none3@jsdfl.com'),
+('265','技术部-工装组','洪伟','none4@jsdfl.com'),
+('274','技术部-设计规范组','黄立成','huanglicheng@jsdfl.com');
 
-insert into t_task_employee(taskId, employeeId)
-values (1,1),
-       (2,1),
-       (2,2);
+INSERT INTO t_employee_leader ( id , duty , leaderId )
+VALUES
+('180','H项目平台经理','182'),
+('181','BC项目工程师','182'),
+('182','ZS项目平台经理','182'),
+('183','M6项目平台经理','182'),
+('184','电器组','188'),
+('186','遮阳帘组','188'),
+('187','设备工程师;检具工程师','187'),
+('188','设计总监','181'),
+('189','导风网组','188'),
+('190','BC项目平台经理','182'),
+('191','IP项目工程师','182'),
+('194','导风网组','188'),
+('196','玻璃组','188'),
+('197','机械组','188'),
+('199','H项目工程师','182'),
+('200','陈诚','182'),
+('201','环境试验工程师;CNAS认证;委外试验工程师','184'),
+('202','维修工程师','187'),
+('204','框架组','188'),
+('207','工艺工程师','258'),
+('212','遮阳帘组','188'),
+('218','电器组','188'),
+('219','量检具管理员;测量工程师','184'),
+('220','可靠性试验工程师;样件管理员;材料数据库管理','184'),
+('239','工艺工程师','258'),
+('240','框架组','188'),
+('242','机械组','188'),
+('243','玻璃组','188'),
+('247','ZS项目工程师','182'),
+('248','框架组','188'),
+('251','玻璃组','188'),
+('255','玻璃组','188'),
+('258','包边技术工程师;工艺技术工程师','258'),
+('262','材料试验工程师','184'),
+('263','设备工程师','187'),
+('264','维修工程师','187'),
+('265','维修工程师','187'),
+('274','APQP管理平台化','180'),
+('180','D-FMEA平台化','180'),
+('200','P-FMEA平台化','180'),
+('191','图纸平台化','180'),
+('262','试验大纲平台化','180'),
+('184','实验室经理','181'),
+('187','工装设备组长','181'),
+('258','工艺组组长','181'),
+('182','项目总监','181'),
+('180','平台化组长','181');
+
+
+UPDATE t_employee_leader SET priority=0 where id=leaderId;
 
 

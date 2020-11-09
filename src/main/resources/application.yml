@@ -5,7 +5,12 @@ spring:
     username: root
     password: Mysql1114
     driver-class-name: com.mysql.cj.jdbc.Driver
-    #nitialization-mode: always
+    #initialization-mode: always
+  servlet:
+    multipart:
+      max-request-size: 100MB
+      enabled: true
+      max-file-size: 100MB
   jpa:
     hibernate:
       naming:

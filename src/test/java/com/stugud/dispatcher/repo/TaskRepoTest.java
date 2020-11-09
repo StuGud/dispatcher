@@ -25,7 +25,7 @@ class TaskRepoTest {
     @Test
     @Transactional
     void findAllByState() {
-        List<Task> tasks = taskRepo.findAllByState("未完成");
+        List<Task> tasks = taskRepo.findAllByState(0);
         System.out.println(tasks);
     }
 
@@ -35,9 +35,9 @@ class TaskRepoTest {
     void saveTask() {
         ArrayList<Employee> list = new ArrayList<>();
         //list.add(new Employee(10,"ecaca","dafasaagdsg","maildfasfda","cdasvsav",12));
-        list.add(new Employee(1,"dasb"));
+        // list.add(new Employee(1,"dasb"));
 
-        Task task=new Task("cedzss","content1","A",new Date(),new Date(),"未完成",list);
+        Task task=new Task("cedzss","content1","A",new Date(),new Date(),0,list);
         System.out.println(task);
         Task save = taskRepo.save(task);
         System.out.println(save);
@@ -48,8 +48,8 @@ class TaskRepoTest {
     @Rollback(value = false)
     void updateTask() {
         ArrayList<Employee> list = new ArrayList<>();
-        list.add(new Employee(2,"dasb"));
-        Task task=new Task("cedzss","contentUpdate","A",new Date(),new Date(),"未完成",list);
+//        list.add(new Employee(2,"dasb"));
+        Task task=new Task("cedzss","contentUpdate","A",new Date(),new Date(),0,list);
         task.setId(11L);
         taskRepo.save(task);
     }

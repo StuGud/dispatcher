@@ -45,7 +45,7 @@ public class FileUtil {
         return filePath;
     }
 
-    public void downloadCommit(HttpServletResponse response, String filePath) throws UnsupportedEncodingException {
+    public void downloadFile(HttpServletResponse response, String filePath) throws UnsupportedEncodingException {
         if (filePath==null){
             LOGGER.info("企图下载空文件");
             return;

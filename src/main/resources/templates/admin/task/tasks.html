@@ -70,9 +70,11 @@
                             </td>
                             <td th:text="${#dates.format(task.createdAt, 'yyyy-MM-dd')}"></td>
                             <td th:text="${#dates.format(task.deadline, 'yyyy-MM-dd')}"></td>
-                            <td th:id="${task.id}" th:text="${task.state}"></td>
+                            <td th:id="${task.id}" th:text="${task.state}==0?'未完成':'已完成'">
+                            </td>
+
                             <td id="login_click">
-                              <a th:id="${task.id}+'_button'" th:if="${task.state}==未完成" th:onclick="submit_set([[${task.id}]]);">完成</a>
+                              <a th:id="${task.id}+'_button'" th:if="${task.state}==0" th:onclick="submit_set([[${task.id}]]);">完成</a>
                             </td>
                           </tr>
                         </tbody>
@@ -100,7 +102,7 @@
           url:"/admin/task/"+e+"/setCompleted",
           success:function(data){
             console.log(data);
-            if(data.state=="已完成"){
+            if(data.state==1){
               $("#"+e).text("已完成");
               $("#"+e+"_button").hide();
             }

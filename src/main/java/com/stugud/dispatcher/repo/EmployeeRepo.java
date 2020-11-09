@@ -18,4 +18,7 @@ public interface EmployeeRepo extends PagingAndSortingRepository<Employee,Long> 
 
     @Query(value = "update t_employee set username=:#{#employee.username},mail=:#{#employee.mail},password=:#{#employee.password} where id= :#{#employee.id} ",nativeQuery = true)
     Employee modifyByEmp(Employee employee);
+
+    @Query(value = "select * from t_employee,(select leaderId from t_employee_leader where id=? and priority >= 1) leaders where t_employee.id=leaders.leaderId;",nativeQuery = true)
+    List<Employee> findLeadersById(long employeeId);
 }

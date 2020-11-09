@@ -69,10 +69,10 @@
                             </td>
                             <td th:text="${#dates.format(task.createdAt, 'yyyy-MM-dd')}"></td>
                             <td th:text="${#dates.format(task.deadline, 'yyyy-MM-dd')}"></td>
-                            <td th:id="${task.id}" th:text="${task.state}"></td>
+                            <td th:id="${task.id}" th:text="${task.state}==0?'未完成':'已完成'"></td>
                             <td>
-                              <a th:if="${task.state}=='未完成'" th:href="@{/employee/task/{id}/commit(id=${task.id})}">提交</a>
-                              <a th:if="${task.state}=='已完成'" th:href="@{/employee/task/{taskId}/download(taskId=${task.id})}">下载commit</a>
+                              <a th:if="${task.state}==0" th:href="@{/employee/task/{id}/commit(id=${task.id})}">提交</a>
+                              <a th:if="${task.state}==1" th:href="@{/employee/task/{taskId}/download(taskId=${task.id})}">下载commit</a>
                             </td>
                           </tr>
                         </tbody>

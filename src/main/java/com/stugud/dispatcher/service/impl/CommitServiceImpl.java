@@ -87,7 +87,7 @@ public class CommitServiceImpl implements CommitService {
     public void downloadFile(HttpServletResponse response, Commit commit) {
         if(null!=commit){
             try {
-                fileUtil.downloadCommit(response, commit.getFilePath());
+                fileUtil.downloadFile(response, commit.getFilePath());
             } catch (UnsupportedEncodingException e) {
                 LOGGER.info("下载文件失败{}",e);
             }

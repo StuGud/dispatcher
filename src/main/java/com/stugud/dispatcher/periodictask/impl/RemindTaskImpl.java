@@ -44,7 +44,7 @@ public class RemindTaskImpl implements RemindTask {
 
         log.info("开始进行邮件提醒");
 
-        List<Task> tasks = taskRepo.findAllByState("未完成");
+        List<Task> tasks = taskRepo.findAllByState(0);
 
         for (Task task : tasks) {
             long createdAt = task.getCreatedAt().getTime();

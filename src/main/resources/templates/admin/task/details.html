@@ -70,7 +70,7 @@
                                                     </div>
                                                 </div>
 
-                                                <div th:if="${task.state=='未完成'}" class="col-md-6">
+                                                <div th:if="${task.state==0}" class="col-md-6">
                                                     <div class="form-group row">
                                                         <label class="col-sm-3 col-form-label">修改：</label>
                                                         <div class="col-sm-9">
@@ -118,15 +118,15 @@
                                                     <div class="form-group row">
                                                         <label class="col-sm-3 col-form-label">任务状态</label>
                                                         <div class="col-sm-9">
-                                                            <select  name="state" class="form-control" th:disabled="${task.state}==已完成">
-                                                                <option name="state" value="未完成" th:selected="${task.state}==未完成" >未完成</option>
-                                                                <option name="state" value="已完成" th:selected="${task.state}==已完成">已完成</option>
+                                                            <select  name="state" class="form-control" th:disabled="${task.state}==1">
+                                                                <option name="state" value="未完成" th:selected="${task.state}==0" >未完成</option>
+                                                                <option name="state" value="已完成" th:selected="${task.state}==1">已完成</option>
                                                             </select>
                                                         </div>
                                                     </div>
                                                 </div>
 
-                                                <div class="col-md-6"  th:if="${task.state}==已完成">
+                                                <div class="col-md-6"  th:if="${task.state}==1">
                                                     <div class="form-group row">
                                                         <label class="col-sm-3 col-form-label">完成时间：</label>
                                                         <div class="col-sm-9">

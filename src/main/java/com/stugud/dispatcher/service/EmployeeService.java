@@ -62,4 +62,6 @@ public interface EmployeeService {
     boolean isEmployeeInChargeTask(long employeeId,long taskId);
 
     boolean isMailExist(String mail);
+
+    List<Employee> findLeaders(long employeeId);
 }

@@ -27,9 +27,9 @@ class TaskServiceTest {
     @Rollback(value = false)
     void testReleaseWithInChargesName() {
         ArrayList<Employee> list = new ArrayList<>();
-        list.add(new Employee(1));
-        list.add(new Employee("employee2"));
-        Task task=new Task("cedzss","content1","A",new Date(),new Date(),"未完成",list);
+//        list.add(new Employee(1));
+//        list.add(new Employee("employee2"));
+        Task task=new Task("cedzss","content1","A",new Date(),new Date(),0,list);
         System.out.println(task);
         taskService.releaseWithInChargesName(task);
     }

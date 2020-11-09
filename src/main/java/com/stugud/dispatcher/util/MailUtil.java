@@ -11,6 +11,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Component;
 
 import java.text.SimpleDateFormat;
+import java.util.List;
 
 @Component
 public class MailUtil {
@@ -35,17 +36,28 @@ public class MailUtil {
 
         try {
             mailSender.send(message);
-            logger.info("邮件已经发送。to"+to);
+            logger.info("邮件已经发送。to" + to);
         } catch (Exception e) {
-            logger.error("发送邮件时发生异常！to "+to, e);
+            logger.error("发送邮件时发生异常！to " + to, e);
         }
 
     }
 
-    public void sendTaskRemindMail(String ps, Task task){
-        for(Employee employee:task.getInCharge()){
-            String subject=ps+task.getSubject();
-            sendTxtMail(employee.getMail(),subject,getSimpleMailContent(task));
+    public void sendTaskRemindMail(String ps, Task task) {
+        String subject = ps + task.getSubject();
+        for (Employee employee : task.getInCharge()) {
+            sendTxtMail(employee.getMail(), subject, getSimpleMailContent(task));
+        }
+    }
+
+    public void sendTaskCompletedMail(String ps, Task task,int scoreChange) {
+        String subject = ps + task.getSubject();
+        String content =getSimpleMailContent(task);
+        content+="完成时间： "+task.getFinishedAt();
+        content+="得分： "+scoreChange;
+
+        for (Employee employee : task.getInCharge()) {
+            sendTxtMail(employee.getMail(), subject,content );
         }
     }
 
@@ -54,24 +66,21 @@ public class MailUtil {
                 + "\n任务主题： " + task.getSubject()
                 + "\n任务级别： " + task.getLevel()
                 + "\n任务详情： " + task.getContent();
+        String inCharge = "\n任务负责人：";
+        for (Employee employee : task.getInCharge()) {
+            inCharge += "\n     " + employee.getUsername() + " " + employee.getDepartment() + " " + employee.getMail();
+        }
+        mailContent += inCharge;
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String time = simpleDateFormat.format(task.getDeadline().getTime());//这个就是把时间戳经过处理得到期望格式的时间
         mailContent += "\n截止时间： " + time;
         return mailContent;
     }
 
-    public String getSimpleMailContentPlusInCharge(Task task) {
-        String mailContent = "任务编号： " + task.getId()
-                + "\n任务主题： " + task.getSubject()
-                + "\n任务级别： " + task.getLevel()
-                + "\n任务详情： " + task.getContent();
-        String inCharge="\n任务负责人：";
-        for (Employee employee:task.getInCharge()){
-            inCharge+="\n     "+employee.getUsername()+" "+employee.getDepartment()+" "+employee.getMail();
+    public void sendTaskRemindMail(String ps, Task task, List<Employee> allLeaders) {
+        String subject = ps + task.getSubject();
+        for (Employee employee : allLeaders) {
+            sendTxtMail(employee.getMail(), subject, getSimpleMailContent(task));
         }
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String time = simpleDateFormat.format(task.getDeadline().getTime());//这个就是把时间戳经过处理得到期望格式的时间
-        mailContent += "\n截止时间： " + time;
-        return mailContent;
     }
 }

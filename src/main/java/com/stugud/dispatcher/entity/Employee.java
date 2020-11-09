@@ -19,7 +19,7 @@ public class Employee {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     @NotBlank
-    @Size(min = 4,max = 32,message = "用户名长度为4-32字符")
+    @Size(min = 2,max = 32,message = "用户名长度为2-32字符")
     private String username;
     @NotBlank
     @Size(min = 8,max = 64,message = "密码长度为8-64字符")
@@ -31,16 +31,8 @@ public class Employee {
     private String department;
     private int score;
 
-    public Employee(long id) {
-        this.id = id;
-    }
 
-    public Employee(long id,String username) {
-        this.id = id;
-        this.username=username;
-    }
-
-    public Employee(@NotBlank @Size(min = 4, max = 32, message = "用户名长度为4-32字符") String username, @NotBlank @Size(min = 8, max = 64, message = "密码长度为8-64字符") String password, @NotBlank @Email String mail, @NotBlank(message = "需要部门信息") String department) {
+    public Employee(@NotBlank @Size(min = 2, max = 32, message = "用户名长度为2-32字符") String username, @NotBlank @Size(min = 8, max = 64, message = "密码长度为8-64字符") String password, @NotBlank @Email String mail, @NotBlank(message = "需要部门信息") String department) {
         this.username = username;
         this.password = password;
         this.mail = mail;
@@ -52,7 +44,5 @@ public class Employee {
 
     }
 
-    public Employee(@NotBlank @Size(min = 4, max = 32, message = "用户名长度为4-32字符") String username) {
-        this.username = username;
-    }
+
 }
