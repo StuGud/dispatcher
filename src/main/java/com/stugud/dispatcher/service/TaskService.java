@@ -2,6 +2,7 @@ package com.stugud.dispatcher.service;
 
 import com.stugud.dispatcher.entity.Commit;
 import com.stugud.dispatcher.entity.Task;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
@@ -52,14 +53,15 @@ public interface TaskService {
      * @param task
      * @return
      */
-    Task releaseWithInChargesName(Task task);
+    Task releaseWithInChargesName(Task task, MultipartFile file);
 
     List<Task> findAllByEmpIdAndState(long empId,String state);
 
-    void downloadFile(HttpServletResponse response,Task task);
+    void downloadFile(HttpServletResponse response,long taskId);
 
     /**
      * 修改任务；不会修改任务状态，任务状态需要单独设置
+     * Todo 修改任务文件，需要先删除原有文件，再upload
      * @param task
      * @return
      */
@@ -70,8 +72,6 @@ public interface TaskService {
      * @return
      */
     Task setCompleted(long taskId);
-
-    Task setCompleted(long taskId, Commit passedCommit);
 
     /**
      * 任务状态 已完成 -> 未完成 时使用，会回滚之前的得分

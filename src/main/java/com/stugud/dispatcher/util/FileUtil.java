@@ -2,6 +2,7 @@ package com.stugud.dispatcher.util;
 
 import com.stugud.dispatcher.controller.EmployeeController;
 import com.stugud.dispatcher.entity.Commit;
+import com.stugud.dispatcher.entity.Task;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -22,7 +23,7 @@ import java.nio.file.Paths;
 public class FileUtil {
     private static final Logger LOGGER = LoggerFactory.getLogger(EmployeeController.class);
 
-    @Value("${dispatcher.commit.root}")
+    @Value("${dispatcher.file.root}")
     private String root;
 
     /**
@@ -31,19 +32,39 @@ public class FileUtil {
      * @param commit
      * @return 生成的文件路径
      */
-    public String storeCommit(Commit commit, MultipartFile file) {
+    public String storeCommit(Commit commit, MultipartFile file)  {
+        if (file==null){
+            return "";
+        }
         String filePath = root + "task" + commit.getTaskId() + "/" + "commit" + commit.getCommitNo() + "/" + file.getOriginalFilename();
+        LOGGER.info("commit[{}]正在存入文件[{}]",commit.getId(),filePath);
+        storeFile(filePath,file);
+        return filePath;
+    }
+
+    public String storeTask(Task task, MultipartFile file) {
+        if (file==null){
+            return "";
+        }
+        String filePath = root + "task" + task.getId() + "/" + file.getOriginalFilename();
+        LOGGER.info("task[{}]正在存入文件[{}]",task.getId(),filePath);
+        storeFile(filePath,file);
+        return filePath;
+    }
+
+    private void storeFile(String filePath,MultipartFile file){
         Path path = Paths.get(filePath);
-        LOGGER.info("commit{}正在存入文件{}",commit,filePath);
         try {
             Files.createDirectories(path.getParent());
             byte[] bytes = file.getBytes();
             Files.write(path, bytes);
         } catch (IOException ioException) {
+            LOGGER.warn("存入文件[{}]时出错",filePath);
             ioException.printStackTrace();
         }
-        return filePath;
     }
+
+
 
     public void downloadFile(HttpServletResponse response, String filePath) throws UnsupportedEncodingException {
         if (filePath==null){

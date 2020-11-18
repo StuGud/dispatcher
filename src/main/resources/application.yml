@@ -3,9 +3,12 @@ spring:
   datasource:
     url: jdbc:mysql://127.0.0.1:3306/dispatcher?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
     username: root
-    password: Mysql1114
+#    password: Mysql1114
+#    password: '@Mysql=1114'
+    password: Mysql4dfl
     driver-class-name: com.mysql.cj.jdbc.Driver
-    #initialization-mode: always
+    initialization-mode: always
+
   servlet:
     multipart:
       max-request-size: 100MB
@@ -37,11 +40,12 @@ spring:
 dispatcher:
   task:
     pageSize: 20
-    fileRootPathWIN: D:/dispatcher/file
   employee:
     pageSize: 20
-  commit:
-    root: /Users/gud/Desktop/
+  file:
+#    root: /Users/gud/Desktop/
+#    root: /usr/gud/dispatcher/
+    root: D:\\dispatcher\\
   mail:
     fromMail:
       addr: dispatchertest@163.com

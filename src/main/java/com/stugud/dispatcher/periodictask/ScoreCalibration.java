@@ -25,15 +25,16 @@ public class ScoreCalibration {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(EmployeeController.class);
 
-    @Autowired
+    final
     EmployeeService employeeService;
 
-    @Autowired
-    EmployeeRepo employeeRepo;
-
-    @Autowired
+    final
     RecordService recordService;
 
+    public ScoreCalibration(EmployeeService employeeService, RecordService recordService) {
+        this.employeeService = employeeService;
+        this.recordService = recordService;
+    }
 
 
     /**
@@ -59,7 +60,7 @@ public class ScoreCalibration {
                     LOGGER.warn("校准时发现EmployeeId{}分数不匹配:原始分数{} 计算分数{}",employee.getId(),employee.getScore(),score);
                     LOGGER.info("正在修改");
                     employee.setScore(score);
-                    employeeRepo.save(employee);
+                    employeeService.save(employee);
                 }
             }
         }

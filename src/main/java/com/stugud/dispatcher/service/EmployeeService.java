@@ -64,4 +64,6 @@ public interface EmployeeService {
     boolean isMailExist(String mail);
 
     List<Employee> findLeaders(long employeeId);
+
+     Employee save(Employee employee);
 }

@@ -25,10 +25,8 @@ import java.util.*;
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
     private static final Logger LOGGER = LoggerFactory.getLogger(EmployeeServiceImpl.class);
-    @Autowired
-    private UserDetailsService userDetailsService;
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+
+    private final PasswordEncoder passwordEncoder;
 
     final
     EmployeeRepo employeeRepo;
@@ -40,9 +38,16 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Value("${dispatcher.employee.pageSize}")
     int pageSize;
 
-    public EmployeeServiceImpl(EmployeeRepo employeeRepo, RecordRepo recordRepo) {
+    public EmployeeServiceImpl(EmployeeRepo employeeRepo, RecordRepo recordRepo, PasswordEncoder passwordEncoder) {
         this.employeeRepo = employeeRepo;
         this.recordRepo = recordRepo;
+        this.passwordEncoder = passwordEncoder;
+    }
+
+    public Employee save(Employee employee){
+        Employee savedEmp = employeeRepo.save(employee);
+        return savedEmp;
+
     }
 
     /**

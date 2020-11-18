@@ -27,6 +27,7 @@ public class AdminEmployeeController {
 
     /**
      * 来到注册员工页面
+     *
      * @param
      * @return
      */
@@ -38,16 +39,17 @@ public class AdminEmployeeController {
     /**
      * TODO: 2020/11/4 邮箱存在后如何提示错误
      * 注册新员工，并转到员工列表
+     *
      * @param employee
      * @return
      */
     @PostMapping("/employee")
     public String registerEmployee(@Validated Employee employee) {
-        if (employeeService.isMailExist(employee.getMail())){
+        if (employeeService.isMailExist(employee.getMail())) {
             return null;
         }
         Employee registeredEmployee = employeeService.register(employee);
-        if (registeredEmployee==null){
+        if (registeredEmployee == null) {
             return null;
         }
         return "redirect:/admin/employees";
@@ -55,6 +57,7 @@ public class AdminEmployeeController {
 
     /**
      * 员工列表
+     *
      * @return
      */
     @GetMapping("/employees")
@@ -74,6 +77,9 @@ public class AdminEmployeeController {
         int month = 0;
         if (date != null) {
             String[] split = date.split("-");
+            if(split.length==0){
+                split = date.split("/");
+            }
             if (split.length == 2) {
                 year = Integer.parseInt(split[0]);
                 month = Integer.parseInt(split[1]);
@@ -87,8 +93,8 @@ public class AdminEmployeeController {
 
         Map<Employee, Integer> employeeIntegerMap = employeeService.countScoresByMonth(year, month);
         model.addAttribute("employees", employeeIntegerMap);
-        model.addAttribute("year",year);
-        model.addAttribute("month",month);
-        return "/admin/employee/monthlyScore";
+        model.addAttribute("year", year);
+        model.addAttribute("month", month);
+        return "admin/employee/monthlyScore";
     }
 }

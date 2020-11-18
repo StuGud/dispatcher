@@ -21,7 +21,7 @@ import java.util.List;
 @Controller
 @RequestMapping("/employee")
 public class EmployeeController {
-    private static final Logger LOGGER= LoggerFactory.getLogger(EmployeeController.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(EmployeeController.class);
 
     final EmployeeService employeeService;
 
@@ -38,6 +38,7 @@ public class EmployeeController {
 
     /**
      * 获取员工个人信息
+     *
      * @param model
      * @return
      */
@@ -45,40 +46,43 @@ public class EmployeeController {
     public String showEmployeeDetails(Model model) {
         Employee employee = employeeService.getCurrentEmployee();
         model.addAttribute("employee", employee);
-        return "/employee/details";
+        return "employee/details";
     }
 
     /**
      * 修改员工个人信息
      * 暂时说，只可以修改密码
-     * @// TODO: 2020/11/4 改为ajax，输出提示信息（成功或失败）
+     *
      * @param modifiedEmp
      * @return
+     * @// TODO: 2020/11/4 改为ajax，输出提示信息（成功或失败）
      */
     @PutMapping("/details")
-    public String modifyEmpDetails(Model model,Employee modifiedEmp){
+    public String modifyEmpDetails(Model model, Employee modifiedEmp) {
         Employee employee = employeeService.modifyByEmpself(modifiedEmp);
-        model.addAttribute("employee",employee);
-        return "/employee/details";
+        model.addAttribute("employee", employee);
+        return "employee/details";
     }
 
     /**
      * 根据status获取任务列表：已完成、未完成、全部
+     *
      * @return
      */
     @GetMapping("/tasks")
-    public String showTasks(Model model,String state) {
-        if (state==null){
-            state="all";
+    public String showTasks(Model model, String state) {
+        if (state == null) {
+            state = "all";
         }
         Employee currentEmployee = employeeService.getCurrentEmployee();
-        List<Task> tasks = taskService.findAllByEmpIdAndState(currentEmployee.getId(),state);
+        List<Task> tasks = taskService.findAllByEmpIdAndState(currentEmployee.getId(), state);
         model.addAttribute("tasks", tasks);
-        return "/employee/task/tasks";
+        return "employee/task/tasks";
     }
 
     /**
      * 查看任务详情;附带commit记录
+     *
      * @param model
      * @param id
      * @return
@@ -86,60 +90,64 @@ public class EmployeeController {
     @GetMapping("/task/{id}")
     public String showTaskDetails(Model model, @PathVariable long id) {
         Task task = taskService.findById(id);
-        long commitDownloadId=0;
-        if (task.getState()==1){
+        long commitDownloadId = 0;
+        if (task.getState() == 1) {
             Commit lastPassedCommit = commitService.findLastPassedCommitByTaskId(id);
-            if (null!=lastPassedCommit){
-                commitDownloadId=lastPassedCommit.getId();
+            if (null != lastPassedCommit) {
+                commitDownloadId = lastPassedCommit.getId();
             }
         }
-        List<Commit> commits=commitService.findAllByTaskId(id);
+        List<Commit> commits = commitService.findAllByTaskId(id);
         model.addAttribute("task", task);
         model.addAttribute("commitDownloadId", commitDownloadId);
-        model.addAttribute("commits",commits);
-        return "/employee/task/details";
+        model.addAttribute("commits", commits);
+        return "employee/task/details";
     }
 
 
     /**
-     * 如果任务状态为已完成，则下载最新一次通过的commit
+     *
      * @param taskId
      * @return
      */
     @GetMapping("/task/{taskId}/download")
-    public void downloadTask(HttpServletResponse response,@PathVariable(name = "taskId") long taskId){
-        Task task = taskService.findById(taskId);
-        taskService.downloadFile(response,task);
+    public void downloadTask(HttpServletResponse response, @PathVariable(name = "taskId") long taskId) {
+        Employee currentEmployee = employeeService.getCurrentEmployee();
+        //有无权限下载该task
+        if (employeeService.isEmployeeInChargeTask(currentEmployee.getId(), taskId)) {
+            taskService.downloadFile(response, taskId);
+        }
     }
 
     /**
      * 来到指定任务的commit界面
+     *
      * @param taskId
      * @return
      */
     @GetMapping("/task/{taskId}/commit")
-    public String showCommitPage(Model model,@PathVariable(name = "taskId") long taskId){
+    public String showCommitPage(Model model, @PathVariable(name = "taskId") long taskId) {
         Task task = taskService.findById(taskId);
         Employee currentEmployee = employeeService.getCurrentEmployee();
-        model.addAttribute("task",task);
-        model.addAttribute("employee",currentEmployee);
+        model.addAttribute("task", task);
+        model.addAttribute("employee", currentEmployee);
 
-        return "/employee/task/commit";
+        return "employee/task/commit";
         //return "noCSS/employee/commit";
     }
 
     @PostMapping("task/{taskId}/commit")
-    public String commit(@PathVariable(name = "taskId") long taskId,@RequestParam("file") MultipartFile file ,Commit commit){
-        if(file==null|| file.isEmpty()||commit==null){
+    public String commit(@PathVariable(name = "taskId") long taskId, @RequestParam("file") MultipartFile file, Commit commit) {
+        if (file == null || file.isEmpty() || commit == null) {
             return null;
         }
         Employee currentEmployee = employeeService.getCurrentEmployee();
         commit.setEmployeeId(currentEmployee.getId());
         //做一些认证：有没有权限提交该commit
-        if(employeeService.isEmployeeInChargeTask(currentEmployee.getId(), taskId)){
+        if (employeeService.isEmployeeInChargeTask(currentEmployee.getId(), taskId)) {
             commit.setTaskId(taskId);
             Commit savedCommit = commitService.commit(commit, file);
-            return "redirect:/employee/task/"+savedCommit.getTaskId();
+            return "redirect:/employee/task/" + savedCommit.getTaskId();
         }
         //转到没有权限的位置
         return null;
@@ -147,25 +155,26 @@ public class EmployeeController {
 
     /**
      * 下载commit
+     *
      * @param commitId
      */
     @GetMapping("/commit/{commitId}/download")
     public void downloadCommit(@PathVariable(name = "commitId") long commitId,
-                               HttpServletResponse response){
+                               HttpServletResponse response) {
         //做一些认证：有没有权限下载该commit
         Employee currentEmployee = employeeService.getCurrentEmployee();
         Commit commit = commitService.findById(commitId);
-        if(employeeService.isEmployeeInChargeTask(currentEmployee.getId(),commit.getTaskId())){
-            commitService.downloadFile(response,commit);
+        if (employeeService.isEmployeeInChargeTask(currentEmployee.getId(), commit.getTaskId())) {
+            commitService.downloadFile(response, commit);
         }
     }
 
     @GetMapping("/commits")
-    public String showCommitsPage(Model model){
+    public String showCommitsPage(Model model) {
         Employee currentEmployee = employeeService.getCurrentEmployee();
         List<Commit> commits = commitService.findAllByEmpId(currentEmployee.getId());
-        model.addAttribute("commits",commits);
-        return "/employee/task/commits";
+        model.addAttribute("commits", commits);
+        return "employee/task/commits";
     }
 
 }

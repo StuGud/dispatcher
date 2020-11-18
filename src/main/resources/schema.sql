@@ -21,6 +21,7 @@ create table if not exists t_task
     filePath   varchar(256)
 );
 
+# state int default 0,
 create table if not exists t_task_employee
 (
     taskId      bigint not null,
@@ -61,7 +62,7 @@ ALTER TABLE t_commit
 create table if not exists t_employee_leader
 (
     id       bigint not null,
-    duty     varchar(32),
+    level    int,
     leaderId bigint not null,
     priority int default 1,
     primary key (id, leaderId)

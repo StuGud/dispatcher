@@ -31,7 +31,7 @@ class TaskServiceTest {
 //        list.add(new Employee("employee2"));
         Task task=new Task("cedzss","content1","A",new Date(),new Date(),0,list);
         System.out.println(task);
-        taskService.releaseWithInChargesName(task);
+        taskService.releaseWithInChargesName(task,null);
     }
 
     @Transactional

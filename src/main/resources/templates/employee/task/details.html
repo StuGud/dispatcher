@@ -61,6 +61,14 @@
                                             <td th:text="${#dates.format(task.deadline, 'yyyy-MM-dd')}"></td>
                                         </tr>
                                         <tr>
+                                            <th>负责人</th>
+                                            <td>
+                                                <div th:each="inChargeEmp : ${task.inCharge}">
+                                                    <p th:text="'部门：'+${inChargeEmp.department}+' 姓名：'+${inChargeEmp.username}+' 邮箱：'+${inChargeEmp.mail}" />
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
                                             <th>状态</th>
                                             <td th:text="${task.state}==0?'未完成':'已完成'"></td>
                                         </tr>
@@ -72,10 +80,8 @@
                                             <th>操作</th>
                                             <td th:if="${task.state}==0">
                                                 <a th:href="@{/employee/task/{id}/commit(id=${task.id})}">提交</a>
-                                            </td>
-                                            <td th:if="${task.state}==1">
-                                                <a th:href="@{/employee/commit/{commitId}/download(taskId=${task.id},commitId=${commitDownloadId})}">
-                                                    下载commit
+                                                <a th:if="${task.filePath!=null&amp;&amp;task.filePath!=''}" th:href="@{/employee/task/{taskId}/download(taskId=${task.id})}">
+                                                    下载文件
                                                 </a>
                                             </td>
                                         </tr>

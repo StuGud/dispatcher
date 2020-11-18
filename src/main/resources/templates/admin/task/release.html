@@ -5,7 +5,7 @@
         <!-- Required meta tags -->
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <title>Majestic Admin</title>
+        <title>Dispatcher 任务发布</title>
         <link rel="stylesheet" th:href="@{/vendors/mdi/css/materialdesignicons.min.css}">
         <link rel="stylesheet" th:href="@{/vendors/base/vendor.bundle.base.css}">
         <!-- endinject -->
@@ -34,7 +34,7 @@
                                 <div class="card">
                                     <div class="card-body">
                                         <h4 class="card-title">任务信息</h4>
-                                        <form class="form-sample" method="POST" action="/admin/task" onsubmit="return filter()">
+                                        <form class="form-sample" method="POST" enctype="multipart/form-data" action="/admin/task" onsubmit="return filter()">
                                             <div class="row">
                                                 <div class="col-md-6">
                                                     <div class="form-group row">
@@ -91,11 +91,23 @@
                                                     <div class="form-group row">
                                                         <label class="col-sm-3 col-form-label">描述</label>
                                                         <div class="col-sm-9">
-                                                            <input name="content" placeholder="最少五个字符"  type="text" class="form-control" style="width:970px; height:200px;"/>
+                                                            <textarea name="content" placeholder="最少五个字符"  type="text" class="form-control" style="width:970px; height:200px;"></textarea>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
+
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group row">
+                                                        <label class="col-sm-3 col-form-label">文件上传</label>
+                                                        <div class="col-sm-9">
+                                                            <input id="uploadFile" type="file" name="file" class="form-control"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
                                             <input  class="btn btn-block btn-primary btn-lg font-weight-medium auth-form-btn"  type="submit" style="width:150px; height:50px;float: right;"></input>
                                     </form>
                                 </div>
@@ -129,7 +141,7 @@
                     alert("任务描述最少五个字符");
                     return false;
                 }
-                if(new Date(deadline)<new Date()||deadline.length==0)
+                if(new Date(deadline)<=new Date()||deadline.length==0)
                 {
                     alert("截止时间有误");
                     return false;

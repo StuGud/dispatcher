@@ -5,7 +5,7 @@
         <!-- Required meta tags -->
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <title>Majestic Admin</title>
+        <title>Dispatcher 任务详情</title>
         <link rel="stylesheet" th:href="@{/vendors/mdi/css/materialdesignicons.min.css}">
         <link rel="stylesheet" th:href="@{/vendors/base/vendor.bundle.base.css}">
         <!-- endinject -->
@@ -35,16 +35,20 @@
                                     <div class="card-body">
                                         <h4 class="card-title">任务详情</h4>
                                         <form class="form-sample" th:method="PUT" action="/admin/task" th:object="${task}" onsubmit="return submit_sure()">
+
                                             <div class="row">
                                                 <input type="text" hidden name="id" th:value="${task.id}"  class="form-control" />
                                                 <div class="col-md-6">
                                                     <div class="form-group row">
                                                         <label class="col-sm-3 col-form-label">任务标题：</label>
                                                         <div class="col-sm-9">
-                                                            <input type="text" disabled="disabled" name="subject" id="id" th:value="${task.subject}"  class="form-control" />
+                                                            <input type="text" readonly name="subject" id="id" th:value="${task.subject}"  class="form-control" />
                                                         </div>
                                                     </div>
                                                 </div>
+                                            </div>
+
+                                            <div class="row">
                                                 <div class="col-md-6">
                                                     <div class="form-group row">
                                                         <label class="col-sm-3 col-form-label">任务等级：</label>
@@ -59,8 +63,8 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="row">
 
+                                            <div class="row">
                                                 <div class="col-md-6">
                                                     <div class="form-group row">
                                                         <label class="col-sm-3 col-form-label">截止时间：</label>
@@ -89,7 +93,6 @@
                                                             姓名：<input type="text" th:name="'inCharge['+${inChargePStat.index}+'].username'" th:value="${inChargeP.username}" class="form-control"/>
                                                             邮箱：<input type="text" th:name="'inCharge['+${inChargePStat.index}+'].mail'"  th:value="${inChargeP.mail}" class="form-control"/>
                                                             部门：<input type="text" th:name="'inCharge['+${inChargePStat.index}+'].department'"  th:value="${inChargeP.department}" class="form-control"/>
-
                                                         </div>
                                                         <button  type="button" class="btn btn-light bg-white btn-icon mr-3 mt-2 mt-xl-0" id="del-btn" th:onclick="del_div(this)">
                                                             <i class="mdi mdi-minus text-muted"></i>
@@ -99,7 +102,6 @@
                                                 <button type="button" class="btn btn-light bg-white btn-icon mr-3 mt-2 mt-xl-0" id="add-btn" th:onclick="add_div()">
                                                     <i class="mdi mdi-plus text-muted"></i>
                                                 </button>
-
                                             </div>
 
                                             <div class="row">
@@ -118,9 +120,9 @@
                                                     <div class="form-group row">
                                                         <label class="col-sm-3 col-form-label">任务状态</label>
                                                         <div class="col-sm-9">
-                                                            <select  name="state" class="form-control" th:disabled="${task.state}==1">
-                                                                <option name="state" value="未完成" th:selected="${task.state}==0" >未完成</option>
-                                                                <option name="state" value="已完成" th:selected="${task.state}==1">已完成</option>
+                                                            <select id="state" name="state" class="form-control" th:disabled="${task.state}==1">
+                                                                <option name="state" value=0 th:selected="${task.state}==0" >未完成</option>
+                                                                <option name="state" value=1 th:selected="${task.state}==1">已完成</option>
                                                             </select>
                                                         </div>
                                                     </div>
@@ -130,11 +132,23 @@
                                                     <div class="form-group row">
                                                         <label class="col-sm-3 col-form-label">完成时间：</label>
                                                         <div class="col-sm-9">
-                                                            <input type="text" id="finishedAt" disabled="disabled"   th:value="${#dates.format(task.finishedAt,'yyyy-MM-dd')}" class="form-control">
+                                                            <input type="text" id="finishedAt" readonly   th:value="${#dates.format(task.finishedAt,'yyyy-MM-dd')}" class="form-control">
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
+
+                                            <div class="row" th:if="${task.filePath!=null&amp;&amp;task.filePath!=''}">
+                                                <div class="col-md-6">
+                                                    <div class="form-group row">
+                                                        <label class="col-sm-3 col-form-label">文件</label>
+                                                        <div class="col-sm-9">
+                                                            <a  th:href="@{/admin/task/{taskId}/download(taskId=${task.id})}">下载文件</a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
                                             <input  class="btn btn-block btn-primary btn-lg font-weight-medium auth-form-btn" type="submit" value="提交修改" style="width:150px; height:50px;float: right;"></input>
                                             <a th:href="@{/admin/task/{taskId}/setNotCompleted(taskId=${task.id})}"><button type="button"  class="btn btn-block btn-primary btn-lg font-weight-medium auth-form-btn" style="width:300px; height:50px;float: left;">重设任务为未完成</button></a>
 
@@ -232,6 +246,11 @@
             }
 
             function submit_sure(){
+                var state= document.getElementById('state')
+                if(state.value != 0){
+                    alert("已完成任务不允许修改");
+                    return false;
+                }
                 const gnl=confirm("确定要修改?");
                 if (gnl==true){
                     return true;

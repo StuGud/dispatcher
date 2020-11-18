@@ -16,6 +16,12 @@ public interface CommitService {
     List<Commit> findAllByEmpId(long empId);
     List<Commit> findAllByTaskId(long taskId);
     List<Commit> findAllByState(int state);
+
+    /**
+     * Todo Repo逻辑有问题
+     * @param taskId
+     * @return
+     */
     Commit findLastPassedCommitByTaskId(long taskId);
     Commit commit(Commit commit,MultipartFile file);
     void downloadFile(HttpServletResponse response,Commit commit);
@@ -25,7 +31,5 @@ public interface CommitService {
      * 需要设置reply、state
      * @return
      */
-    Commit setPassed(long commitId, String reply);
-
-    Commit setNotPassed(long commitId,String reply);
+    Commit reply(long commitId,int state, String reply);
 }

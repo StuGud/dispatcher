@@ -36,7 +36,7 @@ public class Task {
     @Column(name = "createdAt")
     private Date createdAt;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
+
     private Date deadline;
 
     //任务状态 "已完成"，"未完成"
@@ -67,7 +67,16 @@ public class Task {
     }
 
     public static Task release(Task task){
-        return new Task(task.getSubject(), task.getContent(), task.getLevel(),task.getDeadline(),task.getInCharge());
+        return new Task(task.getSubject(), task.getContent(), task.getLevel(),task.getDeadline(),task.getFilePath(),task.getInCharge());
+    }
+
+    public Task(@NotBlank @Size(min = 4, max = 32, message = "任务主题4-32字符") String subject, @NotBlank(message = "任务内容不为空") String content, @Pattern(regexp = "A|B|C", message = "任务级别为A、B、C") String level, Date deadline, String filePath, @Size(min = 1, message = "最少选择一个负责人") List<Employee> inCharge) {
+        this.subject = subject;
+        this.content = content;
+        this.level = level;
+        this.deadline = deadline;
+        this.filePath = filePath;
+        this.inCharge = inCharge;
     }
 
     public Task(@NotBlank @Size(min = 4, max = 32, message = "任务主题4-32字符") String subject, @NotBlank(message = "任务内容不为空") String content, @Pattern(regexp = "A|B|C", message = "任务级别为A、B、C") String level, Date createdAt, Date deadline, int state, @Size(min = 1, message = "最少选择一个负责人") List<Employee> inCharge) {

@@ -2,9 +2,12 @@ package com.stugud.dispatcher.service.impl;
 
 import com.stugud.dispatcher.controller.EmployeeController;
 import com.stugud.dispatcher.entity.Commit;
+import com.stugud.dispatcher.entity.Task;
 import com.stugud.dispatcher.repo.CommitRepo;
+import com.stugud.dispatcher.repo.TaskRepo;
 import com.stugud.dispatcher.service.CommitService;
 import com.stugud.dispatcher.util.FileUtil;
+import com.stugud.dispatcher.util.MailUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,11 +27,22 @@ public class CommitServiceImpl implements CommitService {
 
     private static final Logger LOGGER= LoggerFactory.getLogger(EmployeeController.class);
 
-    @Autowired
+    final
     CommitRepo commitRepo;
 
-    @Autowired
+    final
     FileUtil fileUtil;
+
+    @Autowired
+    MailUtil mailUtil;
+
+    @Autowired
+    TaskRepo taskRepo;
+
+    public CommitServiceImpl(CommitRepo commitRepo, FileUtil fileUtil) {
+        this.commitRepo = commitRepo;
+        this.fileUtil = fileUtil;
+    }
 
     @Override
     public Commit findById(long commitId) {
@@ -70,9 +84,9 @@ public class CommitServiceImpl implements CommitService {
 
         //得出最后一次commit的序号+1
         int commitNo=1;
-        Commit lastPassedCommitByTaskId = findLastPassedCommitByTaskId(commit.getTaskId());
-        if (lastPassedCommitByTaskId!=null){
-            commitNo= lastPassedCommitByTaskId.getCommitNo()+1;
+        Commit MaxNoCommit = commitRepo.findMaxCommitNoByTaskId(commit.getTaskId());
+        if (MaxNoCommit!=null){
+            commitNo= MaxNoCommit.getCommitNo()+1;
         }
         savingCommit.setCommitNo(commitNo);
 
@@ -95,27 +109,22 @@ public class CommitServiceImpl implements CommitService {
     }
 
     @Override
-    public Commit setPassed(long commitId, String reply) {
+    public Commit reply(long commitId,int state, String reply) {
         Optional<Commit> optionalCommit = commitRepo.findById(commitId);
         if(optionalCommit.isPresent()){
             Commit commit = optionalCommit.get();
-            commit.setState(2);
+            commit.setState(state);
             commit.setReply(reply);
-            commitRepo.save(commit);
-            return commit;
-        }
-        return null;
-    }
-
-    @Override
-    public Commit setNotPassed(long commitId, String reply) {
-        Optional<Commit> optionalCommit = commitRepo.findById(commitId);
-        if(optionalCommit.isPresent()){
-            Commit commit = optionalCommit.get();
-            commit.setState(1);
-            commit.setReply(reply);
-            commitRepo.save(commit);
-            return commit;
+            Commit savedCommit = commitRepo.save(commit);
+            //没通过，发送邮件
+            if(state==1){
+                Optional<Task> optionalTask = taskRepo.findById(commit.getTaskId());
+                if (optionalTask.isPresent()){
+                    Task task=optionalTask.get();
+                    mailUtil.sendCommitNotPassedMail("提交未通过! ",task,commit);
+                }
+            }
+            return savedCommit;
         }
         return null;
     }

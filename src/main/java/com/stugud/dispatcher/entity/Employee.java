@@ -44,5 +44,24 @@ public class Employee {
 
     }
 
+    /**
+     * equals相等则hashCode必须相等
+     * @param obj
+     * @return
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Employee) {
+            Employee emp = (Employee) obj;
+            return mail == emp.getMail();
+        }
+        return false;
+    }
 
+    @Override
+    public int hashCode() {
+        int result = 17;
+        result = result * 31 + mail.hashCode();
+        return result;
+    }
 }

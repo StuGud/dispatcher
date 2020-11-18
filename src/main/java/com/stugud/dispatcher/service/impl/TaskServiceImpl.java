@@ -1,7 +1,6 @@
 package com.stugud.dispatcher.service.impl;
 
 import com.stugud.dispatcher.controller.EmployeeController;
-import com.stugud.dispatcher.entity.Commit;
 import com.stugud.dispatcher.entity.Employee;
 import com.stugud.dispatcher.entity.Record;
 import com.stugud.dispatcher.entity.Task;
@@ -13,19 +12,16 @@ import com.stugud.dispatcher.util.FileUtil;
 import com.stugud.dispatcher.util.MailUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -116,7 +112,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public Task releaseWithInChargesName(Task task) {
+    public Task releaseWithInChargesName(Task task, MultipartFile file) {
         List<Employee> inChargeList = new ArrayList<>();
         if (task.getInCharge() != null) {
             inChargeList = findAllEmployeesByNameOrId(task.getInCharge());
@@ -124,13 +120,20 @@ public class TaskServiceImpl implements TaskService {
         if (inChargeList.isEmpty()) {
             return null;
         } else {
+            if (file != null) {
+                String filePath = fileUtil.storeTask(task, file);
+                if (!"".equals(filePath)) {
+                    task.setFilePath(filePath);
+                }
+            }
             task.setInCharge(inChargeList);
+            //取有效内容
             Task savingTask = Task.release(task);
             Task savedTask = taskRepo.save(savingTask);
             LOGGER.info("新建任务{}", savedTask);
 
             //发送新任务提醒
-            mailUtil.sendTaskRemindMail("新任务！ ", savedTask);
+            mailUtil.sendTaskCreatedMail("新任务！ ", savedTask);
             //给领导发送邮件提醒
             remindLeaderByMail(savedTask);
 
@@ -138,13 +141,13 @@ public class TaskServiceImpl implements TaskService {
         }
     }
 
-    private void remindLeaderByMail(Task task){
-        List<Employee> allLeaders=new ArrayList<>();
-        for (Employee employee: task.getInCharge()){
+    private void remindLeaderByMail(Task task) {
+        Set<Employee> allLeaders = new HashSet<>();
+        for (Employee employee : task.getInCharge()) {
             List<Employee> leaders = employeeRepo.findLeadersById(employee.getId());
             allLeaders.addAll(leaders);
         }
-        mailUtil.sendTaskRemindMail("员工有新任务！ ", task ,allLeaders);
+        mailUtil.sendTaskRemindMail("员工有新任务！ ", task, allLeaders);
     }
 
     /**
@@ -170,10 +173,11 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public void downloadFile(HttpServletResponse response, Task task) {
-        if (null != task) {
+    public void downloadFile(HttpServletResponse response, long taskId) {
+        Optional<Task> optionalTask = taskRepo.findById(taskId);
+        if (optionalTask.isPresent() && null != response) {
             try {
-                fileUtil.downloadFile(response, task.getFilePath());
+                fileUtil.downloadFile(response, optionalTask.get().getFilePath());
             } catch (UnsupportedEncodingException e) {
                 LOGGER.info("下载文件失败{}", e);
             }
@@ -238,35 +242,34 @@ public class TaskServiceImpl implements TaskService {
             task1.setFinishedAt(new Date());
             Task savedTask = taskRepo.save(task1);
 
-            int scoreChange = calculateScore(savedTask.getDeadline());
+            int scoreChange = calculateScore(savedTask.getLevel(), savedTask.getDeadline());
             for (Employee employee : savedTask.getInCharge()) {
                 recordRepo.save(new Record(savedTask.getId(), employee.getId(), scoreChange, savedTask.getFinishedAt()));
                 employee.setScore(employee.getScore() + scoreChange);
                 employeeRepo.save(employee);
                 LOGGER.info("任务[{}]员工[{}]得分[{}]", savedTask.getId(), employee.getId(), scoreChange);
             }
-            mailUtil.sendTaskCompletedMail("任务完成！ ",savedTask,scoreChange);
+            mailUtil.sendTaskCompletedMail("任务完成！ ", savedTask, scoreChange);
             return savedTask;
         }
         return null;
     }
 
-    @Override
-    @Transactional
-    public Task setCompleted(long taskId, Commit passedCommit) {
-        Task task = setCompleted(taskId);
-        if (task != null) {
-            task.setFilePath(passedCommit.getFilePath());
-            return task;
-        }
-        return null;
-    }
-
-    private int calculateScore(Date deadline) {
+    private int calculateScore(String level, Date deadline) {
         long deadlineLong = deadline.getTime();
         long nowDate = (new Date()).getTime();
         long delay = (nowDate - deadlineLong) / (24 * 60 * 60 * 1000);
-        int scoreChange = (int) (-5 * delay);
+        int rate = 0;
+        if ("A".equals(level)) {
+            rate = -5;
+        } else if ("B".equals(level)) {
+            rate = -3;
+        } else if ("C".equals(level)) {
+            rate = -1;
+        } else {
+            LOGGER.info("任务等级出现问题");
+        }
+        int scoreChange = (int) (rate * delay);
         return scoreChange;
     }
 
